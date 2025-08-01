@@ -8,68 +8,63 @@
   </head>
   <body>
     <header>
-      <div class="container">
-        <h1>Blog Post</h1>
+      <div class="container nav-container">
+        <h1 class="logo">Blog Post</h1>
         <nav>
-          <ul>
-            <li><a href="index.html"></a></li>
-            <li><a href="blog.html"></a></li>
-            <li><a href="about.html"></a></li>
-            <li><a href="contact.html"></a></li>
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">COntact</a></li>
           </ul>
         </nav>
       </div>
     </header>
 
-    <section id="hero">
-      <div class="container">
-        <h2>Welcome to My Lifestyle Blog</h2>
-        <p>Discover articles on travel, food, fashion, and everyday life.</p>
-      </div>
+    <section class="hero">
+      <h1>Welcome to the Lifestyle Blog</h1>
+      <p>Explore articles on fashion, wellness, travel, and more.</p>
     </section>
 
-    <section id="latest-posts" class="container">
-      <h3>Latest Posts</h3>
-      <div id="posts"></div>
+    <section class="blog-section" id="latest-posts">
+      <h2>Latest Posts</h2>
+      <div class="post-list" id="post-list"></div>
     </section>
 
     <footer>
-      <div class="container">
-        <p>Follow me:</p>
-        <div class="social">
-          <a href="#">Instagram</a>
-          <a href="#">Twitter</a>
-          <a href="#">Facebook</a>
-        </div>
-
-        <div class="subscribe">
-          <input type="email" placeholder="Enter your email" />
-          <button>Subscribe</button>
-        </div>
+      <div class="socials">
+        <a href="#">Instagram</a>
+        <a href="#">Twitter</a>
+        <a href="#">Facebook</a>
       </div>
+      <form id="subscribe-form">
+        <input type="email" placeholder="Enter your email" required />
+        <button type="submit">Subscribe</button>
+      </form>
+      <p>© 2025 Lifestyle Blog</p>
     </footer>
 
     <script>
+      const blogList = document.getElementById("post-list");
+
       fetch("http://localhost:3600/blogs")
         .then((res) => res.json())
         .then((data) => {
-          if (data.success) {
-            const container = document.getElementById("posts");
-            data.data.forEach((post) => {
+          if (data.success && data.data) {
+            data.data.slice(0, 3).forEach((post) => {
               const div = document.createElement("div");
-              div.className = "post";
+              div.className = "post-card";
               div.innerHTML = `
-              <h4>${post.title}</h4>
-              <p>${post.content.substring(0, 150)}...</p>
-              <small>Category: ${post.category} | Author: ${
-                post.username
-              }</small>
+              <h3>${post.title}</h3>
+              <p>${post.content.substring(0, 120)}...</p>
+              <span>By ${post.username} | ${new Date(
+                post.created_at
+              ).toDateString()}</span>
             `;
-              container.appendChild(div);
+              blogList.appendChild(div);
             });
           }
-        })
-        .catch((err) => console.error("Error loading posts:", err));
+        });
     </script>
   </body>
 </html>
