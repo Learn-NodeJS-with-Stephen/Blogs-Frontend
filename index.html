@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog Post</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>Blog Post</h1>
+        <nav>
+          <ul>
+            <li><a href="index.html"></a></li>
+            <li><a href="blog.html"></a></li>
+            <li><a href="about.html"></a></li>
+            <li><a href="contact.html"></a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section id="hero">
+      <div class="container">
+        <h2>Welcome to My Lifestyle Blog</h2>
+        <p>Discover articles on travel, food, fashion, and everyday life.</p>
+      </div>
+    </section>
+
+    <section id="latest-posts" class="container">
+      <h3>Latest Posts</h3>
+      <div id="posts"></div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p>Follow me:</p>
+        <div class="social">
+          <a href="#">Instagram</a>
+          <a href="#">Twitter</a>
+          <a href="#">Facebook</a>
+        </div>
+
+        <div class="subscribe">
+          <input type="email" placeholder="Enter your email" />
+          <button>Subscribe</button>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      fetch("http://localhost:3600/blogs")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            const container = document.getElementById("posts");
+            data.data.forEach((post) => {
+              const div = document.createElement("div");
+              div.className = "post";
+              div.innerHTML = `
+              <h4>${post.title}</h4>
+              <p>${post.content.substring(0, 150)}...</p>
+              <small>Category: ${post.category} | Author: ${
+                post.username
+              }</small>
+            `;
+              container.appendChild(div);
+            });
+          }
+        })
+        .catch((err) => console.error("Error loading posts:", err));
+    </script>
+  </body>
+</html>
