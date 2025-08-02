@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container nav-container">
+        <h1 class="logo">Blog Post</h1>
+        <nav>
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section class="contact-section">
+      <h2>Contact Us</h2>
+      <p>
+        You can reach out to us via our social media channels or fill the form
+        below:
+      </p>
+
+      <form id="contact-form">
+        <input type="text" name="name" placeholder="Your Name" required /><br />
+        <input
+          type="email"
+          name="email"
+          placeholder="Your Email"
+          required
+        /><br />
+        <textarea name="message" placeholder="Your Message" required></textarea
+        ><br />
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+
+    <footer>
+      <div class="socials">
+        <a href="#">Instagram</a>
+        <a href="#">Twitter</a>
+        <a href="#">Facebook</a>
+      </div>
+      <p>© 2025 Blog Post</p>
+    </footer>
+
+    <script>
+      const contactForm = document.getElementById("contact-form");
+      contactForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("Message sent! (Not connected yet)");
+      });
+    </script>
+  </body>
+</html>

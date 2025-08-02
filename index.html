@@ -1,70 +1,334 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blog Post</title>
-    <link rel="stylesheet" href="style.css" />
+    <script src="style.css"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <header>
-      <div class="container nav-container">
-        <h1 class="logo">Blog Post</h1>
+  <body class="bg-white text-gray-800 font-sans">
+    <header
+      class="bg-gradient-to-r from-pink-500 to-yellow-400 text-white py-5 shadow-md sticky top-0 z-50"
+    >
+      <div class="container mx-auto px-4 flex justify-between items-center">
+        <h1 class="text-3xl font-bold">Blog Post</h1>
         <nav>
-          <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="blog.html">Blog</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">COntact</a></li>
+          <ul class="flex gap-6 text-lg font-medium">
+            <li><a href="index.html" class="hover:underline">Home</a></li>
+            <li><a href="blog.html" class="hover:underline">Blog</a></li>
+            <li><a href="about.html" class="hover:underline">About</a></li>
+            <li><a href="contact.html" class="hover:underline">Contact</a></li>
           </ul>
         </nav>
       </div>
     </header>
 
-    <section class="hero">
-      <h1>Welcome to the Lifestyle Blog</h1>
-      <p>Explore articles on fashion, wellness, travel, and more.</p>
+    <!-- Hero -->
+    <section class="text-center py-20 bg-gray-100 animate-fade-in-down">
+      <h2 class="text-4xl font-bold mb-4">Welcome to My Blog Post</h2>
+      <p class="max-w-2xl mx-auto text-gray-600">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec mollis,
+        orci at varius pellentesque, nibh odio lacinia erat, vitae commodo massa
+        turpis eget risus. Nam ornare enim vel lacus rutrum consectetur rutrum
+        quis nibh. Cras rhoncus, sem non feugiat rhoncus, risus libero volutpat
+        metus, vitae aliquam lectus nisi et est.
+      </p>
     </section>
+    <section class="min-h-screen bg-gradient-to-r from-yellow-50 to-gray-100 flex items-center justify-center px-4">
+  <div class="max-w-6xl w-full grid md:grid-cols-2 shadow-xl rounded-2xl overflow-hidden bg-white">
+    <!-- Left: Sign Up Form -->
+    <div class="p-10 space-y-6">
+      <h2 class="text-3xl font-bold text-gray-800">Create an account</h2>
+      <p class="text-gray-500">Sign up and get 30-day free trial</p>
 
-    <section class="blog-section" id="latest-posts">
-      <h2>Latest Posts</h2>
-      <div class="post-list" id="post-list"></div>
-    </section>
+      <form id="signup-form" class="space-y-4">
+        <input type="text" name="first_name" placeholder="First Name" required class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+        <input type="text" name="last_name" placeholder="Last Name" required class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+        <input type="text" name="username" placeholder="Username" required class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+        <input type="email" name="email" placeholder="Email" required class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+        <input type="password" name="password" placeholder="Password" required class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400" />
 
-    <footer>
-      <div class="socials">
-        <a href="#">Instagram</a>
-        <a href="#">Twitter</a>
-        <a href="#">Facebook</a>
-      </div>
-      <form id="subscribe-form">
-        <input type="email" placeholder="Enter your email" required />
-        <button type="submit">Subscribe</button>
+        <button type="submit" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-white rounded-full font-semibold transition-all">Submit</button>
       </form>
-      <p>© 2025 Lifestyle Blog</p>
+
+      <div class="flex items-center justify-between text-sm text-gray-500 mt-4">
+        <a href="#" class="hover:underline">Already have an account? Sign in</a>
+        <a href="#" class="hover:underline">Terms & Conditions</a>
+      </div>
+
+      <div class="flex items-center justify-center space-x-4 mt-4">
+        <button class="border px-6 py-2 rounded-full hover:bg-gray-100 flex items-center gap-2"><img src="https://img.icons8.com/ios-filled/20/000000/mac-os.png"/> Apple</button>
+        <button class="border px-6 py-2 rounded-full hover:bg-gray-100 flex items-center gap-2"><img src="https://img.icons8.com/ios-filled/20/000000/google-logo.png"/> Google</button>
+      </div>
+    </div>
+
+   <!-- Right: Image Slider Section -->
+<div class="relative hidden md:block overflow-hidden h-[680px]">
+  <!-- Image Container -->
+  <div id="slider" class="w-full h-full">
+    <img
+      src="./images/abstract-background-with-low-poly-design.jpg"
+      alt="slider image"
+      class="object-cover w-full h-full transition-opacity duration-1000 ease-in-out"
+    />
+  </div>
+
+  <!-- Navigation Arrows -->
+  <button
+    id="prevBtn"
+    class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow-lg"
+  >
+    &#10094;
+  </button>
+  <button
+    id="nextBtn"
+    class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow-lg"
+  >
+    &#10095;
+  </button>
+
+  <!-- Create Post Button Overlay -->
+  <!--
+  <div class="absolute bottom-6 left-6 bg-white bg-opacity-90 rounded-xl p-4 shadow-lg">
+    <button
+      onclick="showForm('create')"
+      class="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all"
+    >
+      Create Blog Post
+    </button>
+  </div>
+  -->
+</div>
+
+<script>
+  const sliderImages = [
+    "./images/abstract-background-with-low-poly-design.jpg",
+    "./images/digital-art-style-illustration-river-nature.jpg",
+    "./images/high-angle-man-stretching-home.jpg",
+    "./images/illustration-digital-art-style-with-pottery.jpg",
+    "./images/pexels-nemuel-6424590.jpg",
+    "./images/programming-background-with-person-working-with-codes-computer.jpg",
+    "./images/image7.jpg",
+  ];
+
+  let currentIndex = 0;
+  const sliderElement = document.querySelector("#slider img");
+
+  function changeImage(index) {
+    sliderElement.classList.add("opacity-0");
+    setTimeout(() => {
+      sliderElement.src = sliderImages[index];
+      sliderElement.classList.remove("opacity-0");
+    }, 500);
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % sliderImages.length;
+    changeImage(currentIndex);
+  }
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + sliderImages.length) % sliderImages.length;
+    changeImage(currentIndex);
+  }
+
+  document.getElementById("nextBtn").addEventListener("click", nextImage);
+  document.getElementById("prevBtn").addEventListener("click", prevImage);
+
+  // Auto change every 5s
+  setInterval(nextImage, 5000);
+</script>
+
+
+</div>
+    </section>
+
+          <!-- Create Post -->
+          <div id="create" class="form-box hidden">
+            <h3 class="form-title">Create Blog Post</h3>
+            <form id="create-form" enctype="multipart/form-data" class="form">
+              <input
+                type="text"
+                name="title"
+                placeholder="Title"
+                required
+                class="input"
+              />
+              <textarea
+                name="content"
+                placeholder="Content"
+                required
+                class="input h-32"
+              ></textarea>
+              <input
+                type="number"
+                name="blog_category_id"
+                placeholder="Category ID"
+                required
+                class="input"
+              />
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                required
+                class="input"
+              />
+              <button type="submit" class="btn-primary">Post</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Posts -->
+    <section class="bg-gray-100 py-12">
+      <div class="container mx-auto px-4">
+        <h2 class="text-2xl font-semibold text-center mb-6">Latest Posts</h2>
+        <div id="post-list" class="grid md:grid-cols-3 gap-8"></div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-10">
+      <div class="container mx-auto px-4 text-center space-y-4">
+        <div class="flex justify-center gap-6">
+          <a href="#">Instagram</a>
+          <a href="#">Twitter</a>
+          <a href="#">Facebook</a>
+          <a href="admin.html">Admin</a>
+        </div>
+        <form id="subscribe-form" class="flex justify-center gap-4">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            required
+            class="input w-1/2"
+          />
+          <button type="submit" class="btn-primary">Subscribe</button>
+        </form>
+        <p>© 2025 Blog Post</p>
+      </div>
     </footer>
 
+    <!-- JavaScript -->
     <script>
-      const blogList = document.getElementById("post-list");
+      let authToken = "";
 
+      function showForm(formId) {
+        document
+          .querySelectorAll(".form-box")
+          .forEach((div) => div.classList.add("hidden"));
+        document.getElementById(formId).classList.remove("hidden");
+      }
+
+      document
+        .getElementById("signup-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          const body = Object.fromEntries(formData);
+          body.user_type = "user";
+
+          const res = await fetch("http://localhost:3600/users/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+
+          const data = await res.json();
+          alert(data.message || "Signup complete");
+        });
+
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          const body = Object.fromEntries(formData);
+
+          const res = await fetch("http://localhost:3600/users/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+
+          const data = await res.json();
+          if (data.success && data.token) {
+            authToken = data.token;
+            alert("Login successful!");
+          } else {
+            alert("Login failed!");
+          }
+        });
+
+      document
+        .getElementById("create-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          if (!authToken) return alert("You must be logged in!");
+
+          const formData = new FormData(e.target);
+
+          const res = await fetch("http://localhost:3600/blogs", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+            body: formData,
+          });
+
+          const data = await res.json();
+          alert(data.message || "Post created!");
+        });
+
+      // Fetch latest blog posts
       fetch("http://localhost:3600/blogs")
         .then((res) => res.json())
         .then((data) => {
           if (data.success && data.data) {
+            const blogList = document.getElementById("post-list");
             data.data.slice(0, 3).forEach((post) => {
               const div = document.createElement("div");
-              div.className = "post-card";
+              div.className =
+                "bg-white p-6 rounded-lg shadow-md hover:scale-105 transform transition duration-300";
               div.innerHTML = `
-              <h3>${post.title}</h3>
-              <p>${post.content.substring(0, 120)}...</p>
-              <span>By ${post.username} | ${new Date(
-                post.created_at
-              ).toDateString()}</span>
-            `;
+                <h3 class="text-xl font-semibold mb-2">${post.title}</h3>
+                <p class="text-sm text-gray-600 mb-2">${post.content.substring(
+                  0,
+                  100
+                )}...</p>
+                <span class="text-xs text-gray-500">By ${
+                  post.username
+                } | ${new Date(post.created_at).toDateString()}</span>
+              `;
               blogList.appendChild(div);
             });
           }
         });
     </script>
+
+    <!-- Tailwind Buttons & Inputs Custom Classes -->
+    <style>
+            .btn-tab {
+              @apply bg-gray-200 hover:bg-pink-100 text-gray-800 font-semibold py-2 px-4 rounded shadow;
+            }
+            .form-title {
+              @apply text-2xl font-bold mb-4 text-pink-600;
+            }
+            .form-box {
+              @apply bg-white p-6 rounded shadow w-full;
+            }
+
+        .input {
+          @apply px-4 py-3 rounded border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none;
+        }
+
+        .btn-primary {
+          @apply bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow transition;
+        }
+      </style
+    </style>
   </body>
 </html>

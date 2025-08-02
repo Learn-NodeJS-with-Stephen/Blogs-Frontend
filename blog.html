@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container nav-container">
+        <h1 class="logo">Blog Post</h1>
+        <nav>
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <!DOCTYPE html>
+            <html lang="en">
+              <head>
+                <meta charset="UTF-8" />
+                <meta
+                  name="viewport"
+                  content="width=device-width, initial-scale=1.0"
+                />
+                <title>Blog</title>
+                <link rel="stylesheet" href="style.css" />
+              </head>
+              <body>
+                <header>
+                  <div class="container nav-container">
+                    <h1 class="logo">Blog Post</h1>
+                    <nav>
+                      <ul class="nav-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                      </ul>
+                    </nav>
+                  </div>
+                </header>
+
+                <section class="blog-section">
+                  <h2>All Blog Posts</h2>
+                  <div class="post-list" id="all-posts"></div>
+                </section>
+
+                <footer>
+                  <div class="socials">
+                    <a href="#">Instagram</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">Facebook</a>
+                  </div>
+                  <p>© 2025 Blog Post</p>
+                </footer>
+
+                <script>
+                  fetch("http://localhost:3600/blogs")
+                    .then((res) => res.json())
+                    .then((data) => {
+                      if (data.success && data.data) {
+                        const postContainer =
+                          document.getElementById("all-posts");
+                        data.data.forEach((post) => {
+                          const div = document.createElement("div");
+                          div.className = "post-card";
+                          div.innerHTML = `
+              <h3>${post.title}</h3>
+              <p>${post.content.substring(0, 200)}...</p>
+              <span>By ${post.username} | ${new Date(
+                            post.created_at
+                          ).toDateString()}</span>
+            `;
+                          postContainer.appendChild(div);
+                        });
+                      }
+                    })
+                    .catch((err) =>
+                      console.error("Error fetching blogs:", err)
+                    );
+                </script>
+              </body>
+            </html>
+
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section class="blog-section">
+      <h2>All Blog Posts</h2>
+      <div class="post-list" id="all-posts"></div>
+    </section>
+
+    <footer>
+      <div class="socials">
+        <a href="#">Instagram</a>
+        <a href="#">Twitter</a>
+        <a href="#">Facebook</a>
+      </div>
+      <p>© 2025 Blog Post</p>
+    </footer>
+
+    <script>
+      fetch("http://localhost:3600/blogs")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.data) {
+            const postContainer = document.getElementById("all-posts");
+            data.data.forEach((post) => {
+              const div = document.createElement("div");
+              div.className = "post-card";
+              div.innerHTML = `
+              <h3>${post.title}</h3>
+              <p>${post.content.substring(0, 200)}...</p>
+              <span>By ${post.username} | ${new Date(
+                post.created_at
+              ).toDateString()}</span>
+            `;
+              postContainer.appendChild(div);
+            });
+          }
+        })
+        .catch((err) => console.error("Error fetching blogs:", err));
+    </script>
+  </body>
+</html>

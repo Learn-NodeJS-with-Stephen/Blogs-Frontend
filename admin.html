@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container nav-container">
+        <h1 class="logo">Admin Dashboard</h1>
+        <nav>
+          <ul class="nav-links">
+            <li><a href="index.html">← Back to Site</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="admin-dashboard container">
+      <!-- Login Form -->
+      <section class="admin-section">
+        <h2>Admin Login</h2>
+        <form id="admin-login-form">
+          <input
+            type="email"
+            id="admin-email"
+            placeholder="Admin Email"
+            required
+          />
+          <input
+            type="password"
+            id="admin-password"
+            placeholder="Password"
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+      </section>
+
+      <!-- Category Creation -->
+      <section class="admin-section">
+        <h2>Create Blog Category</h2>
+        <form id="category-form">
+          <input
+            type="text"
+            id="category-name"
+            placeholder="Category Name"
+            required
+          />
+          <button type="submit">Create Category</button>
+        </form>
+      </section>
+
+      <!-- View Blog Posts -->
+      <section class="admin-section">
+        <h2>All Blog Posts</h2>
+        <div id="all-posts" class="post-list"></div>
+      </section>
+    </main>
+
+    <script>
+      let adminToken = null;
+
+      // Admin Login
+      document
+        .getElementById("admin-login-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const email = document.getElementById("admin-email").value;
+          const password = document.getElementById("admin-password").value;
+
+          const res = await fetch("http://localhost:3600/admin/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+
+          const data = await res.json();
+          if (data.success) {
+            adminToken = data.token;
+            alert("Login successful");
+            fetchAllPosts();
+          } else {
+            alert("Login failed");
+          }
+        });
+
+      // Create Category
+      document
+        .getElementById("category-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const name = document.getElementById("category-name").value;
+
+          const res = await fetch("http://localhost:3600/admin/category", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${adminToken}`,
+            },
+            body: JSON.stringify({ name }),
+          });
+
+          const data = await res.json();
+          alert(data.message || "Category created");
+        });
+
+      // Fetch all blog posts
+      async function fetchAllPosts() {
+        const res = await fetch("http://localhost:3600/admin/blogs", {
+          headers: { Authorization: `Bearer ${adminToken}` },
+        });
+
+        const data = await res.json();
+        const postsContainer = document.getElementById("all-posts");
+        postsContainer.innerHTML = "";
+
+        if (data.success && data.data.length > 0) {
+          data.data.forEach((post) => {
+            const div = document.createElement("div");
+            div.classList.add("post-card");
+            div.innerHTML = `
+            <h3>${post.title}</h3>
+            <p>${post.content.substring(0, 100)}...</p>
+            <p><strong>By:</strong> ${post.username}</p>
+            <p><strong>Category:</strong> ${post.category}</p>
+            <button onclick="restrictPost(${post.id})">Restrict</button>
+            <button onclick="deletePost(${post.id})">Delete</button>
+          `;
+            postsContainer.appendChild(div);
+          });
+        } else {
+          postsContainer.innerHTML = "<p>No posts found.</p>";
+        }
+      }
+
+      // Restrict post
+      async function restrictPost(postId) {
+        const reason = prompt("Enter restriction reason:");
+        if (!reason) return;
+
+        const res = await fetch(
+          `http://localhost:3600/admin/restrict/${postId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${adminToken}`,
+            },
+            body: JSON.stringify({ restriction_reason: reason }),
+          }
+        );
+
+        const data = await res.json();
+        alert(data.message || "Post restricted");
+        fetchAllPosts();
+      }
+
+      // Delete post
+      async function deletePost(postId) {
+        const reason = prompt("Enter deletion reason:");
+        if (!reason) return;
+
+        const res = await fetch(
+          `http://localhost:3600/admin/delete/${postId}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${adminToken}`,
+            },
+            body: JSON.stringify({ deletion_reason: reason }),
+          }
+        );
+
+        const data = await res.json();
+        alert(data.message || "Post deleted");
+        fetchAllPosts();
+      }
+    </script>
+  </body>
+</html>
