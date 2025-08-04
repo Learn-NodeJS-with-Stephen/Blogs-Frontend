@@ -11,7 +11,35 @@
       <h2 class="text-3xl font-bold text-green-700 mb-4">
         Welcome, <span id="dashboard-username"></span>!
       </h2>
-      <h3 class="text-xl font-semibold mb-2">Your Blog Posts</h3>
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-semibold">Your Blog Posts</h3>
+        <button id="show-create-form" class="btn-primary">Create Post</button>
+      </div>
+      <div id="create-post-form" class="mb-6 hidden">
+        <form id="post-form" class="space-y-4 bg-gray-50 p-4 rounded shadow">
+          <input
+            type="text"
+            name="title"
+            placeholder="Title"
+            required
+            class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          />
+          <textarea
+            name="content"
+            placeholder="Content"
+            required
+            class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          ></textarea>
+          <input
+            type="number"
+            name="blog_category_id"
+            placeholder="Category ID"
+            required
+            class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          />
+          <button type="submit" class="btn-primary">Post</button>
+        </form>
+      </div>
       <div id="user-posts" class="space-y-4"></div>
       <button id="logout-btn" class="btn-primary mt-6">Logout</button>
     </div>
@@ -21,6 +49,34 @@
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       document.getElementById("dashboard-username").textContent =
         user.username || user.email || "User";
+
+      // Show/hide create post form
+      document.getElementById("show-create-form").onclick = function () {
+        const formDiv = document.getElementById("create-post-form");
+        formDiv.classList.toggle("hidden");
+      };
+
+      // Handle create post form submission
+      document
+        .getElementById("post-form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          const body = Object.fromEntries(formData);
+          const res = await fetch("http://localhost:3600/blogs", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+            body: JSON.stringify(body),
+          });
+          const data = await res.json();
+          alert(data.message || "Post created!");
+          e.target.reset();
+          document.getElementById("create-post-form").classList.add("hidden");
+          fetchUserPosts();
+        });
 
       // Fetch and display user's posts
       function fetchUserPosts() {
