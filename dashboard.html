@@ -46,6 +46,9 @@
     <script>
       // Get token and user info from localStorage
       const authToken = localStorage.getItem("token");
+      if (!authToken) {
+        window.location.href = "index.html";
+      }
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       document.getElementById("dashboard-username").textContent =
         user.username || user.email || "User";
@@ -80,7 +83,7 @@
 
       // Fetch and display user's posts
       function fetchUserPosts() {
-        fetch("http://localhost:3600/blogs/my/posts", {
+        fetch("http://localhost:3600/blogs/my/post", {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },

@@ -230,7 +230,7 @@ function showDashboard(user) {
 
 // Fetch posts for the logged-in user
 function fetchUserPosts() {
-  fetch("http://localhost:3600/blogs/my/posts", {
+  fetch("http://localhost:3600/blogs/myposts", {
     headers: {
       Authorization: `Bearer ${authToken}`,
     },
@@ -271,24 +271,16 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
 
   const data = await res.json();
   if (data.success && data.token) {
-    authToken = data.token; // Set authToken here!
-    localStorage.setItem("token", data.token);
-    // Fetch user profile to get user info for dashboard
-    fetch("http://localhost:3600/users/profile", {
-      headers: { Authorization: `Bearer ${data.token}` },
-    })
-      .then((res) => res.json())
-      .then((profile) => {
-        if (profile.success && profile.data) {
-          localStorage.setItem("user", JSON.stringify(profile.data));
-          // showDashboard(profile.data);
-           window.location.href = "dashboard.html";
-        } else {
-          alert("Could not fetch user profile.");
-        }
-      });
+    localStorage.setItem("token", data.token); // <-- Save the token!
+    localStorage.setItem("user", JSON.stringify(data.user || body));
+    window.location.href = "dashboard.html";
+  } else if (data.success) {
+    // fallback if backend doesn't return token
+    localStorage.removeItem("token");
+    localStorage.setItem("user", JSON.stringify(data.user || body));
+    window.location.href = "dashboard.html";
   } else {
-    alert("Login failed!");
+    alert(data.message || "Signup failed");
   }
 });
 
@@ -307,8 +299,13 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
       });
 
       const data = await res.json();
-      if (data.success) {
-        // Store token or user info if provided
+      if (data.success && data.token) {
+        localStorage.setItem("token", data.token); // <-- Save the token!
+        localStorage.setItem("user", JSON.stringify(data.user || body));
+        window.location.href = "dashboard.html";
+      } else if (data.success) {
+        // fallback if backend doesn't return token
+        localStorage.removeItem("token");
         localStorage.setItem("user", JSON.stringify(data.user || body));
         window.location.href = "dashboard.html";
       } else {
