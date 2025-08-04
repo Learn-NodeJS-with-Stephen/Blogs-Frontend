@@ -69,14 +69,6 @@
           </div>
         </div>
 
-        <!-- User Dashboard (hidden by default) -->
-        <div id="user-dashboard" class="p-10 space-y-6 hidden">
-          <h2 class="text-3xl font-bold text-green-700">Welcome, <span id="dashboard-username"></span>!</h2>
-          <h3 class="text-xl font-semibold mb-2">Your Blog Posts</h3>
-          <div id="user-posts" class="space-y-4"></div>
-          <button id="logout-btn" class="btn-primary mt-6">Logout</button>
-        </div>
-
         <!-- Right: Image Slider Section -->
         <div class="relative hidden md:block overflow-hidden h-[680px]">
           <!-- Image Container -->
@@ -225,14 +217,80 @@
 
 <!-- JavaScript -->
 <script>
-  let authToken = "";
+  let authToken = localStorage.getItem("token") || "";
 
-  function showForm(formId) {
-    document
-      .querySelectorAll(".form-box")
-      .forEach((div) => div.classList.add("hidden"));
-    document.getElementById(formId).classList.remove("hidden");
+// Show dashboard and fetch user posts
+function showDashboard(user) {
+  document.getElementById("login-box").classList.add("hidden");
+  document.getElementById("signup-box").classList.add("hidden");
+  document.getElementById("user-dashboard").classList.remove("hidden");
+  document.getElementById("dashboard-username").textContent = user.username || user.email || "User";
+  fetchUserPosts();
+}
+
+// Fetch posts for the logged-in user
+function fetchUserPosts() {
+  fetch("http://localhost:3600/blogs/my/posts", {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      const postsDiv = document.getElementById("user-posts");
+      postsDiv.innerHTML = "";
+      if (data.success && data.data && data.data.length > 0) {
+        data.data.forEach((post) => {
+          const div = document.createElement("div");
+          div.className = "bg-gray-50 p-4 rounded shadow";
+          div.innerHTML = `
+            <h4 class="font-bold">${post.title}</h4>
+            <p>${post.content.substring(0, 120)}...</p>
+            <span class="text-xs text-gray-500">${new Date(post.created_at).toLocaleString()}</span>
+            <span class="text-xs text-pink-600 block mt-1">Category: ${post.category || ""}</span>
+          `;
+          postsDiv.appendChild(div);
+        });
+      } else {
+        postsDiv.innerHTML = "<p>No blog posts found for your account.</p>";
+      }
+    });
+}
+
+// Login form handler
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const body = Object.fromEntries(formData);
+
+  const res = await fetch("http://localhost:3600/users/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  const data = await res.json();
+  if (data.success && data.token) {
+    authToken = data.token; // Set authToken here!
+    localStorage.setItem("token", data.token);
+    // Fetch user profile to get user info for dashboard
+    fetch("http://localhost:3600/users/profile", {
+      headers: { Authorization: `Bearer ${data.token}` },
+    })
+      .then((res) => res.json())
+      .then((profile) => {
+        if (profile.success && profile.data) {
+          localStorage.setItem("user", JSON.stringify(profile.data));
+          // showDashboard(profile.data);
+           window.location.href = "dashboard.html";
+        } else {
+          alert("Could not fetch user profile.");
+        }
+      });
+  } else {
+    alert("Login failed!");
   }
+});
 
   document
     .getElementById("signup-form")
@@ -270,77 +328,6 @@
     document.getElementById("signup-box").classList.remove("hidden");
   };
 
-  // Show dashboard and fetch user posts
-  function showDashboard(user) {
-    document.getElementById("login-box").classList.add("hidden");
-    document.getElementById("signup-box").classList.add("hidden");
-    document.getElementById("user-dashboard").classList.remove("hidden");
-    document.getElementById("dashboard-username").textContent = user.username || user.email || "User";
-    fetchUserPosts(user);
-  }
-
-  // Fetch posts for the logged-in user
-  function fetchUserPosts(user) {
-    // Use user.id or user.email as identifier, adjust endpoint as needed
-    fetch(`http://localhost:3600/blogs/user/${user.id || user.email}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const postsDiv = document.getElementById("user-posts");
-        postsDiv.innerHTML = "";
-        if (data.success && data.data && data.data.length > 0) {
-          data.data.forEach((post) => {
-            const div = document.createElement("div");
-            div.className = "bg-gray-50 p-4 rounded shadow";
-            div.innerHTML = `
-              <h4 class="font-bold">${post.title}</h4>
-              <p>${post.content.substring(0, 120)}...</p>
-              <span class="text-xs text-gray-500">${new Date(post.created_at).toLocaleString()}</span>
-            `;
-            postsDiv.appendChild(div);
-          });
-        } else {
-          postsDiv.innerHTML = "<p>No blog posts found for your account.</p>";
-        }
-      });
-  }
-
-  // Login form handler
-  document.getElementById("login-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const body = Object.fromEntries(formData);
-
-    const res = await fetch("http://localhost:3600/users/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-
-    const data = await res.json();
-    if (data.success && data.token) {
-      localStorage.setItem("token", data.token);
-      // Fetch user profile to get user id/username for fetching posts
-      fetch("http://localhost:3600/users/profile", {
-        headers: { Authorization: `Bearer ${data.token}` },
-      })
-        .then((res) => res.json())
-        .then((profile) => {
-          if (profile.success && profile.data) {
-            localStorage.setItem("user", JSON.stringify(profile.data));
-            showDashboard(profile.data);
-          } else {
-            alert("Could not fetch user profile.");
-          }
-        });
-    } else {
-      alert("Login failed!");
-    }
-  });
-
   document
     .getElementById("create-form")
     .addEventListener("submit", async (e) => {
@@ -359,6 +346,7 @@
 
       const data = await res.json();
       alert(data.message || "Post created!");
+      fetchUserPosts(); // Refresh dashboard posts after creating a new post
     });
 
   // Fetch latest blog posts
