@@ -230,7 +230,7 @@ function showDashboard(user) {
 
 // Fetch posts for the logged-in user
 function fetchUserPosts() {
-  fetch("http://localhost:3600/blogs/myposts", {
+  fetch("http://localhost:3600/blogs/my/post", {
     headers: {
       Authorization: `Bearer ${authToken}`,
     },
