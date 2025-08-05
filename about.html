@@ -5,43 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>About</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <header>
-      <div class="container nav-container">
-        <h1 class="logo">Blog Post</h1>
+  <body
+    class="bg-gradient-to-br from-purple-100 via-purple-200 to-purple-300 text-gray-900 font-sans"
+  >
+    <header
+      class="bg-gradient-to-r from-purple-700 to-purple-500 text-white py-5 shadow-md sticky top-0 z-50"
+    >
+      <div class="container mx-auto px-4 flex justify-between items-center">
+        <h1 class="text-3xl font-bold tracking-wide">Blog Post</h1>
         <nav>
-          <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="blog.html">Blog</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
+          <ul class="flex gap-6 text-lg font-medium">
+            <li><a href="index.html" class="hover:underline">Home</a></li>
+            <li><a href="blog.html" class="hover:underline">Blog</a></li>
+            <li><a href="about.html" class="hover:underline">About</a></li>
+            <li><a href="contact.html" class="hover:underline">Contact</a></li>
           </ul>
         </nav>
       </div>
     </header>
 
-    <section class="about-section">
-      <h2>About This Blog</h2>
-      <p>
+    <section
+      class="about-section max-w-3xl mx-auto mt-12 bg-white/90 p-8 rounded-xl shadow"
+    >
+      <h2 class="text-3xl font-bold text-purple-800 mb-4">About This Blog</h2>
+      <p class="mb-4 text-purple-700">
         Welcome to our Lifestyle Blog! We're here to inspire you with the latest
         on fashion, travel, health, beauty, and more. Our mission is to share
         authentic stories and experiences that help you live your best life.
       </p>
-      <p>
+      <p class="text-purple-700">
         This blog is powered by a custom-built BlogPost API backend. Every post
         you see here is created, stored, and served dynamically through our own
         system.
       </p>
     </section>
 
-    <footer>
-      <div class="socials">
-        <a href="#">Instagram</a>
-        <a href="#">Twitter</a>
-        <a href="#">Facebook</a>
+    <footer
+      class="bg-gradient-to-r from-purple-700 to-purple-900 text-white py-8 mt-10"
+    >
+      <div class="container mx-auto px-4 text-center space-y-4">
+        <div class="flex justify-center gap-6">
+          <a href="#" class="hover:text-purple-200">Instagram</a>
+          <a href="#" class="hover:text-purple-200">Twitter</a>
+          <a href="#" class="hover:text-purple-200">Facebook</a>
+        </div>
+        <p>© 2025 Blog Post</p>
       </div>
-      <p>© 2025 Blog Post</p>
     </footer>
   </body>
 </html>

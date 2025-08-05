@@ -5,50 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <header>
-      <div class="container nav-container">
-        <h1 class="logo">Blog Post</h1>
+  <body
+    class="bg-gradient-to-br from-purple-100 via-purple-200 to-purple-300 text-gray-900 font-sans"
+  >
+    <header
+      class="bg-gradient-to-r from-purple-700 to-purple-500 text-white py-5 shadow-md sticky top-0 z-50"
+    >
+      <div class="container mx-auto px-4 flex justify-between items-center">
+        <h1 class="text-3xl font-bold tracking-wide">Blog Post</h1>
         <nav>
-          <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="blog.html">Blog</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
+          <ul class="flex gap-6 text-lg font-medium">
+            <li><a href="index.html" class="hover:underline">Home</a></li>
+            <li><a href="blog.html" class="hover:underline">Blog</a></li>
+            <li><a href="about.html" class="hover:underline">About</a></li>
+            <li><a href="contact.html" class="hover:underline">Contact</a></li>
           </ul>
         </nav>
       </div>
     </header>
 
-    <section class="contact-section">
-      <h2>Contact Us</h2>
-      <p>
+    <section
+      class="contact-section max-w-2xl mx-auto mt-12 bg-white/90 p-8 rounded-xl shadow"
+    >
+      <h2 class="text-3xl font-bold text-purple-800 mb-4">Contact Us</h2>
+      <p class="mb-4 text-purple-700">
         You can reach out to us via our social media channels or fill the form
         below:
       </p>
 
-      <form id="contact-form">
-        <input type="text" name="name" placeholder="Your Name" required /><br />
+      <form id="contact-form" class="space-y-4">
+        <input
+          type="text"
+          name="name"
+          placeholder="Your Name"
+          required
+          class="w-full p-3 border border-purple-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400 bg-purple-50 text-purple-900 placeholder-purple-400"
+        />
         <input
           type="email"
           name="email"
           placeholder="Your Email"
           required
-        /><br />
-        <textarea name="message" placeholder="Your Message" required></textarea
-        ><br />
-        <button type="submit">Send Message</button>
+          class="w-full p-3 border border-purple-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400 bg-purple-50 text-purple-900 placeholder-purple-400"
+        />
+        <textarea
+          name="message"
+          placeholder="Your Message"
+          required
+          class="w-full p-3 border border-purple-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-400 bg-purple-50 text-purple-900 placeholder-purple-400"
+        ></textarea>
+        <button
+          type="submit"
+          class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-semibold transition-all"
+        >
+          Send Message
+        </button>
       </form>
     </section>
 
-    <footer>
-      <div class="socials">
-        <a href="#">Instagram</a>
-        <a href="#">Twitter</a>
-        <a href="#">Facebook</a>
+    <footer
+      class="bg-gradient-to-r from-purple-700 to-purple-900 text-white py-8 mt-10"
+    >
+      <div class="container mx-auto px-4 text-center space-y-4">
+        <div class="flex justify-center gap-6">
+          <a href="#" class="hover:text-purple-200">Instagram</a>
+          <a href="#" class="hover:text-purple-200">Twitter</a>
+          <a href="#" class="hover:text-purple-200">Facebook</a>
+        </div>
+        <p>© 2025 Blog Post</p>
       </div>
-      <p>© 2025 Blog Post</p>
     </footer>
 
     <script>

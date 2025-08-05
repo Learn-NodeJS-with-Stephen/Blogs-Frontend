@@ -7,12 +7,12 @@
     <script src="style.css"></script>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="bg-white text-gray-800 font-sans">
+  <body class="bg-gradient-to-br from-purple-100 via-purple-200 to-purple-300 text-gray-900 font-sans">
     <header
-      class="bg-gradient-to-r from-pink-500 to-yellow-400 text-white py-5 shadow-md sticky top-0 z-50"
+      class="bg-gradient-to-r from-purple-700 to-purple-500 text-white py-5 shadow-md sticky top-0 z-50"
     >
       <div class="container mx-auto px-4 flex justify-between items-center">
-        <h1 class="text-3xl font-bold">Blog Post</h1>
+        <h1 class="text-3xl font-bold tracking-wide">Blog Post</h1>
         <nav>
           <ul class="flex gap-6 text-lg font-medium">
             <li><a href="index.html" class="hover:underline">Home</a></li>
@@ -25,9 +25,9 @@
     </header>
 
     <!-- Hero -->
-    <section class="text-center py-20 bg-gray-100 animate-fade-in-down">
-      <h2 class="text-4xl font-bold mb-4">Welcome to My Blog Post</h2>
-      <p class="max-w-2xl mx-auto text-gray-600">
+    <section class="text-center py-20 bg-gradient-to-r from-purple-200 to-purple-100 animate-fade-in-down">
+      <h2 class="text-4xl font-bold mb-4 text-purple-800">Welcome to My Blog Post</h2>
+      <p class="max-w-2xl mx-auto text-purple-700">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec mollis,
         orci at varius pellentesque, nibh odio lacinia erat, vitae commodo massa
         turpis eget risus. Nam ornare enim vel lacus rutrum consectetur rutrum
@@ -36,21 +36,21 @@
       </p>
     </section>
 
-    <section class="min-h-screen bg-gradient-to-r from-yellow-50 to-gray-100 flex items-center justify-center px-4">
-      <div class="max-w-6xl w-full grid md:grid-cols-2 shadow-xl rounded-2xl overflow-hidden bg-white">
+    <section class="min-h-screen bg-gradient-to-r from-purple-50 to-purple-200 flex items-center justify-center px-4">
+      <div class="max-w-6xl w-full grid md:grid-cols-2 shadow-2xl rounded-2xl overflow-hidden bg-white/90">
         <!-- Left: Sign Up Form -->
         <div class="p-10 space-y-6" id="signup-box">
-          <h2 class="text-3xl font-bold text-gray-800">Create an account</h2>
-          <p class="text-gray-500">Sign up and get 30-day free trial</p>
+          <h2 class="text-3xl font-bold text-purple-800">Create an account</h2>
+          <p class="text-purple-500">Sign up and get 30-day free trial</p>
           <form id="signup-form" class="space-y-4">
-            <input type="text" name="first_name" placeholder="First Name" required class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400" />
-            <input type="text" name="last_name" placeholder="Last Name" required class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400" />
-            <input type="text" name="username" placeholder="Username" required class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400" />
-            <input type="email" name="email" placeholder="Email" required class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400" />
-            <input type="password" name="password" placeholder="Password" required class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400" />
-            <button type="submit" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-white rounded-full font-semibold transition-all">Submit</button>
+            <input type="text" name="first_name" placeholder="First Name" required class="w-full p-3 border border-purple-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400" />
+            <input type="text" name="last_name" placeholder="Last Name" required class="w-full p-3 border border-purple-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400" />
+            <input type="text" name="username" placeholder="Username" required class="w-full p-3 border border-purple-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400" />
+            <input type="email" name="email" placeholder="Email" required class="w-full p-3 border border-purple-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400" />
+            <input type="password" name="password" placeholder="Password" required class="w-full p-3 border border-purple-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400" />
+            <button type="submit" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-semibold transition-all">Submit</button>
           </form>
-          <div class="flex items-center justify-between text-sm text-gray-500 mt-4">
+          <div class="flex items-center justify-between text-sm text-purple-500 mt-4">
             <a href="#" id="show-login" class="hover:underline">Already have an account? Sign in</a>
             <a href="#" class="hover:underline">Terms & Conditions</a>
           </div>
@@ -58,13 +58,13 @@
 
         <!-- Login Form (initially hidden) -->
         <div id="login-box" class="p-10 space-y-6 hidden">
-          <h2 class="text-3xl font-bold text-gray-800">Sign In</h2>
+          <h2 class="text-3xl font-bold text-purple-800">Sign In</h2>
           <form id="login-form" class="space-y-4">
-            <input type="email" name="email" placeholder="Email" required class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400" />
-            <input type="password" name="password" placeholder="Password" required class="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400" />
-            <button type="submit" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-white rounded-full font-semibold transition-all">Sign In</button>
+            <input type="email" name="email" placeholder="Email" required class="w-full p-3 border border-purple-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400" />
+            <input type="password" name="password" placeholder="Password" required class="w-full p-3 border border-purple-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400" />
+            <button type="submit" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-semibold transition-all">Sign In</button>
           </form>
-          <div class="flex items-center justify-between text-sm text-gray-500 mt-4">
+          <div class="flex items-center justify-between text-sm text-purple-500 mt-4">
             <a href="#" id="show-signup" class="hover:underline">Don't have an account? Sign up</a>
           </div>
         </div>
@@ -83,30 +83,17 @@
           <!-- Navigation Arrows -->
           <button
             id="prevBtn"
-            class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow-lg"
+            class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-purple-100/80 hover:bg-purple-200 p-2 rounded-full shadow-lg"
           >
             &#10094;
           </button>
           <button
             id="nextBtn"
-            class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow-lg"
+            class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-purple-100/80 hover:bg-purple-200 p-2 rounded-full shadow-lg"
           >
             &#10095;
           </button>
-
-          <!-- Create Post Button Overlay -->
-          <!--
-          <div class="absolute bottom-6 left-6 bg-white bg-opacity-90 rounded-xl p-4 shadow-lg">
-            <button
-              onclick="showForm('create')"
-              class="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all"
-            >
-              Create Blog Post
-            </button>
-          </div>
-          -->
         </div>
-
         <script>
           const sliderImages = [
             "./images/abstract-background-with-low-poly-design.jpg",
@@ -142,7 +129,6 @@
           document.getElementById("nextBtn").addEventListener("click", nextImage);
           document.getElementById("prevBtn").addEventListener("click", prevImage);
 
-          // Auto change every 5s
           setInterval(nextImage, 5000);
         </script>
       </div>
@@ -186,21 +172,21 @@
 </section>
 
 <!-- Recent Posts -->
-<section class="bg-gray-100 py-12">
+<section class="bg-gradient-to-r from-purple-100 to-purple-200 py-12">
   <div class="container mx-auto px-4">
-    <h2 class="text-2xl font-semibold text-center mb-6">Latest Posts</h2>
+    <h2 class="text-2xl font-semibold text-center mb-6 text-purple-800">Latest Posts</h2>
     <div id="post-list" class="grid md:grid-cols-3 gap-8"></div>
   </div>
 </section>
 
 <!-- Footer -->
-<footer class="bg-gray-900 text-white py-8 mt-10">
+<footer class="bg-gradient-to-r from-purple-700 to-purple-900 text-white py-8 mt-10">
   <div class="container mx-auto px-4 text-center space-y-4">
     <div class="flex justify-center gap-6">
-      <a href="#">Instagram</a>
-      <a href="#">Twitter</a>
-      <a href="#">Facebook</a>
-      <a href="admin.html">Admin</a>
+      <a href="#" class="hover:text-purple-200">Instagram</a>
+      <a href="#" class="hover:text-purple-200">Twitter</a>
+      <a href="#" class="hover:text-purple-200">Facebook</a>
+      <a href="admin.html" class="hover:text-purple-200">Admin</a>
     </div>
     <form id="subscribe-form" class="flex justify-center gap-4">
       <input
@@ -219,70 +205,53 @@
 <script>
   let authToken = localStorage.getItem("token") || "";
 
-// Show dashboard and fetch user posts
-function showDashboard(user) {
-  document.getElementById("login-box").classList.add("hidden");
-  document.getElementById("signup-box").classList.add("hidden");
-  document.getElementById("user-dashboard").classList.remove("hidden");
-  document.getElementById("dashboard-username").textContent = user.username || user.email || "User";
-  fetchUserPosts();
-}
-
-// Fetch posts for the logged-in user
-function fetchUserPosts() {
-  fetch("http://localhost:3600/blogs/my/post", {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  })
+  // Fetch latest blog posts
+  fetch("http://localhost:3600/blogs")
     .then((res) => res.json())
     .then((data) => {
-      const postsDiv = document.getElementById("user-posts");
-      postsDiv.innerHTML = "";
-      if (data.success && data.data && data.data.length > 0) {
-        data.data.forEach((post) => {
+      if (data.success && data.data) {
+        const blogList = document.getElementById("post-list");
+        blogList.innerHTML = "";
+        data.data.slice(0, 3).forEach((post) => {
           const div = document.createElement("div");
-          div.className = "bg-gray-50 p-4 rounded shadow";
+          div.className =
+            "bg-white p-6 rounded-lg shadow-md hover:scale-105 transform transition duration-300 border border-purple-200";
           div.innerHTML = `
-            <h4 class="font-bold">${post.title}</h4>
-            <p>${post.content.substring(0, 120)}...</p>
-            <span class="text-xs text-gray-500">${new Date(post.created_at).toLocaleString()}</span>
-            <span class="text-xs text-pink-600 block mt-1">Category: ${post.category || ""}</span>
+            <h3 class="text-xl font-semibold mb-2 text-purple-800">${post.title}</h3>
+            <p class="text-sm text-purple-700 mb-2">${post.content.length > 100 ? post.content.substring(0, 100) + "..." : post.content}</p>
+            <span class="text-xs text-purple-500">By ${post.username || "Unknown"} | ${new Date(post.created_at).toLocaleString()}</span>
           `;
-          postsDiv.appendChild(div);
+          blogList.appendChild(div);
         });
-      } else {
-        postsDiv.innerHTML = "<p>No blog posts found for your account.</p>";
       }
     });
-}
 
-// Login form handler
-document.getElementById("login-form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const formData = new FormData(e.target);
-  const body = Object.fromEntries(formData);
+  // Login form handler
+  document.getElementById("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const body = Object.fromEntries(formData);
 
-  const res = await fetch("http://localhost:3600/users/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    const res = await fetch("http://localhost:3600/users/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    const data = await res.json();
+    if (data.success && data.token) {
+      localStorage.setItem("token", data.token); // <-- Save the token!
+      localStorage.setItem("user", JSON.stringify(data.user || body));
+      window.location.href = "dashboard.html";
+    } else if (data.success) {
+      // fallback if backend doesn't return token
+      localStorage.removeItem("token");
+      localStorage.setItem("user", JSON.stringify(data.user || body));
+      window.location.href = "dashboard.html";
+    } else {
+      alert(data.message || "Signup failed");
+    }
   });
-
-  const data = await res.json();
-  if (data.success && data.token) {
-    localStorage.setItem("token", data.token); // <-- Save the token!
-    localStorage.setItem("user", JSON.stringify(data.user || body));
-    window.location.href = "dashboard.html";
-  } else if (data.success) {
-    // fallback if backend doesn't return token
-    localStorage.removeItem("token");
-    localStorage.setItem("user", JSON.stringify(data.user || body));
-    window.location.href = "dashboard.html";
-  } else {
-    alert(data.message || "Signup failed");
-  }
-});
 
   document
     .getElementById("signup-form")
@@ -346,31 +315,6 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
       fetchUserPosts(); // Refresh dashboard posts after creating a new post
     });
 
-  // Fetch latest blog posts
-  fetch("http://localhost:3600/blogs")
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.success && data.data) {
-        const blogList = document.getElementById("post-list");
-        data.data.slice(0, 3).forEach((post) => {
-          const div = document.createElement("div");
-          div.className =
-            "bg-white p-6 rounded-lg shadow-md hover:scale-105 transform transition duration-300";
-          div.innerHTML = `
-            <h3 class="text-xl font-semibold mb-2">${post.title}</h3>
-            <p class="text-sm text-gray-600 mb-2">${post.content.substring(
-              0,
-              100
-            )}...</p>
-            <span class="text-xs text-gray-500">By ${
-              post.username
-            } | ${new Date(post.created_at).toDateString()}</span>
-          `;
-          blogList.appendChild(div);
-        });
-      }
-    });
-
   // Logout button
   document.getElementById("logout-btn").onclick = function () {
     localStorage.removeItem("token");
@@ -382,24 +326,21 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
 
 <!-- Tailwind Buttons & Inputs Custom Classes -->
 <style>
-        .btn-tab {
-          @apply bg-gray-200 hover:bg-pink-100 text-gray-800 font-semibold py-2 px-4 rounded shadow;
-        }
-        .form-title {
-          @apply text-2xl font-bold mb-4 text-pink-600;
-        }
-        .form-box {
-          @apply bg-white p-6 rounded shadow w-full;
-        }
-
-    .input {
-      @apply px-4 py-3 rounded border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none;
-    }
-
-    .btn-primary {
-      @apply bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow transition;
-    }
-  </style
+  .btn-tab {
+    @apply bg-purple-200 hover:bg-purple-300 text-purple-800 font-semibold py-2 px-4 rounded shadow;
+  }
+  .form-title {
+    @apply text-2xl font-bold mb-4 text-purple-700;
+  }
+  .form-box {
+    @apply bg-white/90 p-6 rounded shadow w-full;
+  }
+  .input {
+    @apply px-4 py-3 rounded border border-purple-300 focus:ring-2 focus:ring-purple-400 focus:outline-none;
+  }
+  .btn-primary {
+    @apply bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg shadow transition;
+  }
 </style>
 </body>
 </html>

@@ -5,125 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blog</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <header>
-      <div class="container nav-container">
-        <h1 class="logo">Blog Post</h1>
+  <body
+    class="bg-gradient-to-br from-purple-100 via-purple-200 to-purple-300 text-gray-900 font-sans"
+  >
+    <header
+      class="bg-gradient-to-r from-purple-700 to-purple-500 text-white py-5 shadow-md sticky top-0 z-50"
+    >
+      <div class="container mx-auto px-4 flex justify-between items-center">
+        <h1 class="text-3xl font-bold tracking-wide">Blog Post</h1>
         <nav>
-          <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="blog.html">Blog</a></li>
-            <!DOCTYPE html>
-            <html lang="en">
-              <head>
-                <meta charset="UTF-8" />
-                <meta
-                  name="viewport"
-                  content="width=device-width, initial-scale=1.0"
-                />
-                <title>Blog</title>
-                <link rel="stylesheet" href="style.css" />
-              </head>
-              <body>
-                <header>
-                  <div class="container nav-container">
-                    <h1 class="logo">Blog Post</h1>
-                    <nav>
-                      <ul class="nav-links">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="blog.html">Blog</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                      </ul>
-                    </nav>
-                  </div>
-                </header>
-
-                <section class="blog-section">
-                  <h2>All Blog Posts</h2>
-                  <div class="post-list" id="all-posts"></div>
-                </section>
-
-                <footer>
-                  <div class="socials">
-                    <a href="#">Instagram</a>
-                    <a href="#">Twitter</a>
-                    <a href="#">Facebook</a>
-                  </div>
-                  <p>© 2025 Blog Post</p>
-                </footer>
-
-                <script>
-                  fetch("http://localhost:3600/blogs")
-                    .then((res) => res.json())
-                    .then((data) => {
-                      if (data.success && data.data) {
-                        const postContainer =
-                          document.getElementById("all-posts");
-                        data.data.forEach((post) => {
-                          const div = document.createElement("div");
-                          div.className = "post-card";
-                          div.innerHTML = `
-              <h3>${post.title}</h3>
-              <p>${post.content.substring(0, 200)}...</p>
-              <span>By ${post.username} | ${new Date(
-                            post.created_at
-                          ).toDateString()}</span>
-            `;
-                          postContainer.appendChild(div);
-                        });
-                      }
-                    })
-                    .catch((err) =>
-                      console.error("Error fetching blogs:", err)
-                    );
-                </script>
-              </body>
-            </html>
-
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
+          <ul class="flex gap-6 text-lg font-medium">
+            <li><a href="index.html" class="hover:underline">Home</a></li>
+            <li><a href="blog.html" class="hover:underline">Blog</a></li>
+            <li><a href="about.html" class="hover:underline">About</a></li>
+            <li><a href="contact.html" class="hover:underline">Contact</a></li>
           </ul>
         </nav>
       </div>
     </header>
 
-    <section class="blog-section">
-      <h2>All Blog Posts</h2>
-      <div class="post-list" id="all-posts"></div>
+    <section
+      class="blog-section max-w-4xl mx-auto mt-12 bg-white/90 p-8 rounded-xl shadow"
+    >
+      <h2 class="text-3xl font-bold text-purple-800 mb-6">All Blog Posts</h2>
+      <div class="post-list grid gap-8" id="all-posts"></div>
     </section>
 
-    <footer>
-      <div class="socials">
-        <a href="#">Instagram</a>
-        <a href="#">Twitter</a>
-        <a href="#">Facebook</a>
+    <footer
+      class="bg-gradient-to-r from-purple-700 to-purple-900 text-white py-8 mt-10"
+    >
+      <div class="container mx-auto px-4 text-center space-y-4">
+        <div class="flex justify-center gap-6">
+          <a href="#" class="hover:text-purple-200">Instagram</a>
+          <a href="#" class="hover:text-purple-200">Twitter</a>
+          <a href="#" class="hover:text-purple-200">Facebook</a>
+        </div>
+        <p>© 2025 Blog Post</p>
       </div>
-      <p>© 2025 Blog Post</p>
     </footer>
 
     <script>
       fetch("http://localhost:3600/blogs")
         .then((res) => res.json())
         .then((data) => {
-          if (data.success && data.data) {
-            const postContainer = document.getElementById("all-posts");
+          const postContainer = document.getElementById("all-posts");
+          postContainer.innerHTML = "";
+          if (data.success && data.data && data.data.length > 0) {
             data.data.forEach((post) => {
               const div = document.createElement("div");
-              div.className = "post-card";
+              div.className =
+                "bg-white p-6 rounded-lg shadow border border-purple-200";
               div.innerHTML = `
-              <h3>${post.title}</h3>
-              <p>${post.content.substring(0, 200)}...</p>
-              <span>By ${post.username} | ${new Date(
-                post.created_at
-              ).toDateString()}</span>
-            `;
+                <h3 class="text-xl font-semibold mb-2 text-purple-800">${
+                  post.title
+                }</h3>
+                <div class="prose prose-p:mb-2 prose-p:whitespace-pre-line text-purple-700 mb-2" style="white-space:pre-line;">
+                  ${post.content}
+                </div>
+                <span class="text-xs text-purple-500">By ${
+                  post.username || "Unknown"
+                } | ${new Date(post.created_at).toLocaleString()}</span>
+              `;
               postContainer.appendChild(div);
             });
+          } else {
+            postContainer.innerHTML =
+              "<p class='text-purple-500'>No blog posts found.</p>";
           }
         })
-        .catch((err) => console.error("Error fetching blogs:", err));
+        .catch((err) => {
+          document.getElementById("all-posts").innerHTML =
+            "<p class='text-red-500'>Failed to load blog posts.</p>";
+          console.error("Error fetching blogs:", err);
+        });
     </script>
   </body>
 </html>
