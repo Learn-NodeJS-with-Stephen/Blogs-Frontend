@@ -17,8 +17,6 @@
           <ul class="flex gap-6 text-lg font-medium">
             <li><a href="index.html" class="hover:underline">Home</a></li>
             <li><a href="blog.html" class="hover:underline">Blog</a></li>
-            <li><a href="about.html" class="hover:underline">About</a></li>
-            <li><a href="contact.html" class="hover:underline">Contact</a></li>
           </ul>
         </nav>
       </div>
@@ -206,7 +204,7 @@
   let authToken = localStorage.getItem("token") || "";
 
   // Fetch latest blog posts
-  fetch("http://localhost:3600/blogs")
+  fetch("http://localhost:3600/blogs/")
     .then((res) => res.json())
     .then((data) => {
       if (data.success && data.data) {
