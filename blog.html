@@ -30,25 +30,19 @@
     >
       <h2 class="text-3xl font-bold text-purple-800 mb-6">All Blog Posts</h2>
       <div class="post-list grid gap-8" id="all-posts"></div>
-      <div class="flex justify-center items-center gap-2 mt-8" id="pagination-controls">
-        <button id="prev-page" class="btn-primary px-4 py-2" disabled>Prev</button>
+      <div
+        class="flex justify-center items-center gap-2 mt-8"
+        id="pagination-controls"
+      >
+        <button id="prev-page" class="btn-primary px-4 py-2" disabled>
+          Prev
+        </button>
         <span id="page-numbers" class="flex gap-1"></span>
-        <button id="next-page" class="btn-primary px-4 py-2" disabled>Next</button>
+        <button id="next-page" class="btn-primary px-4 py-2" disabled>
+          Next
+        </button>
       </div>
     </section>
-
-    <footer
-      class="bg-gradient-to-r from-purple-700 to-purple-900 text-white py-8 mt-10"
-    >
-      <div class="container mx-auto px-4 text-center space-y-4">
-        <div class="flex justify-center gap-6">
-          <a href="#" class="hover:text-purple-200">Instagram</a>
-          <a href="#" class="hover:text-purple-200">Twitter</a>
-          <a href="#" class="hover:text-purple-200">Facebook</a>
-        </div>
-        <p>© 2025 Blog Post</p>
-      </div>
-    </footer>
 
     <script>
       const POSTS_PER_PAGE = 5;
@@ -67,11 +61,15 @@
             div.className =
               "bg-white p-6 rounded-lg shadow border border-purple-200";
             div.innerHTML = `
-              <h3 class="text-xl font-semibold mb-2 text-purple-800">${post.title}</h3>
+              <h3 class="text-xl font-semibold mb-2 text-purple-800">${
+                post.title
+              }</h3>
               <div class="prose prose-p:mb-2 prose-p:whitespace-pre-line text-purple-700 mb-2" style="white-space:pre-line;">
                 ${post.content}
               </div>
-              <span class="text-xs text-purple-500">By ${post.username || "Unknown"} | ${new Date(post.created_at).toLocaleString()}</span>
+              <span class="text-xs text-purple-500">By ${
+                post.username || "Unknown"
+              } | ${new Date(post.created_at).toLocaleString()}</span>
             `;
             postContainer.appendChild(div);
           });
@@ -84,7 +82,8 @@
 
       function updatePaginationControls() {
         document.getElementById("prev-page").disabled = currentPage === 1;
-        document.getElementById("next-page").disabled = currentPage === totalPages || totalPages === 0;
+        document.getElementById("next-page").disabled =
+          currentPage === totalPages || totalPages === 0;
 
         // Render page numbers
         const pageNumbers = document.getElementById("page-numbers");
@@ -138,5 +137,18 @@
           console.error("Error fetching blogs:", err);
         });
     </script>
+
+    <footer
+      class="bg-gradient-to-r from-purple-700 to-purple-900 text-white py-8 mt-10"
+    >
+      <div class="container mx-auto px-4 text-center space-y-4">
+        <div class="flex justify-center gap-6">
+          <a href="#" class="hover:text-purple-200">Instagram</a>
+          <a href="#" class="hover:text-purple-200">Twitter</a>
+          <a href="#" class="hover:text-purple-200">Facebook</a>
+        </div>
+        <p>© 2025 Blog Post</p>
+      </div>
+    </footer>
   </body>
 </html>
