@@ -6,214 +6,281 @@
     <title>Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body
-    class="bg-gradient-to-br from-purple-100 via-purple-200 to-purple-300 text-gray-900 font-sans min-h-screen"
-  >
-    <header
-      class="bg-gradient-to-r from-purple-700 to-purple-500 text-white py-5 shadow-md sticky top-0 z-50"
-    >
-      <div class="container mx-auto px-4 flex justify-between items-center">
-        <h1 class="text-3xl font-bold tracking-wide">Admin Dashboard</h1>
-        <nav>
-          <ul class="flex gap-6 text-lg font-medium">
-            <li><a href="index.html" class="hover:underline">Home</a></li>
-            <li><a href="blog.html" class="hover:underline">Blog</a></li>
+  <body class="bg-white text-black font-sans min-h-screen flex flex-col">
+    <!-- Sidebar -->
+    <div class="flex flex-1 min-h-0">
+      <aside
+        class="w-64 min-h-screen bg-black text-white flex flex-col py-8 px-4 sticky top-0"
+      >
+        <div class="mb-10">
+          <h1 class="text-2xl font-bold tracking-wide mb-2">Admin Panel</h1>
+          <span class="text-zinc-400 text-sm">Thought Nest</span>
+        </div>
+        <nav class="flex-1">
+          <ul class="space-y-2 text-lg font-medium">
             <li>
-              <a href="dashboard.html" class="hover:underline"
-                >User Dashboard</a
+              <a
+                href="#overview"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span>🏠</span> Home/Dashboard</a
               >
             </li>
             <li>
-              <a href="admin-dashboard.html" class="hover:underline font-bold"
-                >Admin</a
+              <a
+                href="#users"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span>👥</span> Users</a
               >
+            </li>
+            <li>
+              <a
+                href="#posts"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span>📝</span> Posts</a
+              >
+            </li>
+            <li>
+              <a
+                href="#categories"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span>🏷️</span> Categories</a
+              >
+            </li>
+            <li>
+              <a
+                href="#reports"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span>🚩</span> Reports/Flags</a
+              >
+            </li>
+            <li>
+              <a
+                href="#profile"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span>👤</span> Profile</a
+              >
+            </li>
+            <li>
+              <button
+                onclick="logout()"
+                class="w-full text-left flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+              >
+                <span>🚪</span> Logout
+              </button>
             </li>
           </ul>
         </nav>
-      </div>
-    </header>
+      </aside>
 
-    <main class="max-w-7xl mx-auto py-10 px-4">
-      <!-- Overview / Analytics Section -->
-      <section class="mb-10">
-        <h2 class="text-2xl font-bold text-purple-800 mb-4">
-          Overview & Analytics
-        </h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div
-            class="bg-white rounded-lg shadow p-6 flex flex-col items-center"
-          >
-            <span class="text-4xl font-bold text-purple-700" id="total-posts"
-              >0</span
+      <!-- Main Content -->
+      <main class="flex-1 px-6 py-10 bg-white text-black min-h-screen">
+        <!-- Overview / Analytics Section -->
+        <section id="overview" class="mb-10">
+          <h2 class="text-2xl font-bold text-black mb-4">
+            Overview & Analytics
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div
+              class="bg-gray-100 rounded-lg shadow p-6 flex flex-col items-center"
             >
-            <span class="text-gray-600 mt-2">Total Posts</span>
-          </div>
-          <div
-            class="bg-white rounded-lg shadow p-6 flex flex-col items-center"
-          >
-            <span class="text-4xl font-bold text-purple-700" id="total-users"
-              >0</span
+              <span class="text-4xl font-bold text-black" id="total-posts"
+                >0</span
+              >
+              <span class="text-gray-600 mt-2">Total Posts</span>
+            </div>
+            <div
+              class="bg-gray-100 rounded-lg shadow p-6 flex flex-col items-center"
             >
-            <span class="text-gray-600 mt-2">Registered Users</span>
-          </div>
-          <div
-            class="bg-white rounded-lg shadow p-6 flex flex-col items-center"
-          >
-            <span class="text-4xl font-bold text-purple-700" id="active-authors"
-              >0</span
+              <span class="text-4xl font-bold text-black" id="total-users"
+                >0</span
+              >
+              <span class="text-gray-600 mt-2">Registered Users</span>
+            </div>
+            <div
+              class="bg-gray-100 rounded-lg shadow p-6 flex flex-col items-center"
             >
-            <span class="text-gray-600 mt-2">Active Authors</span>
-          </div>
-          <div
-            class="bg-white rounded-lg shadow p-6 flex flex-col items-center"
-          >
-            <span class="text-4xl font-bold text-purple-700" id="total-comments"
-              >0</span
+              <span class="text-4xl font-bold text-black" id="active-authors"
+                >0</span
+              >
+              <span class="text-gray-600 mt-2">Active Authors</span>
+            </div>
+            <div
+              class="bg-gray-100 rounded-lg shadow p-6 flex flex-col items-center"
             >
-            <span class="text-gray-600 mt-2">Total Comments</span>
+              <span class="text-4xl font-bold text-black" id="total-comments"
+                >0</span
+              >
+              <span class="text-gray-600 mt-2">Total Comments</span>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- User Management -->
-      <section class="mb-10">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-2xl font-bold text-purple-800">User Management</h2>
-          <button class="btn-primary px-4 py-2" id="add-user-btn">
-            Add User
-          </button>
-        </div>
-        <input
-          type="text"
-          id="user-search"
-          placeholder="Search users..."
-          class="input mb-4 w-full max-w-md"
-        />
-        <div class="overflow-x-auto">
-          <table class="min-w-full bg-white rounded-lg shadow">
-            <thead>
-              <tr class="bg-purple-100 text-purple-800">
-                <th class="py-2 px-4">Name</th>
-                <th class="py-2 px-4">Email</th>
-                <th class="py-2 px-4">Role</th>
-                <th class="py-2 px-4">Status</th>
-                <th class="py-2 px-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="user-table">
-              <!-- Users will be rendered here -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Post Management -->
-      <section class="mb-10">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-2xl font-bold text-purple-800">Post Management</h2>
-          <select id="post-filter" class="input max-w-xs">
-            <option value="">All Status</option>
-            <option value="published">Published</option>
-            <option value="pending">Pending</option>
-            <option value="draft">Draft</option>
-          </select>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="min-w-full bg-white rounded-lg shadow">
-            <thead>
-              <tr class="bg-purple-100 text-purple-800">
-                <th class="py-2 px-4">Title</th>
-                <th class="py-2 px-4">Author</th>
-                <th class="py-2 px-4">Category</th>
-                <th class="py-2 px-4">Status</th>
-                <th class="py-2 px-4">Date</th>
-                <th class="py-2 px-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="post-table">
-              <!-- Posts will be rendered here -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Category & Tag Management -->
-      <section class="mb-10">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-2xl font-bold text-purple-800">Categories & Tags</h2>
-          <button class="btn-primary px-4 py-2" id="add-category-btn">
-            Add Category
-          </button>
-          <button class="btn-primary px-4 py-2" id="add-tag-btn">
-            Add Tag
-          </button>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <h3 class="font-semibold text-purple-700 mb-2">Categories</h3>
-            <ul id="category-list" class="mb-4"></ul>
+        <!-- Quick Links: Recent Posts & Users -->
+        <section id="dashboard-quick-links" class="mb-10">
+          <div class="grid md:grid-cols-2 gap-8">
+            <!-- Recent Posts -->
+            <div class="bg-gray-100 rounded-lg shadow p-6">
+              <div class="flex justify-between items-center mb-3">
+                <h3 class="text-lg font-bold text-black">Recent Posts</h3>
+                <a
+                  href="#posts"
+                  class="text-blue-600 underline text-sm hover:text-black"
+                  >See more</a
+                >
+              </div>
+              <ul id="recent-posts-list" class="space-y-2 text-black"></ul>
+            </div>
+            <!-- All Users -->
+            <div class="bg-gray-100 rounded-lg shadow p-6">
+              <div class="flex justify-between items-center mb-3">
+                <h3 class="text-lg font-bold text-black">All Users</h3>
+                <a
+                  href="#users"
+                  class="text-blue-600 underline text-sm hover:text-black"
+                  >See more</a
+                >
+              </div>
+              <ul id="recent-users-list" class="space-y-2 text-black"></ul>
+            </div>
           </div>
-          <div>
-            <h3 class="font-semibold text-purple-700 mb-2">Tags</h3>
-            <ul id="tag-list" class="mb-4"></ul>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Reports & Flags -->
-      <section class="mb-10">
-        <h2 class="text-2xl font-bold text-purple-800 mb-4">Reports & Flags</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <h3 class="font-semibold text-purple-700 mb-2">Flagged Posts</h3>
-            <ul id="flagged-posts-list" class="mb-4"></ul>
+        <!-- User Management -->
+        <section id="users" class="mb-10">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold text-black">User Management</h2>
+            <button class="btn-primary px-4 py-2" id="add-user-btn">
+              Add User
+            </button>
           </div>
-          <div>
-            <h3 class="font-semibold text-purple-700 mb-2">Flagged Users</h3>
-            <ul id="flagged-users-list" class="mb-4"></ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- Profile & Security -->
-      <section class="mb-10">
-        <h2 class="text-2xl font-bold text-purple-800 mb-4">
-          Profile & Security
-        </h2>
-        <form id="admin-profile-form" class="space-y-4 max-w-lg">
           <input
             type="text"
-            name="name"
-            placeholder="Name"
-            class="input w-full"
+            id="user-search"
+            placeholder="Search users..."
+            class="input mb-4 w-full max-w-md"
           />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            class="input w-full"
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="New Password"
-            class="input w-full"
-          />
-          <button type="submit" class="btn-primary w-full">
-            Update Profile
-          </button>
-        </form>
-      </section>
-    </main>
+          <div class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow text-black">
+              <thead>
+                <tr class="bg-gray-200 text-black">
+                  <th class="py-2 px-4">Name</th>
+                  <th class="py-2 px-4">Email</th>
+                  <th class="py-2 px-4">Role</th>
+                  <th class="py-2 px-4">Status</th>
+                  <th class="py-2 px-4">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="user-table">
+                <!-- Users will be rendered here -->
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-    <footer
-      class="bg-gradient-to-r from-purple-700 to-purple-900 text-white py-8 mt-10"
-    >
+        <!-- Post Management -->
+        <section id="posts" class="mb-10">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold text-black">Post Management</h2>
+            <select id="post-filter" class="input max-w-xs">
+              <option value="">All Status</option>
+              <option value="published">Published</option>
+              <option value="pending">Pending</option>
+              <option value="draft">Draft</option>
+            </select>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow text-black">
+              <thead>
+                <tr class="bg-gray-200 text-black">
+                  <th class="py-2 px-4">Title</th>
+                  <th class="py-2 px-4">Author</th>
+                  <th class="py-2 px-4">Category</th>
+                  <th class="py-2 px-4">Status</th>
+                  <th class="py-2 px-4">Date</th>
+                  <th class="py-2 px-4">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="post-table">
+                <!-- Posts will be rendered here -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Category & Tag Management -->
+        <section id="categories" class="mb-10">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold text-black">Categories & Tags</h2>
+            <button class="btn-primary px-4 py-2" id="add-category-btn">
+              Add Category
+            </button>
+            <button class="btn-primary px-4 py-2" id="add-tag-btn">
+              Add Tag
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="font-semibold text-black mb-2">Categories</h3>
+              <ul id="category-list" class="mb-4"></ul>
+            </div>
+            <div>
+              <h3 class="font-semibold text-black mb-2">Tags</h3>
+              <ul id="tag-list" class="mb-4"></ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Reports & Flags -->
+        <section id="reports" class="mb-10">
+          <h2 class="text-2xl font-bold text-black mb-4">Reports & Flags</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="font-semibold text-black mb-2">Flagged Posts</h3>
+              <ul id="flagged-posts-list" class="mb-4"></ul>
+            </div>
+            <div>
+              <h3 class="font-semibold text-black mb-2">Flagged Users</h3>
+              <ul id="flagged-users-list" class="mb-4"></ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Profile & Security -->
+        <section id="profile" class="mb-10">
+          <h2 class="text-2xl font-bold text-black mb-4">Profile & Security</h2>
+          <form id="admin-profile-form" class="space-y-4 max-w-lg">
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              class="input w-full"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              class="input w-full"
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="New Password"
+              class="input w-full"
+            />
+            <button type="submit" class="btn-primary w-full">
+              Update Profile
+            </button>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <footer class="bg-black text-zinc-300 py-8 w-full mt-auto">
       <div class="container mx-auto px-4 text-center space-y-4">
         <div class="flex justify-center gap-6">
-          <a href="#" class="hover:text-purple-200">Instagram</a>
-          <a href="#" class="hover:text-purple-200">Twitter</a>
-          <a href="#" class="hover:text-purple-200">Facebook</a>
+          <a href="#" class="hover:text-white">Instagram</a>
+          <a href="#" class="hover:text-white">Twitter</a>
+          <a href="#" class="hover:text-white">Facebook</a>
         </div>
         <p>© 2025 Blog Post Admin</p>
       </div>
@@ -221,34 +288,476 @@
 
     <style>
       .btn-primary {
-        background: linear-gradient(to right, #7c3aed, #a78bfa);
+        background: linear-gradient(to right, #222, #444);
         color: #fff;
         font-weight: 700;
         padding: 0.5rem 1.2rem;
         border-radius: 0.75rem;
-        box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08);
+        box-shadow: 0 2px 8px rgba(24, 24, 24, 0.08);
         transition: background 0.2s, box-shadow 0.2s;
         letter-spacing: 0.02em;
         font-size: 1rem;
       }
       .btn-primary:hover {
-        background: linear-gradient(to right, #a78bfa, #7c3aed);
-        box-shadow: 0 4px 16px rgba(124, 58, 237, 0.15);
+        background: linear-gradient(to right, #444, #222);
+        box-shadow: 0 4px 16px rgba(24, 24, 24, 0.15);
       }
       .input {
         padding: 0.75rem 1rem;
         border-radius: 0.75rem;
-        border: 1px solid #a78bfa;
-        background: #f3f0ff;
-        color: #4b2e83;
+        border: 1px solid #444;
+        background: #f9f9f9;
+        color: #000;
         font-size: 1rem;
         margin-bottom: 0.5rem;
         outline: none;
         transition: border 0.2s;
       }
       .input:focus {
-        border-color: #7c3aed;
+        border-color: #000;
+      }
+      ::selection {
+        background: #000;
+        color: #fff;
+      }
+      @media (max-width: 900px) {
+        aside {
+          min-width: 100px;
+          width: 100%;
+          position: static;
+        }
+        main {
+          padding: 1rem;
+        }
       }
     </style>
+    <script>
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "index.html";
+      }
+
+      const API = "http://localhost:3600/admin"; // Adjust if your admin routes are different
+
+      // --- Overview / Analytics ---
+      async function loadAnalytics() {
+        // You should create an endpoint like /admin/analytics for this summary
+        const res = await fetch(`${API}/analytics`, {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById("total-posts").textContent = data.totalPosts;
+          document.getElementById("total-users").textContent = data.totalUsers;
+          document.getElementById("active-authors").textContent =
+            data.activeAuthors;
+          document.getElementById("total-comments").textContent =
+            data.totalComments;
+        }
+      }
+
+      // --- User Management ---
+      async function loadUsers(query = "") {
+        const res = await fetch(
+          `${API}/users?search=${encodeURIComponent(query)}`,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        );
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success) {
+          const tbody = document.getElementById("user-table");
+          tbody.innerHTML = "";
+          data.users.forEach((user) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+      <td class="py-2 px-4">${user.username}</td>
+      <td class="py-2 px-4">${user.email}</td>
+      <td class="py-2 px-4">
+        <select data-id="${
+          user.id
+        }" class="role-select border rounded px-2 py-1">
+          <option value="user" ${
+            user.user_type === "user" ? "selected" : ""
+          }>User</option>
+          <option value="admin" ${
+            user.user_type === "admin" ? "selected" : ""
+          }>Admin</option>
+        </select>
+      </td>
+      <td class="py-2 px-4">${user.is_active ? "Active" : "Suspended"}</td>
+      <td class="py-2 px-4">
+        <button class="text-blue-600 underline edit-user-btn" data-id="${
+          user.id
+        }">Edit</button>
+        <button class="text-red-600 underline ml-2 delete-user-btn" data-id="${
+          user.id
+        }">Delete</button>
+        <button class="text-yellow-600 underline ml-2 suspend-user-btn" data-id="${
+          user.id
+        }">${user.is_active ? "Suspend" : "Activate"}</button>
+      </td>
+    `;
+            tbody.appendChild(tr);
+          });
+
+          // Role change
+          document.querySelectorAll(".role-select").forEach((sel) => {
+            sel.onchange = async function () {
+              await fetch(`${API}/users/${this.dataset.id}/role`, {
+                method: "PATCH",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+                body: JSON.stringify({ role: this.value }),
+              });
+              loadUsers(document.getElementById("user-search").value);
+            };
+          });
+
+          // Delete user
+          document.querySelectorAll(".delete-user-btn").forEach((btn) => {
+            btn.onclick = async function () {
+              if (confirm("Delete this user?")) {
+                await fetch(`${API}/users/${this.dataset.id}`, {
+                  method: "DELETE",
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                });
+                loadUsers(document.getElementById("user-search").value);
+              }
+            };
+          });
+
+          // Suspend/Activate user
+          document.querySelectorAll(".suspend-user-btn").forEach((btn) => {
+            btn.onclick = async function () {
+              await fetch(`${API}/users/${this.dataset.id}/restrict`, {
+                method: "PATCH",
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+              });
+              loadUsers(document.getElementById("user-search").value);
+            };
+          });
+        }
+      }
+      document.getElementById("user-search").oninput = function () {
+        loadUsers(this.value);
+      };
+
+      // --- Post Management ---
+      async function loadPosts(status = "") {
+        const res = await fetch(
+          `${API}/posts?status=${encodeURIComponent(status)}`,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        );
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success) {
+          const tbody = document.getElementById("post-table");
+          tbody.innerHTML = "";
+          data.posts.forEach((post) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+      <td class="py-2 px-4">${post.title}</td>
+      <td class="py-2 px-4">${post.username}</td>
+      <td class="py-2 px-4">${post.category}</td>
+      <td class="py-2 px-4">${
+        post.status ||
+        (post.is_deleted
+          ? "Deleted"
+          : post.is_restricted
+          ? "Restricted"
+          : "Published")
+      }</td>
+      <td class="py-2 px-4">${new Date(
+        post.created_at
+      ).toLocaleDateString()}</td>
+      <td class="py-2 px-4">
+        <button class="text-blue-600 underline edit-post-btn" data-id="${
+          post.id
+        }">Edit</button>
+        <button class="text-red-600 underline ml-2 delete-post-btn" data-id="${
+          post.id
+        }">Delete</button>
+        <button class="text-yellow-600 underline ml-2 restrict-post-btn" data-id="${
+          post.id
+        }">Restrict</button>
+      </td>
+    `;
+            tbody.appendChild(tr);
+          });
+
+          // Delete post
+          document.querySelectorAll(".delete-post-btn").forEach((btn) => {
+            btn.onclick = async function () {
+              const reason = prompt("Reason for deletion?");
+              if (reason) {
+                await fetch(`${API}/posts/${this.dataset.id}/delete`, {
+                  method: "PATCH",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                  body: JSON.stringify({ reason }),
+                });
+                loadPosts(document.getElementById("post-filter").value);
+              }
+            };
+          });
+
+          // Restrict post
+          document.querySelectorAll(".restrict-post-btn").forEach((btn) => {
+            btn.onclick = async function () {
+              await fetch(`${API}/posts/${this.dataset.id}/restrict`, {
+                method: "PATCH",
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+              });
+              loadPosts(document.getElementById("post-filter").value);
+            };
+          });
+        }
+      }
+      document.getElementById("post-filter").onchange = function () {
+        loadPosts(this.value);
+      };
+
+      // --- Category & Tag Management ---
+      async function loadCategories() {
+        const res = await fetch(`${API}/categories`, {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success) {
+          const ul = document.getElementById("category-list");
+          ul.innerHTML = "";
+          data.categories.forEach((cat) => {
+            const li = document.createElement("li");
+            li.className = "flex justify-between items-center py-2";
+            li.innerHTML = `
+      <span class="text-purple-700 font-medium">${cat.name}</span>
+      <button class="text-red-600 underline delete-category-btn" data-id="${cat.id}">Delete</button>
+    `;
+            ul.appendChild(li);
+          });
+
+          // Delete category
+          document.querySelectorAll(".delete-category-btn").forEach((btn) => {
+            btn.onclick = async function () {
+              if (confirm("Delete this category?")) {
+                await fetch(`${API}/categories/${this.dataset.id}`, {
+                  method: "DELETE",
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                });
+                loadCategories();
+              }
+            };
+          });
+        }
+      }
+      async function loadTags() {
+        const res = await fetch(`${API}/tags`, {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success) {
+          const ul = document.getElementById("tag-list");
+          ul.innerHTML = "";
+          data.tags.forEach((tag) => {
+            const li = document.createElement("li");
+            li.className = "flex justify-between items-center py-2";
+            li.innerHTML = `
+      <span class="text-purple-700 font-medium">${tag.name}</span>
+      <button class="text-red-600 underline delete-tag-btn" data-id="${tag.id}">Delete</button>
+    `;
+            ul.appendChild(li);
+          });
+
+          // Delete tag
+          document.querySelectorAll(".delete-tag-btn").forEach((btn) => {
+            btn.onclick = async function () {
+              if (confirm("Delete this tag?")) {
+                await fetch(`${API}/tags/${this.dataset.id}`, {
+                  method: "DELETE",
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                });
+                loadTags();
+              }
+            };
+          });
+        }
+      }
+      document.getElementById("add-category-btn").onclick = async function () {
+        const name = prompt("New category name:");
+        if (name) {
+          await fetch(`${API}/categories`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+            body: JSON.stringify({ name }),
+          });
+          loadCategories();
+        }
+      };
+      document.getElementById("add-tag-btn").onclick = async function () {
+        const name = prompt("New tag name:");
+        if (name) {
+          await fetch(`${API}/tags`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+            body: JSON.stringify({ name }),
+          });
+          loadTags();
+        }
+      };
+
+      // --- Reports & Flags ---
+      async function loadFlaggedPosts() {
+        const res = await fetch(`${API}/posts/flagged`, {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success) {
+          const ul = document.getElementById("flagged-posts-list");
+          ul.innerHTML = "";
+          data.posts.forEach((post) => {
+            const li = document.createElement("li");
+            li.className = "border-b py-2";
+            li.innerHTML = `
+      <div class="flex justify-between items-center">
+        <span class="text-purple-700 font-medium">${post.title}</span>
+        <button class="text-red-600 underline unflag-post-btn" data-id="${post.id}">Unflag</button>
+      </div>
+      <div class="text-gray-600 text-sm">${post.reason}</div>
+    `;
+            ul.appendChild(li);
+          });
+
+          // Unflag post
+          document.querySelectorAll(".unflag-post-btn").forEach((btn) => {
+            btn.onclick = async function () {
+              await fetch(`${API}/posts/${this.dataset.id}/unflag`, {
+                method: "PATCH",
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+              });
+              loadFlaggedPosts();
+            };
+          });
+        }
+      }
+      async function loadFlaggedUsers() {
+        const res = await fetch(`${API}/users/flagged`, {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success) {
+          const ul = document.getElementById("flagged-users-list");
+          ul.innerHTML = "";
+          data.users.forEach((user) => {
+            const li = document.createElement("li");
+            li.className = "border-b py-2";
+            li.innerHTML = `
+      <div class="flex justify-between items-center">
+        <span class="text-purple-700 font-medium">${user.username}</span>
+        <button class="text-red-600 underline unflag-user-btn" data-id="${user.id}">Unflag</button>
+      </div>
+      <div class="text-gray-600 text-sm">${user.reason}</div>
+    `;
+            ul.appendChild(li);
+          });
+
+          // Unflag user
+          document.querySelectorAll(".unflag-user-btn").forEach((btn) => {
+            btn.onclick = async function () {
+              await fetch(`${API}/users/${this.dataset.id}/unflag`, {
+                method: "PATCH",
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+              });
+              loadFlaggedUsers();
+            };
+          });
+        }
+      }
+
+      // Fetch and render 5 recent posts
+      async function loadRecentPosts() {
+        const res = await fetch("http://localhost:3600/admin/posts?limit=5", {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success) {
+          const ul = document.getElementById("recent-posts-list");
+          ul.innerHTML = "";
+          data.posts.slice(0, 5).forEach((post) => {
+            const li = document.createElement("li");
+            li.innerHTML = `<span class="font-semibold">${post.title}</span> <span class="text-xs text-gray-500">by ${post.username}</span>`;
+            ul.appendChild(li);
+          });
+        }
+      }
+
+      // Fetch and render 5 users
+      async function loadRecentUsers() {
+        const res = await fetch("http://localhost:3600/admin/users?limit=5", {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success) {
+          const ul = document.getElementById("recent-users-list");
+          ul.innerHTML = "";
+          data.users.slice(0, 5).forEach((user) => {
+            const li = document.createElement("li");
+            li.innerHTML = `<span class="font-semibold">${user.username}</span> <span class="text-xs text-gray-500">${user.email}</span>`;
+            ul.appendChild(li);
+          });
+        }
+      }
+
+      window.onload = function () {
+        loadAnalytics();
+        loadUsers();
+        loadPosts();
+        loadCategories();
+        loadTags();
+        loadFlaggedPosts();
+        loadFlaggedUsers();
+        loadRecentPosts();
+        loadRecentUsers();
+      };
+    </script>
   </body>
 </html>
