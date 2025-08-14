@@ -167,6 +167,7 @@
             <table class="min-w-full bg-white rounded-lg shadow text-black">
               <thead>
                 <tr class="bg-gray-200 text-black">
+                  <th class="py-2 px-4">No.</th>
                   <th class="py-2 px-4">Name</th>
                   <th class="py-2 px-4">Email</th>
                   <th class="py-2 px-4">Role</th>
@@ -346,19 +347,103 @@
 
       // --- Overview / Analytics ---
       async function loadAnalytics() {
-        // You should create an endpoint like /admin/analytics for this summary
-        const res = await fetch(`${API}/analytics`, {
+        // Use your updated adminDashboard endpoint
+        const res = await fetch("http://localhost:3600/admin/dashboard", {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         });
         if (!res.ok) return;
         const data = await res.json();
-        if (data.success) {
-          document.getElementById("total-posts").textContent = data.totalPosts;
-          document.getElementById("total-users").textContent = data.totalUsers;
+        if (data.success && data.data) {
+          document.getElementById("total-posts").textContent =
+            data.data.total_posts;
+          document.getElementById("total-users").textContent =
+            data.data.total_users;
           document.getElementById("active-authors").textContent =
-            data.activeAuthors;
-          document.getElementById("total-comments").textContent =
-            data.totalComments;
+            data.data.active_authors;
+          // If you add total_comments to your controller, uncomment below:
+          // document.getElementById("total-comments").textContent = data.data.total_comments;
+
+          // Show all users in User Management table
+          if (data.data.all_users) {
+            const tbody = document.getElementById("user-table");
+            tbody.innerHTML = "";
+            data.data.all_users.forEach((user, idx) => {
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td class="py-2 px-4">${idx + 1}</td>
+                <td class="py-2 px-4">${user.username}</td>
+                <td class="py-2 px-4">${user.email}</td>
+                <td class="py-2 px-4">
+                  <select data-id="${
+                    user.id
+                  }" class="role-select border rounded px-2 py-1">
+                    <option value="user" ${
+                      user.user_type === "user" ? "selected" : ""
+                    }>User</option>
+                    <option value="admin" ${
+                      user.user_type === "admin" ? "selected" : ""
+                    }>Admin</option>
+                  </select>
+                </td>
+                <td class="py-2 px-4">${
+                  user.is_active ? "Active" : "Suspended"
+                }</td>
+                <td class="py-2 px-4">
+                  <button class="text-blue-600 underline edit-user-btn" data-id="${
+                    user.id
+                  }">Edit</button>
+                  <button class="text-red-600 underline ml-2 delete-user-btn" data-id="${
+                    user.id
+                  }">Delete</button>
+                  <button class="text-yellow-600 underline ml-2 suspend-user-btn" data-id="${
+                    user.id
+                  }">${user.is_active ? "Suspend" : "Activate"}</button>
+                </td>
+              `;
+              tbody.appendChild(tr);
+            });
+
+            // Attach event listeners for role, delete, and suspend actions if needed
+            document.querySelectorAll(".role-select").forEach((sel) => {
+              sel.onchange = async function () {
+                await fetch(`${API}/users/${this.dataset.id}/role`, {
+                  method: "PATCH",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                  body: JSON.stringify({ role: this.value }),
+                });
+                loadAnalytics();
+              };
+            });
+
+            document.querySelectorAll(".delete-user-btn").forEach((btn) => {
+              btn.onclick = async function () {
+                if (confirm("Delete this user?")) {
+                  await fetch(`${API}/users/${this.dataset.id}`, {
+                    method: "DELETE",
+                    headers: {
+                      Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                  });
+                  loadAnalytics();
+                }
+              };
+            });
+
+            document.querySelectorAll(".suspend-user-btn").forEach((btn) => {
+              btn.onclick = async function () {
+                await fetch(`${API}/users/${this.dataset.id}/restrict`, {
+                  method: "PATCH",
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                });
+                loadAnalytics();
+              };
+            });
+          }
         }
       }
 
@@ -377,9 +462,10 @@
         if (data.success) {
           const tbody = document.getElementById("user-table");
           tbody.innerHTML = "";
-          data.users.forEach((user) => {
+          data.users.forEach((user, idx) => {
             const tr = document.createElement("tr");
             tr.innerHTML = `
+      <td class="py-2 px-4">${idx + 1}</td>
       <td class="py-2 px-4">${user.username}</td>
       <td class="py-2 px-4">${user.email}</td>
       <td class="py-2 px-4">
@@ -750,7 +836,7 @@
 
       // Fetch and render 5 users
       async function loadRecentUsers() {
-        const res = await fetch("http://localhost:3600/admin/users?limit=5", {
+        const res = await fetch("http://localhost:3600/admin/users", {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         });
         if (!res.ok) return;
@@ -758,17 +844,43 @@
         if (data.success) {
           const ul = document.getElementById("recent-users-list");
           ul.innerHTML = "";
-          data.users.slice(0, 5).forEach((user) => {
-            const li = document.createElement("li");
-            li.innerHTML = `<span class="font-semibold">${user.username}</span> <span class="text-xs text-gray-500">${user.email}</span>`;
-            ul.appendChild(li);
-          });
+          const users = data.users || data.data?.all_users || [];
+          let showingAll = false;
+
+          function renderUsers(limit) {
+            ul.innerHTML = "";
+            users.slice(0, limit).forEach((user, idx) => {
+              const li = document.createElement("li");
+              li.innerHTML = `<span class="font-semibold">${
+                idx + 1
+              }.</span> <span class="font-semibold ml-1">${
+                user.username
+              }</span> <span class="text-xs text-gray-500 ml-1">${
+                user.email
+              }</span>`;
+              ul.appendChild(li);
+            });
+            if (users.length > limit && !showingAll) {
+              const seeMoreBtn = document.createElement("button");
+              seeMoreBtn.textContent = "See more";
+              seeMoreBtn.className =
+                "mt-2 text-blue-600 underline text-sm hover:text-blue-800 block";
+              seeMoreBtn.onclick = function () {
+                showingAll = true;
+                renderUsers(users.length);
+              };
+              const li = document.createElement("li");
+              li.appendChild(seeMoreBtn);
+              ul.appendChild(li);
+            }
+          }
+
+          renderUsers(10);
         }
       }
 
       window.onload = function () {
         loadAnalytics();
-        loadUsers();
         loadPosts();
         loadCategories();
         loadTags();
