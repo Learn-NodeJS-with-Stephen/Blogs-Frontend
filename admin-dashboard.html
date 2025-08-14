@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body class="bg-white text-black font-sans min-h-screen flex flex-col">
     <!-- Sidebar -->
@@ -22,42 +26,42 @@
               <a
                 href="#overview"
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span>🏠</span> Home/Dashboard</a
+                ><span><i class="bx bx-home"></i> </span> Home/Dashboard</a
               >
             </li>
             <li>
               <a
                 href="#users"
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span>👥</span> Users</a
+                ><span><i class="bx bx-user"></i> </span> Users</a
               >
             </li>
             <li>
               <a
                 href="#posts"
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span>📝</span> Posts</a
+                ><span><i class="bx bx-user"></i> </span> Posts</a
               >
             </li>
             <li>
               <a
                 href="#categories"
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span>🏷️</span> Categories</a
+                ><span><i class="bx bx-envelope"></i> </span> Categories</a
               >
             </li>
             <li>
               <a
                 href="#reports"
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span>🚩</span> Reports/Flags</a
+                ><span><i class="bx bx-report"></i> </span> Reports/Flags</a
               >
             </li>
             <li>
               <a
                 href="#profile"
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span>👤</span> Profile</a
+                ><span><i class="bx bx-user-circle"></i> </span> Profile</a
               >
             </li>
             <li>
@@ -65,7 +69,7 @@
                 onclick="logout()"
                 class="w-full text-left flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
               >
-                <span>🚪</span> Logout
+                <span><i class="bx bx-dock-right"></i> </span> Logout
               </button>
             </li>
           </ul>
@@ -128,7 +132,7 @@
                   >See more</a
                 >
               </div>
-              <ul id="recent-posts-list" class="space-y-2 text-black"></ul>
+              <div id="recent-posts-list" class="space-y-4"></div>
             </div>
             <!-- All Users -->
             <div class="bg-gray-100 rounded-lg shadow p-6">
@@ -711,20 +715,35 @@
         }
       }
 
-      // Fetch and render 5 recent posts
+      // Fetch and render 5 recent posts as cards with title, content preview, author, and date
       async function loadRecentPosts() {
-        const res = await fetch("http://localhost:3600/admin/posts?limit=5", {
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-        });
+        const res = await fetch("http://localhost:3600/blogs");
         if (!res.ok) return;
         const data = await res.json();
-        if (data.success) {
-          const ul = document.getElementById("recent-posts-list");
-          ul.innerHTML = "";
-          data.posts.slice(0, 5).forEach((post) => {
-            const li = document.createElement("li");
-            li.innerHTML = `<span class="font-semibold">${post.title}</span> <span class="text-xs text-gray-500">by ${post.username}</span>`;
-            ul.appendChild(li);
+        if (data.success && data.data) {
+          const container = document.getElementById("recent-posts-list");
+          container.innerHTML = "";
+          data.data.slice(0, 5).forEach((post) => {
+            const isLong = post.content.length > 200;
+            let preview;
+            if (isLong) {
+              // Place "See more" before the ellipsis
+              const previewText = post.content.substring(0, 200).trimEnd();
+              preview = `${previewText}<a href="blog.html?postId=${post.id}" target="_blank" class="inline-block text-blue-600 underline hover:text-blue-800 text-sm ml-2">See more</a>...`;
+            } else {
+              preview = post.content;
+            }
+            const card = document.createElement("div");
+            card.className = "bg-white rounded shadow p-4 text-black";
+            card.innerHTML = `
+        <h4 class="font-bold text-lg mb-1">${post.title}</h4>
+        <div class="mb-2 text-justify">${preview}</div>
+        <div class="flex justify-between items-center text-xs text-gray-500 mb-2">
+          <span>By ${post.username || "Unknown"}</span>
+          <span>${new Date(post.created_at).toLocaleDateString()}</span>
+        </div>
+      `;
+            container.appendChild(card);
           });
         }
       }
