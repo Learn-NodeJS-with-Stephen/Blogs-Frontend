@@ -254,6 +254,7 @@
     }
   });
 
+  // Signup form handler
   document
     .getElementById("signup-form")
     .addEventListener("submit", async (e) => {
@@ -270,14 +271,13 @@
 
       const data = await res.json();
       if (data.success && data.token) {
-        localStorage.setItem("token", data.token); // <-- Save the token!
+        localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user || body));
-        window.location.href = "dashboard.html";
+        window.location.href = "dashboard.html"; // Redirect to user dashboard
       } else if (data.success) {
-        // fallback if backend doesn't return token
         localStorage.removeItem("token");
         localStorage.setItem("user", JSON.stringify(data.user || body));
-        window.location.href = "dashboard.html";
+        window.location.href = "dashboard.html"; // Redirect to user dashboard
       } else {
         alert(data.message || "Signup failed");
       }

@@ -851,13 +851,15 @@
             ul.innerHTML = "";
             users.slice(0, limit).forEach((user, idx) => {
               const li = document.createElement("li");
-              li.innerHTML = `<span class="font-semibold">${
-                idx + 1
-              }.</span> <span class="font-semibold ml-1">${
-                user.username
-              }</span> <span class="text-xs text-gray-500 ml-1">${
-                user.email
-              }</span>`;
+              li.innerHTML = `
+      <span class="font-semibold">${idx + 1}.</span>
+      <a href="#" class="font-semibold ml-1 user-link" data-id="${
+        user.id
+      }" style="color:#1d4ed8; text-decoration:underline;">
+        ${user.username}
+      </a>
+      <span class="text-xs text-gray-500 ml-1">${user.email}</span>
+    `;
               ul.appendChild(li);
             });
             if (users.length > limit && !showingAll) {
@@ -873,6 +875,14 @@
               li.appendChild(seeMoreBtn);
               ul.appendChild(li);
             }
+
+            // Add click event to each username to open the user profile modal
+            document.querySelectorAll(".user-link").forEach((link) => {
+              link.onclick = function (e) {
+                e.preventDefault();
+                openUserProfileModal(this.dataset.id);
+              };
+            });
           }
 
           renderUsers(10);
@@ -889,6 +899,132 @@
         loadRecentPosts();
         loadRecentUsers();
       };
+
+      async function openUserProfileModal(userId) {
+        // Fetch user info and posts
+        const res = await fetch(`${API}/users/${userId}`, {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success && data.user) {
+          const user = data.user;
+          let postsHtml = "";
+          if (user.posts && user.posts.length > 0) {
+            postsHtml =
+              `<h4 class="font-bold mt-4 mb-2">Posts by ${user.username}:</h4><ul class="list-disc pl-5 space-y-1">` +
+              user.posts.map((post) => `<li>${post.title}</li>`).join("") +
+              "</ul>";
+          } else {
+            postsHtml = `<p class="mt-4 text-gray-500">No posts by this user.</p>`;
+          }
+
+          document.getElementById("user-profile-content").innerHTML = `
+      <h3 class="text-xl font-bold mb-2">Edit User Profile</h3>
+      <form id="edit-user-form" class="space-y-3">
+        <input type="hidden" name="id" value="${user.id}" />
+        <label class="block">
+          <span class="text-sm">Name</span>
+          <input type="text" name="username" value="${
+            user.username
+          }" class="input w-full" />
+        </label>
+        <label class="block">
+          <span class="text-sm">Email</span>
+          <input type="email" name="email" value="${
+            user.email
+          }" class="input w-full" />
+        </label>
+        <label class="block">
+          <span class="text-sm">Role</span>
+          <select name="user_type" class="input w-full">
+            <option value="user" ${
+              user.user_type === "user" ? "selected" : ""
+            }>User</option>
+            <option value="admin" ${
+              user.user_type === "admin" ? "selected" : ""
+            }>Admin</option>
+          </select>
+        </label>
+        <label class="block">
+          <span class="text-sm">Status</span>
+          <input type="text" value="${
+            user.is_active ? "Active" : "Suspended"
+          }" class="input w-full" disabled />
+        </label>
+        <button type="submit" class="btn-primary w-full">Save Changes</button>
+      </form>
+      <button id="restrict-user-btn" class="mt-4 w-full bg-red-600 text-white py-2 rounded hover:bg-red-700">${
+        user.is_active ? "Restrict Account" : "Activate Account"
+      }</button>
+      ${postsHtml}
+    `;
+          document
+            .getElementById("user-profile-modal")
+            .classList.remove("hidden");
+
+          // Handle edit form submit
+          document.getElementById("edit-user-form").onsubmit = async function (
+            e
+          ) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            await fetch(`${API}/users/${user.id}`, {
+              method: "PATCH",
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+              body: formData,
+            });
+            alert("User updated!");
+            document
+              .getElementById("user-profile-modal")
+              .classList.add("hidden");
+            loadAnalytics();
+            loadRecentUsers();
+          };
+
+          // Handle restrict/activate
+          document.getElementById("restrict-user-btn").onclick =
+            async function () {
+              await fetch(`${API}/users/${user.id}/restrict`, {
+                method: "PATCH",
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+              });
+              alert(user.is_active ? "User restricted!" : "User activated!");
+              document
+                .getElementById("user-profile-modal")
+                .classList.add("hidden");
+              loadAnalytics();
+              loadRecentUsers();
+            };
+        }
+      }
+
+      // Close modal handler
+      document.getElementById("close-user-modal").onclick = function () {
+        document.getElementById("user-profile-modal").classList.add("hidden");
+      };
     </script>
+    <div
+      id="user-profile-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div
+        class="bg-white text-black rounded-lg shadow-lg p-8 w-full max-w-lg relative"
+      >
+        <button
+          id="close-user-modal"
+          class="absolute top-2 right-4 text-2xl text-gray-400 hover:text-black"
+        >
+          &times;
+        </button>
+        <div id="user-profile-content">
+          <!-- User profile info will be loaded here -->
+        </div>
+      </div>
+    </div>
   </body>
 </html>
