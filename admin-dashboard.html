@@ -397,7 +397,7 @@
                   }">Delete</button>
                   <button class="text-yellow-600 underline ml-2 suspend-user-btn" data-id="${
                     user.id
-                  }">${user.is_active ? "Suspend" : "Activate"}</button>
+                  }">${user.is_active ? "Restrict" : "Activate"}</button>
                 </td>
               `;
               tbody.appendChild(tr);
@@ -490,7 +490,7 @@
         }">Delete</button>
         <button class="text-yellow-600 underline ml-2 suspend-user-btn" data-id="${
           user.id
-        }">${user.is_active ? "Suspend" : "Activate"}</button>
+        }">${user.is_active ? "Restrict" : "Activate"}</button>
       </td>
     `;
             tbody.appendChild(tr);
