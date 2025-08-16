@@ -443,6 +443,13 @@
                 loadAnalytics();
               };
             });
+
+            // Edit user
+            document.querySelectorAll(".edit-user-btn").forEach((btn) => {
+              btn.onclick = function () {
+                openUserProfileModal(this.dataset.id, true); // pass true to indicate edit mode
+              };
+            });
           }
         }
       }
@@ -536,6 +543,13 @@
                 },
               });
               loadUsers(document.getElementById("user-search").value);
+            };
+          });
+
+          // Edit user
+          document.querySelectorAll(".edit-user-btn").forEach((btn) => {
+            btn.onclick = function () {
+              openUserProfileModal(this.dataset.id, true); // pass true to indicate edit mode
             };
           });
         }
@@ -901,19 +915,30 @@
       };
 
       async function openUserProfileModal(userId) {
-        // Fetch user info and posts
-        const res = await fetch(`${API}/users/${userId}`, {
+        // Fetch user info and posts from your adminController endpoint
+        const res = await fetch(`http://localhost:3600/admin/users/${userId}`, {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         });
         if (!res.ok) return;
         const data = await res.json();
-        if (data.success && data.user) {
-          const user = data.user;
+        if (data.success && data.data && data.data.user) {
+          const user = data.data.user;
           let postsHtml = "";
           if (user.posts && user.posts.length > 0) {
             postsHtml =
-              `<h4 class="font-bold mt-4 mb-2">Posts by ${user.username}:</h4><ul class="list-disc pl-5 space-y-1">` +
-              user.posts.map((post) => `<li>${post.title}</li>`).join("") +
+              `<h4 class="font-bold mt-4 mb-2">Posts by ${user.username}:</h4>
+        <ul class="list-disc pl-5 space-y-1">` +
+              user.posts
+                .map(
+                  (post) => `
+          <li>
+            <span class="font-semibold">${post.title}</span>
+            <button class="ml-2 text-blue-600 underline text-xs edit-post-btn" data-id="${post.id}">Edit</button>
+            <button class="ml-2 text-red-600 underline text-xs delete-post-btn" data-id="${post.id}">Delete</button>
+          </li>
+        `
+                )
+                .join("") +
               "</ul>";
           } else {
             postsHtml = `<p class="mt-4 text-gray-500">No posts by this user.</p>`;
@@ -969,7 +994,7 @@
           ) {
             e.preventDefault();
             const formData = new FormData(this);
-            await fetch(`${API}/users/${user.id}`, {
+            await fetch(`http://localhost:3600/admin/users/${user.id}`, {
               method: "PATCH",
               headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),
@@ -987,12 +1012,15 @@
           // Handle restrict/activate
           document.getElementById("restrict-user-btn").onclick =
             async function () {
-              await fetch(`${API}/users/${user.id}/restrict`, {
-                method: "PATCH",
-                headers: {
-                  Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-              });
+              await fetch(
+                `http://localhost:3600/admin/users/${user.id}/restrict`,
+                {
+                  method: "PATCH",
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                }
+              );
               alert(user.is_active ? "User restricted!" : "User activated!");
               document
                 .getElementById("user-profile-modal")
@@ -1000,6 +1028,38 @@
               loadAnalytics();
               loadRecentUsers();
             };
+
+          // Handle edit and delete post buttons
+          document.querySelectorAll(".edit-post-btn").forEach((btn) => {
+            btn.onclick = function () {
+              alert(
+                "Implement post editing modal or redirect here for post ID: " +
+                  this.dataset.id
+              );
+              // You can open a modal or redirect to a post edit page here
+            };
+          });
+          document.querySelectorAll(".delete-post-btn").forEach((btn) => {
+            btn.onclick = async function () {
+              if (confirm("Delete this post?")) {
+                await fetch(
+                  `http://localhost:3600/admin/posts/${this.dataset.id}/delete`,
+                  {
+                    method: "PATCH",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                    body: JSON.stringify({
+                      deletion_reason: "Deleted by admin from user profile",
+                    }),
+                  }
+                );
+                alert("Post deleted!");
+                openUserProfileModal(user.id); // Refresh modal content
+              }
+            };
+          });
         }
       }
 
