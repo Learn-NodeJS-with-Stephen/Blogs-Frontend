@@ -576,32 +576,32 @@
           data.posts.forEach((post) => {
             const tr = document.createElement("tr");
             tr.innerHTML = `
-      <td class="py-2 px-4">${post.title}</td>
-      <td class="py-2 px-4">${post.username}</td>
-      <td class="py-2 px-4">${post.category}</td>
-      <td class="py-2 px-4">${
-        post.status ||
-        (post.is_deleted
-          ? "Deleted"
-          : post.is_restricted
-          ? "Restricted"
-          : "Published")
-      }</td>
-      <td class="py-2 px-4">${new Date(
-        post.created_at
-      ).toLocaleDateString()}</td>
-      <td class="py-2 px-4">
-        <button class="text-blue-600 underline edit-post-btn" data-id="${
-          post.id
-        }">Edit</button>
-        <button class="text-red-600 underline ml-2 delete-post-btn" data-id="${
-          post.id
-        }">Delete</button>
-        <button class="text-yellow-600 underline ml-2 restrict-post-btn" data-id="${
-          post.id
-        }">Restrict</button>
-      </td>
-    `;
+        <td class="py-2 px-4">${post.title}</td>
+        <td class="py-2 px-4">${post.username}</td>
+        <td class="py-2 px-4">${post.category}</td>
+        <td class="py-2 px-4">${
+          post.status ||
+          (post.is_deleted
+            ? "Deleted"
+            : post.is_restricted
+            ? "Restricted"
+            : "Published")
+        }</td>
+        <td class="py-2 px-4">${new Date(
+          post.created_at
+        ).toLocaleDateString()}</td>
+        <td class="py-2 px-4">
+          <button class="text-blue-600 underline edit-post-btn" data-id="${
+            post.id
+          }">Edit</button>
+          <button class="text-red-600 underline ml-2 delete-post-btn" data-id="${
+            post.id
+          }">Delete</button>
+          <button class="text-yellow-600 underline ml-2 restrict-post-btn" data-id="${
+            post.id
+          }">Restrict</button>
+        </td>
+      `;
             tbody.appendChild(tr);
           });
 
@@ -916,7 +916,7 @@
 
       async function openUserProfileModal(userId) {
         // Fetch user info and posts from your adminController endpoint
-        const res = await fetch(`http://localhost:3600/admin/users/${userId}`, {
+        const res = await fetch(`http://localhost:3600/users/profile`, {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         });
         if (!res.ok) return;
