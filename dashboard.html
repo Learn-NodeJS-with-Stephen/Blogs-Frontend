@@ -125,6 +125,42 @@
       let totalPages = 1;
       let allPosts = [];
 
+      // Helper: Check if user is logged in
+      function isLoggedIn() {
+        return !!localStorage.getItem("token");
+      }
+
+      // Helper: Like a post
+      async function likePost(postId) {
+        const res = await fetch(`http://localhost:3600/blogs/${postId}/like`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+        const data = await res.json();
+        alert(data.message || "Liked!");
+        fetchUserPosts();
+      }
+
+      // Helper: Comment on a post
+      async function commentOnPost(postId, comment) {
+        const res = await fetch(
+          `http://localhost:3600/blogs/${postId}/comment`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+            body: JSON.stringify({ comment }),
+          }
+        );
+        const data = await res.json();
+        alert(data.message || "Comment added!");
+        fetchUserPosts();
+      }
+
       function renderUserPosts() {
         const postsDiv = document.getElementById("user-posts");
         postsDiv.innerHTML = "";
@@ -148,14 +184,101 @@
              <button class="btn-danger ml-80 mt-2 self-start" data-id="${
                post.id
              }">Delete</button>
+             <div class="mt-4 flex items-center gap-4">
+               <button class="like-btn text-purple-700 underline" data-id="${
+                 post.id
+               }" ${isLoggedIn() ? "" : "disabled"}>Like</button>
+               <span class="like-count text-xs text-gray-600" id="like-count-${
+                 post.id
+               }"></span>
+             </div>
+             <div class="mt-2">
+               <form class="comment-form flex gap-2" data-id="${post.id}">
+                 <input type="text" name="comment" placeholder="Add a comment..." class="border rounded px-2 py-1 flex-1" ${
+                   isLoggedIn() ? "" : "disabled"
+                 } />
+                 <button type="submit" class="text-purple-700 underline" ${
+                   isLoggedIn() ? "" : "disabled"
+                 }>Comment</button>
+               </form>
+               <div class="comments-list mt-2" id="comments-list-${
+                 post.id
+               }"></div>
+             </div>
             `;
             postsDiv.appendChild(div);
+
+            // Fetch and display likes and comments for each post
+            fetch(`http://localhost:3600/blogs/${post.id}/likes`)
+              .then((res) => res.json())
+              .then((data) => {
+                const likeCountSpan = document.getElementById(
+                  `like-count-${post.id}`
+                );
+                if (data.success) {
+                  likeCountSpan.textContent = `${data.count || 0} like${
+                    data.count === 1 ? "" : "s"
+                  }`;
+                } else {
+                  likeCountSpan.textContent = "0 likes";
+                }
+              });
+
+            fetch(`http://localhost:3600/blogs/${post.id}/comments`)
+              .then((res) => res.json())
+              .then((data) => {
+                const commentsDiv = document.getElementById(
+                  `comments-list-${post.id}`
+                );
+                if (
+                  data.success &&
+                  Array.isArray(data.comments) &&
+                  data.comments.length > 0
+                ) {
+                  commentsDiv.innerHTML =
+                    `<div class="font-semibold mb-1">Comments:</div>` +
+                    data.comments
+                      .map(
+                        (c) =>
+                          `<div class="text-xs text-gray-800 mb-1"><span class="font-semibold">${c.username}:</span> ${c.comment}</div>`
+                      )
+                      .join("");
+                } else {
+                  commentsDiv.innerHTML = `<div class="text-xs text-gray-400">No comments yet.</div>`;
+                }
+              });
           });
         } else {
           postsDiv.innerHTML = "<p>No blog posts found for your account.</p>";
         }
         updatePaginationControls();
         attachDeleteListeners();
+
+        // Attach like and comment listeners
+        document.querySelectorAll(".like-btn").forEach((btn) => {
+          btn.onclick = function () {
+            if (!isLoggedIn()) {
+              alert("You must be logged in to like a post.");
+              return;
+            }
+            likePost(this.dataset.id);
+          };
+        });
+
+        document.querySelectorAll(".comment-form").forEach((form) => {
+          form.onsubmit = function (e) {
+            e.preventDefault();
+            if (!isLoggedIn()) {
+              alert("You must be logged in to comment.");
+              return;
+            }
+            const comment = this.comment.value.trim();
+            if (comment) {
+              commentOnPost(this.dataset.id, comment);
+              this.comment.value = "";
+            }
+          };
+        });
       }
 
       function updatePaginationControls() {
