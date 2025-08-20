@@ -208,22 +208,31 @@
             `;
             postsDiv.appendChild(div);
 
-            // Fetch and display likes and comments for each post
+            // Fetch and display likes for each post
             fetch(`http://localhost:3600/blogs/${post.id}/likes`)
               .then((res) => res.json())
               .then((data) => {
                 const likeCountSpan = document.getElementById(
                   `like-count-${post.id}`
                 );
-                if (data.success) {
-                  likeCountSpan.textContent = `${data.count || 0} like${
-                    data.count === 1 ? "" : "s"
-                  }`;
-                } else {
-                  likeCountSpan.textContent = "0 likes";
+                if (likeCountSpan) {
+                  if (data && data.success && typeof data.count === "number") {
+                    likeCountSpan.textContent = `${data.count} like${
+                      data.count === 1 ? "" : "s"
+                    }`;
+                  } else {
+                    likeCountSpan.textContent = "0 likes";
+                  }
                 }
+              })
+              .catch(() => {
+                const likeCountSpan = document.getElementById(
+                  `like-count-${post.id}`
+                );
+                if (likeCountSpan) likeCountSpan.textContent = "0 likes";
               });
 
+            // Fetch and display comments for each post
             fetch(`http://localhost:3600/blogs/${post.id}/comments`)
               .then((res) => res.json())
               .then((data) => {
