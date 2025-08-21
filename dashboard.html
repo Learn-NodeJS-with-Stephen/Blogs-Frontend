@@ -233,7 +233,11 @@
               });
 
             // Fetch and display comments for each post
-            fetch(`http://localhost:3600/blogs/${post.id}/comments`)
+            fetch(`http://localhost:3600/blogs/${post.id}/comments`, {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            })
               .then((res) => res.json())
               .then((data) => {
                 const commentsDiv = document.getElementById(
@@ -245,11 +249,24 @@
                   data.data.length > 0
                 ) {
                   commentsDiv.innerHTML =
-                    `<div class="font-semibold mb-1">Comments:</div>` +
+                    `<div class="font-semibold mb-2 text-purple-700">Comments:</div>` +
                     data.data
                       .map(
                         (c) =>
-                          `<div class="text-xs text-gray-800 mb-1"><span class="font-semibold">${c.username}:</span> ${c.comment}</div>`
+                          `<div class="flex items-start gap-2 mb-2">
+                <div class="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center font-bold text-purple-700 text-sm">
+                  ${c.username.charAt(0).toUpperCase()}
+                </div>
+                <div class="bg-purple-50 rounded-lg px-3 py-2 flex-1 shadow-sm">
+                  <span class="font-semibold text-purple-800">${
+                    c.username
+                  }</span>
+                  <span class="block text-gray-700">${c.comment}</span>
+                  <span class="text-xs text-gray-400">${new Date(
+                    c.created_at
+                  ).toLocaleString()}</span>
+                </div>
+              </div>`
                       )
                       .join("");
                 } else {
