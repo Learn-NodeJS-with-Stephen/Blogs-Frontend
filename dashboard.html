@@ -241,12 +241,12 @@
                 );
                 if (
                   data.success &&
-                  Array.isArray(data.comments) &&
-                  data.comments.length > 0
+                  Array.isArray(data.data) &&
+                  data.data.length > 0
                 ) {
                   commentsDiv.innerHTML =
                     `<div class="font-semibold mb-1">Comments:</div>` +
-                    data.comments
+                    data.data
                       .map(
                         (c) =>
                           `<div class="text-xs text-gray-800 mb-1"><span class="font-semibold">${c.username}:</span> ${c.comment}</div>`

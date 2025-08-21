@@ -639,9 +639,8 @@
       }
       document.getElementById("post-filter").onchange = function () {
         loadPosts(this.value);
-      }; 
+      };
 
-      
       async function loadCategories() {
         const res = await fetch(`${API}/categories`, {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
