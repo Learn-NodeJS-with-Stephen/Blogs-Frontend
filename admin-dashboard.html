@@ -13,64 +13,68 @@
   <body class="bg-white text-black font-sans min-h-screen flex flex-col">
     <!-- Sidebar -->
     <div class="flex flex-1 min-h-0">
-      <aside
-        class="w-64 min-h-screen bg-black text-white flex flex-col py-8 px-4 sticky top-0"
-      >
+      <aside class="w-64 bg-zinc-900 text-white min-h-screen p-6">
         <div class="mb-10">
           <h1 class="text-2xl font-bold tracking-wide mb-2">Admin Panel</h1>
           <span class="text-zinc-400 text-sm">Thought Nest</span>
         </div>
         <nav class="flex-1">
           <ul class="space-y-2 text-lg font-medium">
-            <li>
+            <li class="mb-4">
               <a
-                href="#overview"
+                href="index.html"
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span><i class="bx bx-home"></i> </span> Home/Dashboard</a
+                ><span><i class="bx bx-home"></i></span> Home</a
               >
             </li>
             <li>
               <a
-                href="#users"
+                href="admin-dashboard.html"
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span><i class="bx bx-user"></i> </span> Users</a
+                ><span><i class="bx bx-bar-chart"></i></span> Dashboard</a
               >
             </li>
             <li>
               <a
-                href="#posts"
+                href="admin-users.html"
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span><i class="bx bx-user"></i> </span> Posts</a
+                ><span><i class="bx bx-user"></i></span> Users</a
               >
             </li>
             <li>
               <a
-                href="#categories"
+                href="admin-posts.html"
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span><i class="bx bx-envelope"></i> </span> Categories</a
+                ><span><i class="bx bx-file"></i></span> Posts</a
               >
             </li>
             <li>
               <a
-                href="#reports"
+                href="admin-categories.html"
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span><i class="bx bx-report"></i> </span> Reports/Flags</a
+                ><span><i class="bx bx-category"></i></span> Categories</a
               >
             </li>
             <li>
               <a
-                href="#profile"
+                href="admin-reports.html"
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span><i class="bx bx-user-circle"></i> </span> Profile</a
+                ><span><i class="bx bx-flag"></i></span> Report/Flags</a
               >
             </li>
             <li>
-              <button
-                onclick="logout()"
-                class="w-full text-left flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+              <a
+                href="admin-profile.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-user-circle"></i></span> Profile</a
               >
-                <span><i class="bx bx-dock-right"></i> </span> Logout
-              </button>
+            </li>
+            <li>
+              <a
+                href="logout.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-log-out"></i></span> Logout</a
+              >
             </li>
           </ul>
         </nav>

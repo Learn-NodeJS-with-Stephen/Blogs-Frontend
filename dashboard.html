@@ -216,9 +216,13 @@
                   `like-count-${post.id}`
                 );
                 if (likeCountSpan) {
-                  if (data && data.success && typeof data.count === "number") {
-                    likeCountSpan.textContent = `${data.count} like${
-                      data.count === 1 ? "" : "s"
+                  if (
+                    data &&
+                    data.success &&
+                    typeof data.total_likes === "number"
+                  ) {
+                    likeCountSpan.textContent = `${data.total_likes} like${
+                      data.total_likes === 1 ? "" : "s"
                     }`;
                   } else {
                     likeCountSpan.textContent = "0 likes";
