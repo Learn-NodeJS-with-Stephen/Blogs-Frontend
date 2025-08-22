@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-white text-black font-sans min-h-screen">
+    <header
+      class="bg-zinc-900 text-white p-4 flex justify-between items-center"
+    >
+      <h1 class="text-2xl font-bold">Admin Panel</h1>
+      <a href="admin-dashboard.html" class="text-blue-300 underline"
+        >Dashboard</a
+      >
+    </header>
+    <main class="max-w-2xl mx-auto py-10">
+      <h2 class="text-2xl font-bold mb-6">Profile & Security</h2>
+      <form class="space-y-4 bg-gray-100 p-6 rounded-lg shadow">
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          class="input w-full"
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          class="input w-full"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="New Password"
+          class="input w-full"
+        />
+        <button type="submit" class="btn-primary w-full">Update Profile</button>
+      </form>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Users</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        min-height: 100vh;
+      }
+      main {
+        margin-left: 16rem;
+      }
+    </style>
+  </head>
+  <body class="bg-white text-black font-sans min-h-screen">
+    <!-- Sidebar -->
+    <!-- (Paste sidebar code here) -->
+
+    <main class="p-8">
+      <h2 class="text-2xl font-bold mb-6">All Users</h2>
+      <div class="bg-gray-100 rounded-lg shadow p-6">
+        <table class="min-w-full bg-white rounded-lg shadow text-black">
+          <thead>
+            <tr class="bg-gray-200 text-black">
+              <th class="py-2 px-4">No.</th>
+              <th class="py-2 px-4">Name</th>
+              <th class="py-2 px-4">Email</th>
+              <th class="py-2 px-4">Role</th>
+              <th class="py-2 px-4">Status</th>
+              <th class="py-2 px-4">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Render users here with JS or server-side -->
+            <tr>
+              <td class="py-2 px-4">1</td>
+              <td class="py-2 px-4">John Doe</td>
+              <td class="py-2 px-4">john@example.com</td>
+              <td class="py-2 px-4">User</td>
+              <td class="py-2 px-4">Active</td>
+              <td class="py-2 px-4">
+                <button class="text-blue-600 underline">Edit</button>
+                <button class="text-red-600 underline ml-2">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </body>
+</html>
