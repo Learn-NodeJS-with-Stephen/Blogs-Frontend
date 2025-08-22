@@ -71,7 +71,8 @@
             </li>
             <li>
               <a
-                href="logout.html"
+                href="#"
+                onclick="logout()"
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
                 ><span><i class="bx bx-log-out"></i></span> Logout</a
               >
@@ -338,6 +339,15 @@
         main {
           padding: 1rem;
         }
+      }
+
+      /* New styles for section visibility */
+      #users,
+      #posts,
+      #categories,
+      #reports,
+      #profile {
+        display: none;
       }
     </style>
     <script>
@@ -1089,5 +1099,47 @@
         </div>
       </div>
     </div>
+
+    <script>
+      // List of all main section IDs
+      const sectionIds = [
+        "overview",
+        "users",
+        "posts",
+        "categories",
+        "reports",
+        "profile",
+      ];
+
+      function showSection(id) {
+        sectionIds.forEach((sec) => {
+          const el = document.getElementById(sec);
+          if (el) el.style.display = sec === id ? "block" : "none";
+        });
+      }
+
+      // Set up sidebar navigation
+      document.querySelectorAll("aside nav a").forEach((link) => {
+        link.addEventListener("click", function (e) {
+          const href = this.getAttribute("href");
+          if (href && href.startsWith("#")) {
+            e.preventDefault();
+            showSection(href.replace("#", ""));
+            // Optionally, update the URL hash:
+            window.location.hash = href;
+          }
+        });
+      });
+
+      // On page load, show the section from the hash or default to overview
+      window.addEventListener("DOMContentLoaded", () => {
+        const hash = window.location.hash.replace("#", "");
+        if (sectionIds.includes(hash)) {
+          showSection(hash);
+        } else {
+          showSection("overview");
+        }
+      });
+    </script>
   </body>
 </html>
