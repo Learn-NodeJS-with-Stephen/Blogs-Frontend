@@ -103,11 +103,21 @@
             id="category-message"
             class="mb-4 text-center font-semibold"
           ></div>
-          <!-- Category List -->
+          <!-- Category Table -->
           <h3 class="font-semibold mb-2">Category List</h3>
-          <ul id="category-list" class="divide-y divide-gray-300">
-            <!-- Categories will be rendered here -->
-          </ul>
+          <table class="w-full border border-gray-300 rounded mb-2 bg-white">
+            <thead>
+              <tr class="bg-gray-200">
+                <th class="py-2 px-4 text-left">No.</th>
+                <th class="py-2 px-4 text-left">Category Name</th>
+                <th class="py-2 px-4 text-left">Category ID</th>
+                <th class="py-2 px-4 text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="category-table-body">
+              <!-- Categories will be rendered here -->
+            </tbody>
+          </table>
         </div>
       </main>
     </div>
@@ -118,38 +128,69 @@
         window.location.href = "index.html";
       }
 
-      // Fetch and render categories
+      // Fetch and render categories in table
       async function loadCategories() {
-        const res = await fetch("http://localhost:3600/categories/get", {
+        const res = await fetch("http://localhost:3600/admin/categories", {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
         });
-        const ul = document.getElementById("category-list");
-        ul.innerHTML = "";
+        const tableBody = document.getElementById("category-table-body");
+        tableBody.innerHTML = "";
         if (!res.ok) {
-          ul.innerHTML =
-            "<li class='py-2 text-red-600'>Failed to load categories.</li>";
+          tableBody.innerHTML =
+            "<tr><td colspan='4' class='py-2 px-4 text-red-600'>Failed to load categories.</td></tr>";
           return;
         }
         const data = await res.json();
         if (data.success && Array.isArray(data.data)) {
           if (data.data.length === 0) {
-            ul.innerHTML =
-              "<li class='py-2 text-gray-500'>No categories found.</li>";
+            tableBody.innerHTML =
+              "<tr><td colspan='4' class='py-2 px-4 text-gray-500'>No categories found.</td></tr>";
           } else {
-            data.data.forEach((cat) => {
-              const li = document.createElement("li");
-              li.className = "py-2 flex justify-between items-center";
-              li.innerHTML = `
-                <span>${cat.name}</span>
+            data.data.forEach((cat, idx) => {
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td class="py-2 px-4">${idx + 1}.</td>
+                <td class="py-2 px-4">${cat.name}</td>
+                <td class="py-2 px-4">${cat.id}</td>
+                <td class="py-2 px-4">
+                  <button class="text-red-600 underline delete-category-btn" data-id="${
+                    cat.id
+                  }">Delete</button>
+                </td>
               `;
-              ul.appendChild(li);
+              tableBody.appendChild(tr);
+            });
+
+            // Add delete functionality
+            document.querySelectorAll(".delete-category-btn").forEach((btn) => {
+              btn.addEventListener("click", async function () {
+                if (confirm("Are you sure you want to delete this category?")) {
+                  const categoryId = this.getAttribute("data-id");
+                  const res = await fetch(
+                    `http://localhost:3600/admin/category/${categoryId}`,
+                    {
+                      method: "DELETE",
+                      headers: {
+                        Authorization:
+                          "Bearer " + localStorage.getItem("token"),
+                      },
+                    }
+                  );
+                  const result = await res.json();
+                  if (result.success) {
+                    loadCategories();
+                  } else {
+                    alert(result.message || "Failed to delete category.");
+                  }
+                }
+              });
             });
           }
         } else {
-          ul.innerHTML =
-            "<li class='py-2 text-red-600'>Failed to load categories.</li>";
+          tableBody.innerHTML =
+            "<tr><td colspan='4' class='py-2 px-4 text-red-600'>Failed to load categories.</td></tr>";
         }
       }
 
@@ -165,7 +206,7 @@
             msg.className = "mb-4 text-center font-semibold text-red-600";
             return;
           }
-          const res = await fetch("http://localhost:3600/categories/create", {
+          const res = await fetch("http://localhost:3600/admin/category", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

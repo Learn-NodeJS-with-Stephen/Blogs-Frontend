@@ -5,100 +5,172 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin - Reports & Flags</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
   </head>
-  <body class="bg-white text-black font-sans min-h-screen">
-    <!-- Sidebar code: Place this at the top of the <body> in ALL your admin pages (replace the old header/sidebar if present) -->
-    <aside
-      class="w-64 bg-zinc-900 text-white min-h-screen p-6 fixed inset-y-0 left-0"
-    >
-      <div class="mb-10">
-        <h1 class="text-2xl font-bold tracking-wide mb-2">Admin Panel</h1>
-        <span class="text-zinc-400 text-sm">Thought Nest</span>
-      </div>
-      <nav class="flex-1">
-        <ul class="space-y-2 text-lg font-medium">
-          <li class="mb-4">
-            <a
-              href="index.html"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-home"></i></span> Home
-            </a>
-          </li>
-          <li>
-            <a
-              href="admin-dashboard.html"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-bar-chart"></i></span> Dashboard
-            </a>
-          </li>
-          <li>
-            <a
-              href="admin-users.html"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-user"></i></span> Users
-            </a>
-          </li>
-          <li>
-            <a
-              href="admin-posts.html"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-file"></i></span> Posts
-            </a>
-          </li>
-          <li>
-            <a
-              href="admin-categories.html"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-category"></i></span> Categories
-            </a>
-          </li>
-          <li>
-            <a
-              href="admin-reports.html"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-flag"></i></span> Report/Flags
-            </a>
-          </li>
-          <li>
-            <a
-              href="admin-profile.html"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-user-circle"></i></span> Profile
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              onclick="logout()"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-log-out"></i></span> Logout
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </aside>
+  <body class="bg-white text-black font-sans min-h-screen flex flex-col">
+    <div class="flex flex-1 min-h-0">
+      <!-- Sidebar (matches admin-dashboard.html) -->
+      <aside class="w-64 bg-zinc-900 text-white min-h-screen p-6">
+        <div class="mb-10">
+          <h1 class="text-2xl font-bold tracking-wide mb-2">Admin Panel</h1>
+          <span class="text-zinc-400 text-sm">Thought Nest</span>
+        </div>
+        <nav class="flex-1">
+          <ul class="space-y-2 text-lg font-medium">
+            <li class="mb-4">
+              <a
+                href="index.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-home"></i></span> Home</a
+              >
+            </li>
+            <li>
+              <a
+                href="admin-dashboard.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-bar-chart"></i></span> Dashboard</a
+              >
+            </li>
+            <li>
+              <a
+                href="admin-users.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-user"></i></span> Users</a
+              >
+            </li>
+            <li>
+              <a
+                href="admin-posts.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-file"></i></span> Posts</a
+              >
+            </li>
+            <li>
+              <a
+                href="admin-categories.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-category"></i></span> Categories</a
+              >
+            </li>
+            <li>
+              <a
+                href="admin-reports.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-flag"></i></span> Report/Flags</a
+              >
+            </li>
+            <li>
+              <a
+                href="admin-profile.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-user-circle"></i></span> Profile</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                onclick="logout()"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-log-out"></i></span> Logout</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </aside>
+      <main class="flex-1 px-6 py-10 bg-white text-black min-h-screen">
+        <h2 class="text-2xl font-bold mb-6">Restricted Posts & Users</h2>
+        <div class="bg-gray-100 rounded-lg shadow p-6">
+          <h3 class="font-semibold mb-4">Restricted Posts</h3>
+          <table class="w-full mb-8 bg-white rounded shadow">
+            <thead>
+              <tr class="bg-gray-200">
+                <th class="py-2 px-4 text-left">No.</th>
+                <th class="py-2 px-4 text-left">Post Title</th>
+                <th class="py-2 px-4 text-left">Post ID</th>
+                <th class="py-2 px-4 text-left">Reason</th>
+              </tr>
+            </thead>
+            <tbody id="restricted-posts-table">
+              <!-- Restricted posts will be rendered here -->
+            </tbody>
+          </table>
+          <h3 class="font-semibold mb-4">Restricted Users</h3>
+          <table class="w-full bg-white rounded shadow">
+            <thead>
+              <tr class="bg-gray-200">
+                <th class="py-2 px-4 text-left">No.</th>
+                <th class="py-2 px-4 text-left">Username</th>
+                <th class="py-2 px-4 text-left">User ID</th>
+                <th class="py-2 px-4 text-left">Reason</th>
+              </tr>
+            </thead>
+            <tbody id="restricted-users-table">
+              <!-- Restricted users will be rendered here -->
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+    <script>
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "index.html";
+      }
 
-    <main class="max-w-4xl mx-auto py-10 ml-64">
-      <h2 class="text-2xl font-bold mb-6">Reports & Flags</h2>
-      <!-- Reports/flags placeholder -->
-      <div class="bg-gray-100 rounded-lg shadow p-6">
-        <h3 class="font-semibold mb-2">Flagged Posts</h3>
-        <ul>
-          <li class="mb-2">Post 1 - Reason: Spam</li>
-        </ul>
-        <h3 class="font-semibold mt-6 mb-2">Flagged Users</h3>
-        <ul>
-          <li class="mb-2">User1 - Reason: Abusive language</li>
-        </ul>
-      </div>
-    </main>
+      // Dummy data for demonstration. Replace with your API fetch.
+      const restrictedPosts = [
+        { id: 12, title: "Spam Post", reason: "Spam content" },
+        { id: 15, title: "Offensive Post", reason: "Offensive language" },
+      ];
+      const restrictedUsers = [
+        { id: 3, username: "john_doe", reason: "Multiple violations" },
+        { id: 7, username: "jane_admin", reason: "Abusive language" },
+      ];
+
+      function renderRestricted() {
+        // Render restricted posts
+        const postsTbody = document.getElementById("restricted-posts-table");
+        postsTbody.innerHTML = "";
+        if (restrictedPosts.length === 0) {
+          postsTbody.innerHTML = `<tr><td colspan="4" class="py-2 px-4 text-gray-500">No restricted posts.</td></tr>`;
+        } else {
+          restrictedPosts.forEach((post, idx) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td class="py-2 px-4">${idx + 1}.</td>
+              <td class="py-2 px-4">${post.title}</td>
+              <td class="py-2 px-4">${post.id}</td>
+              <td class="py-2 px-4">${post.reason}</td>
+            `;
+            postsTbody.appendChild(tr);
+          });
+        }
+
+        // Render restricted users
+        const usersTbody = document.getElementById("restricted-users-table");
+        usersTbody.innerHTML = "";
+        if (restrictedUsers.length === 0) {
+          usersTbody.innerHTML = `<tr><td colspan="4" class="py-2 px-4 text-gray-500">No restricted users.</td></tr>`;
+        } else {
+          restrictedUsers.forEach((user, idx) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td class="py-2 px-4">${idx + 1}.</td>
+              <td class="py-2 px-4">${user.username}</td>
+              <td class="py-2 px-4">${user.id}</td>
+              <td class="py-2 px-4">${user.reason}</td>
+            `;
+            usersTbody.appendChild(tr);
+          });
+        }
+      }
+
+      // Initial render
+      renderRestricted();
+    </script>
   </body>
 </html>
