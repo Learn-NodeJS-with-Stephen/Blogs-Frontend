@@ -7,15 +7,85 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-white text-black font-sans min-h-screen">
-    <header
-      class="bg-zinc-900 text-white p-4 flex justify-between items-center"
+    <!-- Sidebar -->
+    <aside
+      class="w-64 bg-zinc-900 text-white min-h-screen p-6 fixed inset-y-0 left-0"
     >
-      <h1 class="text-2xl font-bold">Admin Panel</h1>
-      <a href="admin-dashboard.html" class="text-blue-300 underline"
-        >Dashboard</a
-      >
-    </header>
-    <main class="max-w-4xl mx-auto py-10">
+      <div class="mb-10">
+        <h1 class="text-2xl font-bold tracking-wide mb-2">Admin Panel</h1>
+        <span class="text-zinc-400 text-sm">Thought Nest</span>
+      </div>
+      <nav class="flex-1">
+        <ul class="space-y-2 text-lg font-medium">
+          <li class="mb-4">
+            <a
+              href="index.html"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-home"></i></span> Home
+            </a>
+          </li>
+          <li>
+            <a
+              href="admin-dashboard.html"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-bar-chart"></i></span> Dashboard
+            </a>
+          </li>
+          <li>
+            <a
+              href="admin-users.html"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-user"></i></span> Users
+            </a>
+          </li>
+          <li>
+            <a
+              href="admin-posts.html"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-file"></i></span> Posts
+            </a>
+          </li>
+          <li>
+            <a
+              href="admin-categories.html"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-category"></i></span> Categories
+            </a>
+          </li>
+          <li>
+            <a
+              href="admin-reports.html"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-flag"></i></span> Report/Flags
+            </a>
+          </li>
+          <li>
+            <a
+              href="admin-profile.html"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-user-circle"></i></span> Profile
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              onclick="logout()"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-log-out"></i></span> Logout
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="max-w-4xl mx-auto py-10" style="margin-left: 16rem">
       <h2 class="text-2xl font-bold mb-6">All Posts</h2>
       <!-- Posts table placeholder -->
       <div class="bg-gray-100 rounded-lg shadow p-6">
