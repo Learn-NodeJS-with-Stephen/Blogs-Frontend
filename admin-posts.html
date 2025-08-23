@@ -5,117 +5,174 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin - Posts</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
   </head>
-  <body class="bg-white text-black font-sans min-h-screen">
-    <!-- Sidebar -->
-    <aside
-      class="w-64 bg-zinc-900 text-white min-h-screen p-6 fixed inset-y-0 left-0"
-    >
-      <div class="mb-10">
-        <h1 class="text-2xl font-bold tracking-wide mb-2">Admin Panel</h1>
-        <span class="text-zinc-400 text-sm">Thought Nest</span>
-      </div>
-      <nav class="flex-1">
-        <ul class="space-y-2 text-lg font-medium">
-          <li class="mb-4">
-            <a
-              href="index.html"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-home"></i></span> Home
-            </a>
-          </li>
-          <li>
-            <a
-              href="admin-dashboard.html"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-bar-chart"></i></span> Dashboard
-            </a>
-          </li>
-          <li>
-            <a
-              href="admin-users.html"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-user"></i></span> Users
-            </a>
-          </li>
-          <li>
-            <a
-              href="admin-posts.html"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-file"></i></span> Posts
-            </a>
-          </li>
-          <li>
-            <a
-              href="admin-categories.html"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-category"></i></span> Categories
-            </a>
-          </li>
-          <li>
-            <a
-              href="admin-reports.html"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-flag"></i></span> Report/Flags
-            </a>
-          </li>
-          <li>
-            <a
-              href="admin-profile.html"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-user-circle"></i></span> Profile
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              onclick="logout()"
-              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-            >
-              <span><i class="bx bx-log-out"></i></span> Logout
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </aside>
-    <main class="max-w-4xl mx-auto py-10" style="margin-left: 16rem">
-      <h2 class="text-2xl font-bold mb-6">All Posts</h2>
-      <!-- Posts table placeholder -->
-      <div class="bg-gray-100 rounded-lg shadow p-6">
-        <table class="min-w-full bg-white rounded-lg shadow text-black">
-          <thead>
-            <tr class="bg-gray-200 text-black">
-              <th class="py-2 px-4">Title</th>
-              <th class="py-2 px-4">Author</th>
-              <th class="py-2 px-4">Category</th>
-              <th class="py-2 px-4">Status</th>
-              <th class="py-2 px-4">Date</th>
-              <th class="py-2 px-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Render posts here with JS or server-side -->
-            <tr>
-              <td class="py-2 px-4">Sample Post</td>
-              <td class="py-2 px-4">John Doe</td>
-              <td class="py-2 px-4">Tech</td>
-              <td class="py-2 px-4">Published</td>
-              <td class="py-2 px-4">2025-08-22</td>
+  <body class="bg-white text-black font-sans min-h-screen flex flex-col">
+    <div class="flex flex-1 min-h-0">
+      <!-- Sidebar (matches admin-dashboard.html) -->
+      <aside class="w-64 bg-zinc-900 text-white min-h-screen p-6">
+        <div class="mb-10">
+          <h1 class="text-2xl font-bold tracking-wide mb-2">Admin Panel</h1>
+          <span class="text-zinc-400 text-sm">Thought Nest</span>
+        </div>
+        <nav class="flex-1">
+          <ul class="space-y-2 text-lg font-medium">
+            <li class="mb-4">
+              <a
+                href="index.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-home"></i></span> Home</a
+              >
+            </li>
+            <li>
+              <a
+                href="admin-dashboard.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-bar-chart"></i></span> Dashboard</a
+              >
+            </li>
+            <li>
+              <a
+                href="admin-users.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-user"></i></span> Users</a
+              >
+            </li>
+            <li>
+              <a
+                href="admin-posts.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-file"></i></span> Posts</a
+              >
+            </li>
+            <li>
+              <a
+                href="admin-categories.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-category"></i></span> Categories</a
+              >
+            </li>
+            <li>
+              <a
+                href="admin-reports.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-flag"></i></span> Report/Flags</a
+              >
+            </li>
+            <li>
+              <a
+                href="admin-profile.html"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-user-circle"></i></span> Profile</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                onclick="logout()"
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+                ><span><i class="bx bx-log-out"></i></span> Logout</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </aside>
+      <main class="flex-1 px-6 py-10 bg-white text-black min-h-screen">
+        <h2 class="text-2xl font-bold mb-6">All Posts</h2>
+        <div class="bg-gray-100 rounded-lg shadow p-6">
+          <table class="min-w-full bg-white rounded-lg shadow text-black">
+            <thead>
+              <tr class="bg-gray-200 text-black">
+                <th class="py-2 px-4">No.</th>
+                <th class="py-2 px-4">Title</th>
+                <th class="py-2 px-4">Post ID</th>
+                <th class="py-2 px-4">Author</th>
+                <th class="py-2 px-4">Category</th>
+                <th class="py-2 px-4">Status</th>
+                <th class="py-2 px-4">Date</th>
+                <th class="py-2 px-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="posts-table">
+              <!-- Posts will be rendered here -->
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+    <script>
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "index.html";
+      }
+
+      // Fetch and render all posts
+      async function loadPosts() {
+        const res = await fetch("http://localhost:3600/blogs/", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.success && Array.isArray(data.data)) {
+          const tbody = document.getElementById("posts-table");
+          tbody.innerHTML = "";
+          data.data.forEach((post, idx) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td class="py-2 px-4">${idx + 1}.</td>
+              <td class="py-2 px-4">${post.title}</td>
+              <td class="py-2 px-4">${post.id}</td>
+              <td class="py-2 px-4">${post.username || post.author || ""}</td>
+              <td class="py-2 px-4">${post.category || ""}</td>
+              <td class="py-2 px-4">${post.status || "Published"}</td>
+              <td class="py-2 px-4">${new Date(
+                post.created_at
+              ).toLocaleDateString()}</td>
               <td class="py-2 px-4">
-                <button class="text-blue-600 underline">Edit</button>
+                <button class="text-yellow-600 underline restrict-post-btn" data-id="${
+                  post.id
+                }">Restrict</button>
+                <button class="text-blue-600 underline ml-2">Edit</button>
                 <button class="text-red-600 underline ml-2">Delete</button>
               </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </main>
+            `;
+            tbody.appendChild(tr);
+          });
+
+          // Add restrict functionality
+          document.querySelectorAll(".restrict-post-btn").forEach((btn) => {
+            btn.addEventListener("click", async function () {
+              const postId = this.getAttribute("data-id");
+              if (confirm("Are you sure you want to restrict this post?")) {
+                const res = await fetch(
+                  `http://localhost:3600/blogs/${postId}/restrict`,
+                  {
+                    method: "PATCH",
+                    headers: {
+                      Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                  }
+                );
+                const result = await res.json();
+                if (result.success) {
+                  alert("Post restricted successfully.");
+                  loadPosts();
+                } else {
+                  alert(result.message || "Failed to restrict post.");
+                }
+              }
+            });
+          });
+        }
+      }
+
+      window.onload = loadPosts;
+    </script>
   </body>
 </html>
