@@ -138,7 +138,9 @@
                 <button class="text-yellow-600 underline restrict-post-btn" data-id="${
                   post.id
                 }">Restrict</button>
-                <button class="text-blue-600 underline ml-2">Edit</button>
+                <button class="text-blue-600 underline ml-2 edit-post-btn" data-id="${
+                  post.id
+                }">Edit</button>
                 <button class="text-red-600 underline ml-2">Delete</button>
               </td>
             `;
@@ -167,6 +169,15 @@
                   alert(result.message || "Failed to restrict post.");
                 }
               }
+            });
+          });
+
+          // Add edit functionality
+          document.querySelectorAll(".edit-post-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const postId = this.getAttribute("data-id");
+              // Redirect to the edit page with the post ID as a query parameter
+              window.location.href = `admin-edit-post.html?id=${postId}`;
             });
           });
         }
