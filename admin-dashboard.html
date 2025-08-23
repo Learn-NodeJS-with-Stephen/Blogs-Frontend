@@ -125,7 +125,7 @@
               <div class="flex justify-between items-center mb-3">
                 <h3 class="text-lg font-bold text-black">Recent Posts</h3>
                 <a
-                  href="admin-posts.html"
+                  href="blog.html"
                   class="text-blue-600 underline text-sm hover:text-black"
                   >See more</a
                 >
@@ -146,72 +146,6 @@
               <ul id="recent-users-list" class="space-y-2 text-black"></ul>
             </div>
           </div>
-        </section>
-
-        <!-- Category & Tag Management -->
-        <section id="categories" class="mb-10">
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-bold text-black">Categories & Tags</h2>
-            <button class="btn-primary px-4 py-2" id="add-category-btn">
-              Add Category
-            </button>
-            <button class="btn-primary px-4 py-2" id="add-tag-btn">
-              Add Tag
-            </button>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 class="font-semibold text-black mb-2">Categories</h3>
-              <ul id="category-list" class="mb-4"></ul>
-            </div>
-            <div>
-              <h3 class="font-semibold text-black mb-2">Tags</h3>
-              <ul id="tag-list" class="mb-4"></ul>
-            </div>
-          </div>
-        </section>
-
-        <!-- Reports & Flags -->
-        <section id="reports" class="mb-10">
-          <h2 class="text-2xl font-bold text-black mb-4">Reports & Flags</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 class="font-semibold text-black mb-2">Flagged Posts</h3>
-              <ul id="flagged-posts-list" class="mb-4"></ul>
-            </div>
-            <div>
-              <h3 class="font-semibold text-black mb-2">Flagged Users</h3>
-              <ul id="flagged-users-list" class="mb-4"></ul>
-            </div>
-          </div>
-        </section>
-
-        <!-- Profile & Security -->
-        <section id="profile" class="mb-10">
-          <h2 class="text-2xl font-bold text-black mb-4">Profile & Security</h2>
-          <form id="admin-profile-form" class="space-y-4 max-w-lg">
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              class="input w-full"
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              class="input w-full"
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="New Password"
-              class="input w-full"
-            />
-            <button type="submit" class="btn-primary w-full">
-              Update Profile
-            </button>
-          </form>
         </section>
       </main>
     </div>
@@ -293,7 +227,8 @@
             data.data.total_users;
           document.getElementById("active-authors").textContent =
             data.data.active_authors;
-          // document.getElementById("total-comments").textContent = data.data.total_comments;
+          document.getElementById("total-comments").textContent =
+            data.data.total_comments; // <-- Show total comments
         }
       }
 
@@ -331,17 +266,18 @@
 
       // --- Recent Users ---
       async function loadRecentUsers() {
-        const res = await fetch("http://localhost:3600/users/get", {
+        // Now fetch from admin dashboard endpoint to use all_users
+        const res = await fetch("http://localhost:3600/admin/dashboard", {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         });
         if (!res.ok) return;
         const data = await res.json();
-        if (data.success) {
+        if (data.success && data.data && Array.isArray(data.data.all_users)) {
           const ul = document.getElementById("recent-users-list");
           ul.innerHTML = "";
-          const users =
-            data.users || (data.data && data.data.all_users) || data.data || [];
-          users.slice(0, 5).forEach((user, idx) => {
+          // Show the 5 latest users (assuming last in array are latest)
+          const users = data.data.all_users.slice(-5).reverse();
+          users.forEach((user, idx) => {
             const li = document.createElement("li");
             li.innerHTML = `
               <span class="font-bold text-base">${idx + 1}.</span>
@@ -355,201 +291,10 @@
         }
       }
 
-      // --- Categories ---
-      async function loadCategories() {
-        const res = await fetch("http://localhost:3600/admin/categories", {
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-        });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (data.success) {
-          const ul = document.getElementById("category-list");
-          ul.innerHTML = "";
-          data.categories.forEach((cat) => {
-            const li = document.createElement("li");
-            li.className = "flex justify-between items-center py-2";
-            li.innerHTML = `
-              <span class="text-purple-700 font-medium">${cat.name}</span>
-              <button class="text-red-600 underline delete-category-btn" data-id="${cat.id}">Delete</button>
-            `;
-            ul.appendChild(li);
-          });
-
-          document.querySelectorAll(".delete-category-btn").forEach((btn) => {
-            btn.onclick = async function () {
-              if (confirm("Delete this category?")) {
-                await fetch(
-                  `http://localhost:3600/admin/categories/${this.dataset.id}`,
-                  {
-                    method: "DELETE",
-                    headers: {
-                      Authorization: "Bearer " + localStorage.getItem("token"),
-                    },
-                  }
-                );
-                loadCategories();
-              }
-            };
-          });
-        }
-      }
-
-      // --- Tags ---
-      async function loadTags() {
-        const res = await fetch("http://localhost:3600/admin/tags", {
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-        });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (data.success) {
-          const ul = document.getElementById("tag-list");
-          ul.innerHTML = "";
-          data.tags.forEach((tag) => {
-            const li = document.createElement("li");
-            li.className = "flex justify-between items-center py-2";
-            li.innerHTML = `
-              <span class="text-purple-700 font-medium">${tag.name}</span>
-              <button class="text-red-600 underline delete-tag-btn" data-id="${tag.id}">Delete</button>
-            `;
-            ul.appendChild(li);
-          });
-
-          document.querySelectorAll(".delete-tag-btn").forEach((btn) => {
-            btn.onclick = async function () {
-              if (confirm("Delete this tag?")) {
-                await fetch(
-                  `http://localhost:3600/admin/tags/${this.dataset.id}`,
-                  {
-                    method: "DELETE",
-                    headers: {
-                      Authorization: "Bearer " + localStorage.getItem("token"),
-                    },
-                  }
-                );
-                loadTags();
-              }
-            };
-          });
-        }
-      }
-
-      document.getElementById("add-category-btn").onclick = async function () {
-        const name = prompt("New category name:");
-        if (name) {
-          await fetch("http://localhost:3600/admin/categories", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-            body: JSON.stringify({ name }),
-          });
-          loadCategories();
-        }
-      };
-      document.getElementById("add-tag-btn").onclick = async function () {
-        const name = prompt("New tag name:");
-        if (name) {
-          await fetch("http://localhost:3600/admin/tags", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-            body: JSON.stringify({ name }),
-          });
-          loadTags();
-        }
-      };
-
-      // --- Flagged Posts ---
-      async function loadFlaggedPosts() {
-        const res = await fetch("http://localhost:3600/admin/posts/flagged", {
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-        });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (data.success) {
-          const ul = document.getElementById("flagged-posts-list");
-          ul.innerHTML = "";
-          data.posts.forEach((post) => {
-            const li = document.createElement("li");
-            li.className = "border-b py-2";
-            li.innerHTML = `
-              <div class="flex justify-between items-center">
-                <span class="text-purple-700 font-medium">${post.title}</span>
-                <button class="text-red-600 underline unflag-post-btn" data-id="${post.id}">Unflag</button>
-              </div>
-              <div class="text-gray-600 text-sm">${post.reason}</div>
-            `;
-            ul.appendChild(li);
-          });
-
-          document.querySelectorAll(".unflag-post-btn").forEach((btn) => {
-            btn.onclick = async function () {
-              await fetch(
-                `http://localhost:3600/admin/posts/${this.dataset.id}/unflag`,
-                {
-                  method: "PATCH",
-                  headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                  },
-                }
-              );
-              loadFlaggedPosts();
-            };
-          });
-        }
-      }
-
-      // --- Flagged Users ---
-      async function loadFlaggedUsers() {
-        const res = await fetch("http://localhost:3600/admin/users/flagged", {
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-        });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (data.success) {
-          const ul = document.getElementById("flagged-users-list");
-          ul.innerHTML = "";
-          data.users.forEach((user) => {
-            const li = document.createElement("li");
-            li.className = "border-b py-2";
-            li.innerHTML = `
-              <div class="flex justify-between items-center">
-                <span class="text-purple-700 font-medium">${user.username}</span>
-                <button class="text-red-600 underline unflag-user-btn" data-id="${user.id}">Unflag</button>
-              </div>
-              <div class="text-gray-600 text-sm">${user.reason}</div>
-            `;
-            ul.appendChild(li);
-          });
-
-          document.querySelectorAll(".unflag-user-btn").forEach((btn) => {
-            btn.onclick = async function () {
-              await fetch(
-                `http://localhost:3600/admin/users/${this.dataset.id}/unflag`,
-                {
-                  method: "PATCH",
-                  headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                  },
-                }
-              );
-              loadFlaggedUsers();
-            };
-          });
-        }
-      }
-
       window.onload = function () {
         loadAnalytics();
         loadRecentPosts();
         loadRecentUsers();
-        loadCategories();
-        loadTags();
-        loadFlaggedPosts();
-        loadFlaggedUsers();
       };
     </script>
   </body>

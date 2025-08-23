@@ -49,11 +49,54 @@
       </div>
     </section>
 
+    <!-- Modal for comments -->
+    <div
+      id="comments-modal"
+      class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+        <button
+          id="close-comments-modal"
+          class="absolute top-2 right-2 text-xl text-gray-500 hover:text-black"
+        >
+          &times;
+        </button>
+        <h3
+          class="text-xl font-bold text-purple-700 mb-4"
+          id="modal-post-title"
+        >
+          Comments
+        </h3>
+        <div id="comments-list" class="mb-4 max-h-60 overflow-y-auto"></div>
+        <form id="add-comment-form" class="space-y-2">
+          <textarea
+            id="comment-input"
+            class="w-full border border-purple-300 rounded p-2"
+            rows="3"
+            placeholder="Add a comment..."
+            required
+          ></textarea>
+          <button
+            type="submit"
+            class="btn-primary px-4 py-2 rounded font-bold text-white bg-purple-600 hover:bg-purple-700"
+          >
+            Post Comment
+          </button>
+          <div id="comment-message" class="text-sm mt-1"></div>
+        </form>
+      </div>
+    </div>
     <script>
       const POSTS_PER_PAGE = 5;
       let currentPage = 1;
       let totalPages = 1;
       let allPosts = [];
+      let selectedPostId = null;
+      let selectedPostTitle = "";
+
+      function isLoggedIn() {
+        return !!localStorage.getItem("token");
+      }
 
       function renderPosts() {
         const postContainer = document.getElementById("all-posts");
@@ -83,6 +126,11 @@
               <span class="text-xs text-purple-500">By ${
                 post.username || "Unknown"
               } | ${new Date(post.created_at).toLocaleString()}</span>
+              <button class="show-comments-btn mt-4 block text-purple-700 underline font-semibold" data-id="${
+                post.id
+              }" data-title="${encodeURIComponent(
+              post.title
+            )}">Show Comments</button>
             `;
             postContainer.appendChild(div);
           });
@@ -104,6 +152,17 @@
               previewSpan
                 .querySelector(".see-more-btn")
                 .addEventListener("click", handler);
+            });
+          });
+
+          // Attach show comments listeners
+          document.querySelectorAll(".show-comments-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              selectedPostId = btn.getAttribute("data-id");
+              selectedPostTitle = decodeURIComponent(
+                btn.getAttribute("data-title")
+              );
+              openCommentsModal(selectedPostId, selectedPostTitle);
             });
           });
         } else {
@@ -169,6 +228,126 @@
             "<p class='text-red-500'>Failed to load blog posts.</p>";
           console.error("Error fetching blogs:", err);
         });
+
+      // --- Comments Modal Logic ---
+      const commentsModal = document.getElementById("comments-modal");
+      const closeCommentsModalBtn = document.getElementById(
+        "close-comments-modal"
+      );
+      const commentsList = document.getElementById("comments-list");
+      const addCommentForm = document.getElementById("add-comment-form");
+      const commentInput = document.getElementById("comment-input");
+      const commentMessage = document.getElementById("comment-message");
+      const modalPostTitle = document.getElementById("modal-post-title");
+
+      function openCommentsModal(postId, postTitle) {
+        modalPostTitle.textContent = `Comments for: ${postTitle}`;
+        commentsModal.classList.remove("hidden");
+        commentInput.value = "";
+        commentMessage.textContent = "";
+        // Show/hide comment form based on login
+        if (isLoggedIn()) {
+          addCommentForm.classList.remove("hidden");
+        } else {
+          addCommentForm.classList.add("hidden");
+          commentMessage.textContent = "You must be logged in to comment.";
+          commentMessage.className = "text-red-600 text-center mt-2";
+        }
+        loadComments(postId);
+      }
+
+      function closeCommentsModal() {
+        commentsModal.classList.add("hidden");
+        commentsList.innerHTML = "";
+        commentMessage.textContent = "";
+      }
+
+      closeCommentsModalBtn.onclick = closeCommentsModal;
+      commentsModal.onclick = function (e) {
+        if (e.target === commentsModal) closeCommentsModal();
+      };
+
+      async function loadComments(postId) {
+        commentsList.innerHTML =
+          "<div class='text-gray-500'>Loading comments...</div>";
+        try {
+          const res = await fetch(
+            `http://localhost:3600/blogs/${postId}/comments`
+          );
+          const data = await res.json();
+          if (data.success && Array.isArray(data.comments)) {
+            if (data.comments.length === 0) {
+              commentsList.innerHTML =
+                "<div class='text-gray-500'>No comments yet.</div>";
+            } else {
+              commentsList.innerHTML = "";
+              data.comments.forEach((comment) => {
+                const div = document.createElement("div");
+                div.className = "mb-3 border-b pb-2";
+                div.innerHTML = `
+                  <div class="font-semibold text-purple-700">${
+                    comment.username || "Anonymous"
+                  }</div>
+                  <div class="text-gray-800">${comment.content}</div>
+                  <div class="text-xs text-gray-400">${new Date(
+                    comment.created_at
+                  ).toLocaleString()}</div>
+                `;
+                commentsList.appendChild(div);
+              });
+            }
+          } else {
+            commentsList.innerHTML =
+              "<div class='text-red-500'>Failed to load comments.</div>";
+          }
+        } catch (err) {
+          commentsList.innerHTML =
+            "<div class='text-red-500'>Failed to load comments.</div>";
+        }
+      }
+
+      addCommentForm.onsubmit = async function (e) {
+        e.preventDefault();
+        commentMessage.textContent = "";
+        if (!isLoggedIn()) {
+          commentMessage.textContent = "You must be logged in to comment.";
+          commentMessage.className = "text-red-600 text-center mt-2";
+          return;
+        }
+        const content = commentInput.value.trim();
+        if (!content) {
+          commentMessage.textContent = "Comment cannot be empty.";
+          commentMessage.className = "text-red-600 text-center mt-2";
+          return;
+        }
+        try {
+          const res = await fetch(
+            `http://localhost:3600/blogs/${selectedPostId}/comments`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+              body: JSON.stringify({ content }),
+            }
+          );
+          const data = await res.json();
+          if (data.success) {
+            commentInput.value = "";
+            commentMessage.textContent = "Comment added!";
+            commentMessage.className = "text-green-600 text-center mt-2";
+            loadComments(selectedPostId);
+          } else {
+            commentMessage.textContent =
+              data.message || "Failed to add comment.";
+            commentMessage.className = "text-red-600 text-center mt-2";
+          }
+        } catch (err) {
+          commentMessage.textContent = "Failed to add comment.";
+          commentMessage.className = "text-red-600 text-center mt-2";
+        }
+      };
     </script>
 
     <footer
