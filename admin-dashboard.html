@@ -142,9 +142,10 @@
             <!-- All Users -->
             <div class="bg-gray-100 rounded-lg shadow p-6">
               <div class="flex justify-between items-center mb-3">
-                <h3 class="text-lg font-bold text-black">All Users</h3>
+                <h3 class="text-lg font-bold text-black">Users</h3>
                 <a
-                  href="#users"
+                  href="admin-users.html"
+                  id="see-more-users-link"
                   class="text-blue-600 underline text-sm hover:text-black"
                   >See more</a
                 >
@@ -861,9 +862,9 @@
         }
       }
 
-      // Fetch and render 5 users
+      // Fetch and render 5 latest users in the "All Users" quick links section
       async function loadRecentUsers() {
-        const res = await fetch("http://localhost:3600/admin/users", {
+        const res = await fetch("http://localhost:3600/users/get", {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         });
         if (!res.ok) return;
@@ -871,48 +872,20 @@
         if (data.success) {
           const ul = document.getElementById("recent-users-list");
           ul.innerHTML = "";
-          const users = data.users || data.data?.all_users || [];
-          let showingAll = false;
-
-          function renderUsers(limit) {
-            ul.innerHTML = "";
-            users.slice(0, limit).forEach((user, idx) => {
-              const li = document.createElement("li");
-              li.innerHTML = `
-      <span class="font-semibold">${idx + 1}.</span>
-      <a href="#" class="font-semibold ml-1 user-link" data-id="${
-        user.id
-      }" style="color:#1d4ed8; text-decoration:underline;">
-        ${user.username}
-      </a>
-      <span class="text-xs text-gray-500 ml-1">${user.email}</span>
-    `;
-              ul.appendChild(li);
-            });
-            if (users.length > limit && !showingAll) {
-              const seeMoreBtn = document.createElement("button");
-              seeMoreBtn.textContent = "See more";
-              seeMoreBtn.className =
-                "mt-2 text-blue-600 underline text-sm hover:text-blue-800 block";
-              seeMoreBtn.onclick = function () {
-                showingAll = true;
-                renderUsers(users.length);
-              };
-              const li = document.createElement("li");
-              li.appendChild(seeMoreBtn);
-              ul.appendChild(li);
-            }
-
-            // Add click event to each username to open the user profile modal
-            document.querySelectorAll(".user-link").forEach((link) => {
-              link.onclick = function (e) {
-                e.preventDefault();
-                openUserProfileModal(this.dataset.id);
-              };
-            });
-          }
-
-          renderUsers(10);
+          // Try to get users array from different possible keys
+          const users =
+            data.users || (data.data && data.data.all_users) || data.data || [];
+          users.slice(0, 5).forEach((user, idx) => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+            <span class="font-bold text-base">${idx + 1}.</span>
+            <span class="font-bold text-base ml-1">${user.username}</span>
+            <span class="font-semibold text-xs text-gray-700 ml-1">${
+              user.email
+            }</span>
+          `;
+            ul.appendChild(li);
+          });
         }
       }
 
@@ -924,7 +897,7 @@
         loadFlaggedPosts();
         loadFlaggedUsers();
         loadRecentPosts();
-        loadRecentUsers();
+        loadRecentUsers(); // Now shows only 5 latest users, bolded
       };
 
       async function openUserProfileModal(userId) {
