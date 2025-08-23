@@ -121,56 +121,92 @@
         window.location.href = "index.html";
       }
 
-      // Dummy data for demonstration. Replace with your API fetch.
-      const restrictedPosts = [
-        { id: 12, title: "Spam Post", reason: "Spam content" },
-        { id: 15, title: "Offensive Post", reason: "Offensive language" },
-      ];
-      const restrictedUsers = [
-        { id: 3, username: "john_doe", reason: "Multiple violations" },
-        { id: 7, username: "jane_admin", reason: "Abusive language" },
-      ];
-
-      function renderRestricted() {
-        // Render restricted posts
-        const postsTbody = document.getElementById("restricted-posts-table");
-        postsTbody.innerHTML = "";
-        if (restrictedPosts.length === 0) {
-          postsTbody.innerHTML = `<tr><td colspan="4" class="py-2 px-4 text-gray-500">No restricted posts.</td></tr>`;
-        } else {
-          restrictedPosts.forEach((post, idx) => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td class="py-2 px-4">${idx + 1}.</td>
-              <td class="py-2 px-4">${post.title}</td>
-              <td class="py-2 px-4">${post.id}</td>
-              <td class="py-2 px-4">${post.reason}</td>
-            `;
-            postsTbody.appendChild(tr);
-          });
-        }
-
-        // Render restricted users
+      // Fetch restricted users from backend
+      async function loadRestrictedUsers() {
         const usersTbody = document.getElementById("restricted-users-table");
         usersTbody.innerHTML = "";
-        if (restrictedUsers.length === 0) {
-          usersTbody.innerHTML = `<tr><td colspan="4" class="py-2 px-4 text-gray-500">No restricted users.</td></tr>`;
-        } else {
-          restrictedUsers.forEach((user, idx) => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td class="py-2 px-4">${idx + 1}.</td>
-              <td class="py-2 px-4">${user.username}</td>
-              <td class="py-2 px-4">${user.id}</td>
-              <td class="py-2 px-4">${user.reason}</td>
-            `;
-            usersTbody.appendChild(tr);
+        try {
+          const res = await fetch("http://localhost:3600/admin/users", {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
           });
+          if (!res.ok) {
+            usersTbody.innerHTML = `<tr><td colspan="4" class="py-2 px-4 text-red-600">Failed to load restricted users.</td></tr>`;
+            return;
+          }
+          const data = await res.json();
+          if (data.success && Array.isArray(data.data)) {
+            if (data.data.length === 0) {
+              usersTbody.innerHTML = `<tr><td colspan="4" class="py-2 px-4 text-gray-500">No restricted users.</td></tr>`;
+            } else {
+              data.data.forEach((user, idx) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                  <td class="py-2 px-4">${idx + 1}.</td>
+                  <td class="py-2 px-4">${user.username}</td>
+                  <td class="py-2 px-4">${user.id}</td>
+                  <td class="py-2 px-4">Restricted by admin</td>
+                `;
+                usersTbody.appendChild(tr);
+              });
+            }
+          } else {
+            usersTbody.innerHTML = `<tr><td colspan="4" class="py-2 px-4 text-red-600">Failed to load restricted users.</td></tr>`;
+          }
+        } catch (err) {
+          usersTbody.innerHTML = `<tr><td colspan="4" class="py-2 px-4 text-red-600">Failed to load restricted users.</td></tr>`;
+        }
+      }
+
+      // Fetch restricted posts from backend
+      async function loadRestrictedPosts() {
+        const postsTbody = document.getElementById("restricted-posts-table");
+        postsTbody.innerHTML = "";
+        try {
+          // You need an endpoint that returns restricted posts and their reasons
+          // Example: GET http://localhost:3600/admin/posts/restricted
+          const res = await fetch(
+            "http://localhost:3600/admin/posts/restricted",
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            }
+          );
+          if (!res.ok) {
+            postsTbody.innerHTML = `<tr><td colspan="4" class="py-2 px-4 text-red-600">Failed to load restricted posts.</td></tr>`;
+            return;
+          }
+          const data = await res.json();
+          if (data.success && Array.isArray(data.data)) {
+            if (data.data.length === 0) {
+              postsTbody.innerHTML = `<tr><td colspan="4" class="py-2 px-4 text-gray-500">No restricted posts.</td></tr>`;
+            } else {
+              data.data.forEach((post, idx) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                  <td class="py-2 px-4">${idx + 1}.</td>
+                  <td class="py-2 px-4">${post.title}</td>
+                  <td class="py-2 px-4">${post.id}</td>
+                  <td class="py-2 px-4">${
+                    post.restriction_reason || "Restricted by admin"
+                  }</td>
+                `;
+                postsTbody.appendChild(tr);
+              });
+            }
+          } else {
+            postsTbody.innerHTML = `<tr><td colspan="4" class="py-2 px-4 text-red-600">Failed to load restricted posts.</td></tr>`;
+          }
+        } catch (err) {
+          postsTbody.innerHTML = `<tr><td colspan="4" class="py-2 px-4 text-red-600">Failed to load restricted posts.</td></tr>`;
         }
       }
 
       // Initial render
-      renderRestricted();
+      loadRestrictedPosts();
+      loadRestrictedUsers();
     </script>
   </body>
 </html>

@@ -123,6 +123,7 @@
           const tbody = document.getElementById("posts-table");
           tbody.innerHTML = "";
           data.data.forEach((post, idx) => {
+            const isRestricted = post.is_restricted; // Make sure your API returns this field
             const tr = document.createElement("tr");
             tr.innerHTML = `
               <td class="py-2 px-4">${idx + 1}.</td>
@@ -135,9 +136,14 @@
                 post.created_at
               ).toLocaleDateString()}</td>
               <td class="py-2 px-4">
-                <button class="text-yellow-600 underline restrict-post-btn" data-id="${
-                  post.id
-                }">Restrict</button>
+                <button class="restrict-post-btn ${
+                  isRestricted
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "text-yellow-600 underline"
+                }" 
+                  data-id="${post.id}" ${isRestricted ? "disabled" : ""}>
+                  ${isRestricted ? "Restricted" : "Restrict"}
+                </button>
                 <button class="text-blue-600 underline ml-2 edit-post-btn" data-id="${
                   post.id
                 }">Edit</button>
@@ -150,15 +156,21 @@
           // Add restrict functionality
           document.querySelectorAll(".restrict-post-btn").forEach((btn) => {
             btn.addEventListener("click", async function () {
+              if (this.disabled) return;
               const postId = this.getAttribute("data-id");
+              const reason = prompt("Enter restriction reason:");
+              if (!reason) return;
               if (confirm("Are you sure you want to restrict this post?")) {
+                // Use the correct endpoint as in your backend: /blogs/:id/restrict
                 const res = await fetch(
-                  `http://localhost:3600/blogs/${postId}/restrict`,
+                  `http://localhost:3600/admin/posts/${postId}/restrict`,
                   {
-                    method: "PATCH",
+                    method: "PUT",
                     headers: {
+                      "Content-Type": "application/json",
                       Authorization: "Bearer " + localStorage.getItem("token"),
                     },
+                    body: JSON.stringify({ restriction_reason: reason }),
                   }
                 );
                 const result = await res.json();
