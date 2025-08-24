@@ -147,7 +147,9 @@
                 <button class="text-blue-600 underline ml-2 edit-post-btn" data-id="${
                   post.id
                 }">Edit</button>
-                <button class="text-red-600 underline ml-2">Delete</button>
+                <button class="text-red-600 underline ml-2 delete-post-btn" data-id="${
+                  post.id
+                }">Delete</button>
               </td>
             `;
             tbody.appendChild(tr);
@@ -161,7 +163,6 @@
               const reason = prompt("Enter restriction reason:");
               if (!reason) return;
               if (confirm("Are you sure you want to restrict this post?")) {
-                // Use the correct endpoint as in your backend: /blogs/:id/restrict
                 const res = await fetch(
                   `http://localhost:3600/admin/posts/${postId}/restrict`,
                   {
@@ -190,6 +191,35 @@
               const postId = this.getAttribute("data-id");
               // Redirect to the edit page with the post ID as a query parameter
               window.location.href = `admin-edit-post.html?id=${postId}`;
+            });
+          });
+
+          // Add delete functionality
+          document.querySelectorAll(".delete-post-btn").forEach((btn) => {
+            btn.addEventListener("click", async function () {
+              const postId = this.getAttribute("data-id");
+              const reason = prompt("Enter reason for deletion:");
+              if (!reason) return;
+              if (confirm("Are you sure you want to delete this post?")) {
+                const res = await fetch(
+                  `http://localhost:3600/admin/posts/${postId}`,
+                  {
+                    method: "DELETE",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                    body: JSON.stringify({ deletion_reason: reason }),
+                  }
+                );
+                const result = await res.json();
+                if (result.success) {
+                  alert("Post deleted successfully.");
+                  loadPosts();
+                } else {
+                  alert(result.message || "Failed to delete post.");
+                }
+              }
             });
           });
         }
