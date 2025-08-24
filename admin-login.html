@@ -15,14 +15,16 @@
       </h2>
       <form id="admin-login-form" class="space-y-4">
         <input
-          type="text"
-          name="username"
-          placeholder="Username"
+          type="email"
+          id="admin-email"
+          name="email"
+          placeholder="Email"
           required
           class="w-full p-3 border border-purple-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
         <input
           type="password"
+          id="admin-password"
           name="password"
           placeholder="Password"
           required
@@ -41,37 +43,38 @@
       </form>
     </div>
     <script>
-      document.getElementById("admin-login-form").onsubmit = async function (
-        e
-      ) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const body = Object.fromEntries(formData);
-        const msg = document.getElementById("admin-login-message");
-        msg.textContent = "";
-        try {
-          const res = await fetch("http://localhost:3600/admin/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-          });
-          const data = await res.json();
-          if (data.success && data.token && data.user) {
-            // Optionally check for admin role here
-            if (data.user.role && data.user.role !== "admin") {
-              msg.textContent = "Only admin can login here.";
-              return;
+      document
+        .getElementById("admin-login-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const email = document.getElementById("admin-email").value;
+          const password = document.getElementById("admin-password").value;
+          const msg = document.getElementById("admin-login-message");
+          msg.textContent = "";
+
+          try {
+            const res = await fetch("http://localhost:3600/admin/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+            });
+
+            const data = await res.json();
+            if (data.success && data.token && data.user) {
+              if (data.user.role && data.user.role !== "admin") {
+                msg.textContent = "Only admin can login here.";
+                return;
+              }
+              localStorage.setItem("token", data.token);
+              localStorage.setItem("user", JSON.stringify(data.user));
+              window.location.href = "admin-dashboard.html";
+            } else {
+              msg.textContent = data.message || "Invalid admin credentials.";
             }
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("user", JSON.stringify(data.user));
-            window.location.href = "admin-dashboard.html";
-          } else {
-            msg.textContent = data.message || "Invalid admin credentials.";
+          } catch (err) {
+            msg.textContent = "Login failed. Please try again.";
           }
-        } catch (err) {
-          msg.textContent = "Login failed. Please try again.";
-        }
-      };
+        });
     </script>
   </body>
 </html>
