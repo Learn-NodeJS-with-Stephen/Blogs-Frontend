@@ -60,13 +60,10 @@
             });
 
             const data = await res.json();
-            if (data.success && data.token && data.user) {
-              if (data.user.role && data.user.role !== "admin") {
-                msg.textContent = "Only admin can login here.";
-                return;
-              }
+            if (data.success && data.token) {
+              // Store token and redirect to dashboard
               localStorage.setItem("token", data.token);
-              localStorage.setItem("user", JSON.stringify(data.user));
+              // Optionally, you can fetch user info if needed
               window.location.href = "admin-dashboard.html";
             } else {
               msg.textContent = data.message || "Invalid admin credentials.";
