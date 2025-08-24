@@ -82,24 +82,66 @@
       </aside>
       <main class="flex-1 px-6 py-10 bg-white text-black min-h-screen">
         <h2 class="text-2xl font-bold mb-6">All Posts</h2>
-        <div class="bg-gray-100 rounded-lg shadow p-6">
-          <table class="min-w-full bg-white rounded-lg shadow text-black">
-            <thead>
-              <tr class="bg-gray-200 text-black">
-                <th class="py-2 px-4">No.</th>
-                <th class="py-2 px-4">Title</th>
-                <th class="py-2 px-4">Post ID</th>
-                <th class="py-2 px-4">Author</th>
-                <th class="py-2 px-4">Category</th>
-                <th class="py-2 px-4">Status</th>
-                <th class="py-2 px-4">Date</th>
-                <th class="py-2 px-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="posts-table">
-              <!-- Posts will be rendered here -->
-            </tbody>
-          </table>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/Loopple/loopple-public-assets@main/riva-dashboard-tailwind/riva-dashboard.css"
+        />
+        <div class="flex flex-wrap -mx-3 mb-5">
+          <div class="w-full max-w-full px-3 mb-6 mx-auto">
+            <div
+              class="relative flex-[1_auto] flex flex-col break-words min-w-0 bg-clip-border rounded-[.95rem] bg-white m-5"
+            >
+              <div
+                class="relative flex flex-col min-w-0 break-words border border-dashed bg-clip-border rounded-2xl border-stone-200 bg-light/30"
+              >
+                <!-- card header -->
+                <div
+                  class="px-9 pt-5 flex justify-between items-stretch flex-wrap min-h-[70px] pb-0 bg-transparent"
+                >
+                  <h3
+                    class="flex flex-col items-start justify-center m-2 ml-0 font-medium text-xl/tight text-dark"
+                  >
+                    <span class="mr-3 font-semibold text-dark">Blog Posts</span>
+                    <span
+                      class="mt-1 font-medium text-secondary-dark text-lg/normal"
+                      >All posts in the system</span
+                    >
+                  </h3>
+                </div>
+                <!-- end card header -->
+                <!-- card body  -->
+                <div class="flex-auto block py-8 pt-6 px-9">
+                  <div class="overflow-x-auto">
+                    <table
+                      class="w-full my-0 align-middle text-dark border-neutral-200"
+                      id="posts-table-main"
+                    >
+                      <thead class="align-bottom">
+                        <tr
+                          class="font-semibold text-[0.95rem] text-secondary-dark"
+                        >
+                          <th class="pb-3 text-start min-w-[175px]">TITLE</th>
+                          <th class="pb-3 text-end min-w-[100px]">AUTHOR</th>
+                          <th class="pb-3 text-end min-w-[100px]">CATEGORY</th>
+                          <th class="pb-3 text-end min-w-[100px]">STATUS</th>
+                          <th class="pb-3 pr-12 text-end min-w-[100px]">
+                            DATE
+                          </th>
+                          <th class="pb-3 pr-12 text-end min-w-[100px]">
+                            ACTIONS
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="posts-table-body">
+                        <!-- Posts will be rendered here -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <!-- end card body -->
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </div>
@@ -110,7 +152,7 @@
         window.location.href = "index.html";
       }
 
-      // Fetch and render all posts
+      // Fetch and render all posts in the new styled table
       async function loadPosts() {
         const res = await fetch("http://localhost:3600/blogs/", {
           headers: {
@@ -119,23 +161,49 @@
         });
         if (!res.ok) return;
         const data = await res.json();
+        const tbody = document.getElementById("posts-table-body");
+        tbody.innerHTML = "";
         if (data.success && Array.isArray(data.data)) {
-          const tbody = document.getElementById("posts-table");
-          tbody.innerHTML = "";
           data.data.forEach((post, idx) => {
-            const isRestricted = post.is_restricted; // Make sure your API returns this field
+            const isRestricted = post.is_restricted;
             const tr = document.createElement("tr");
+            tr.className = "border-b border-dashed last:border-b-0";
             tr.innerHTML = `
-              <td class="py-2 px-4">${idx + 1}.</td>
-              <td class="py-2 px-4">${post.title}</td>
-              <td class="py-2 px-4">${post.id}</td>
-              <td class="py-2 px-4">${post.username || post.author || ""}</td>
-              <td class="py-2 px-4">${post.category || ""}</td>
-              <td class="py-2 px-4">${post.status || "Published"}</td>
-              <td class="py-2 px-4">${new Date(
-                post.created_at
-              ).toLocaleDateString()}</td>
-              <td class="py-2 px-4">
+              <td class="p-3 pl-0">
+                <div class="flex items-center">
+                  <div class="flex flex-col justify-start">
+                    <span class="mb-1 font-semibold transition-colors duration-200 ease-in-out text-lg/normal text-secondary-inverse hover:text-primary">${
+                      post.title
+                    }</span>
+                    <span class="text-xs text-gray-400">#${post.id}</span>
+                  </div>
+                </div>
+              </td>
+              <td class="p-3 pr-0 text-end">
+                <span class="font-semibold text-light-inverse text-md/normal">${
+                  post.username || post.author || ""
+                }</span>
+              </td>
+              <td class="p-3 pr-0 text-end">
+                <span class="font-semibold text-light-inverse text-md/normal">${
+                  post.category || ""
+                }</span>
+              </td>
+              <td class="p-3 pr-0 text-end">
+                <span class="text-center align-baseline inline-flex px-4 py-2 mr-auto items-center font-semibold text-[.95rem] leading-none ${
+                  post.status === "Published"
+                    ? "text-success bg-success-light"
+                    : post.status === "Draft"
+                    ? "text-warning bg-warning-light"
+                    : "text-danger bg-danger-light"
+                } rounded-lg">${post.status || "Published"}</span>
+              </td>
+              <td class="pr-0 text-end">
+                <span class="font-semibold text-light-inverse text-md/normal">${new Date(
+                  post.created_at
+                ).toLocaleDateString()}</span>
+              </td>
+              <td class="p-3 pr-0 text-end">
                 <button class="restrict-post-btn ${
                   isRestricted
                     ? "bg-gray-300 text-gray-500 cursor-not-allowed"
