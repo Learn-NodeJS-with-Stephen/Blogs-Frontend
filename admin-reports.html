@@ -22,6 +22,19 @@
           <h1 class="text-2xl font-bold tracking-wide mb-2">Admin Panel</h1>
           <span class="text-zinc-400 text-sm">Thought Nest</span>
         </div>
+        <!-- Admin Profile Section -->
+        <div class="flex flex-col items-center mb-8">
+          <img
+            id="admin-avatar"
+            src="https://ui-avatars.com/api/?name=Admin&background=random"
+            alt="Admin Avatar"
+            class="w-16 h-16 rounded-full mb-2"
+          />
+          <h2 id="admin-username" class="font-semibold text-lg text-teal-400">
+            Admin User
+          </h2>
+          <p class="text-xs text-gray-300">Administrator</p>
+        </div>
         <nav class="flex-1">
           <ul class="space-y-2 text-lg font-medium">
             <li class="mb-4">
@@ -301,6 +314,19 @@
           postsTbody.innerHTML = `<tr><td colspan="5" class="py-2 px-4 text-red-600">Failed to load restricted posts.</td></tr>`;
         }
       }
+
+      // Show admin profile info in sidebar
+      document.addEventListener("DOMContentLoaded", function () {
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        if (user && user.username) {
+          document.getElementById("admin-username").textContent = user.username;
+          document.getElementById("admin-avatar").src =
+            user.avatar ||
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(
+              user.username
+            )}&background=random`;
+        }
+      });
 
       // Initial render
       loadRestrictedPosts();

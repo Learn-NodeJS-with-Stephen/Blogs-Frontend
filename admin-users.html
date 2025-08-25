@@ -31,6 +31,19 @@
         <h1 class="text-2xl font-bold tracking-wide mb-2">Admin Panel</h1>
         <span class="text-zinc-400 text-sm">Thought Nest</span>
       </div>
+      <!-- Admin Profile Section -->
+      <div class="flex flex-col items-center mb-8">
+        <img
+          id="admin-avatar"
+          src="https://ui-avatars.com/api/?name=Admin&background=random"
+          alt="Admin Avatar"
+          class="w-16 h-16 rounded-full mb-2"
+        />
+        <h2 id="admin-username" class="font-semibold text-lg text-teal-400">
+          Admin User
+        </h2>
+        <p class="text-xs text-gray-300">Administrator</p>
+      </div>
       <nav class="flex-1">
         <ul class="space-y-2 text-lg font-medium">
           <li class="mb-4">
@@ -104,16 +117,7 @@
 
     <main class="p-8">
       <h2 class="text-2xl font-bold mb-6">All Users</h2>
-      <!-- Search Bar -->
-      <div class="mb-4">
-        <input
-          type="text"
-          id="user-search"
-          placeholder="Search users by name or email..."
-          class="input w-full max-w-md border border-gray-300 rounded px-4 py-2"
-        />
-      </div>
-      <!-- Loopple/Riva Dashboard Table Style -->
+      <!-- Users Table with Search Bar in Header -->
       <div
         class="relative flex-[1_auto] flex flex-col break-words min-w-0 bg-clip-border rounded-[.95rem] bg-white m-5"
       >
@@ -121,16 +125,22 @@
           class="relative flex flex-col min-w-0 break-words border border-dashed bg-clip-border rounded-2xl border-stone-200 bg-light/30"
         >
           <div
-            class="px-9 pt-5 flex justify-between items-stretch flex-wrap min-h-[70px] pb-0 bg-transparent"
+            class="px-9 pt-5 flex justify-between items-center flex-wrap min-h-[70px] pb-0 bg-transparent"
           >
             <h3
               class="flex flex-col items-start justify-center m-2 ml-0 font-medium text-xl/tight text-dark"
             >
               <span class="mr-3 font-semibold text-dark">Users Table</span>
-              <span class="mt-1 font-medium text-secondary-dark text-lg/normal"
-                >All users in the system</span
-              >
             </h3>
+            <!-- Search Bar moved here -->
+            <div class="mb-0 w-full sm:w-auto flex justify-end">
+              <input
+                type="text"
+                id="user-search"
+                placeholder="Search users by name or email..."
+                class="input border border-gray-300 rounded px-4 py-2 w-full sm:w-80"
+              />
+            </div>
           </div>
           <div class="flex-auto block py-8 pt-6 px-9">
             <div class="overflow-x-auto">
@@ -152,6 +162,11 @@
                 </tbody>
               </table>
             </div>
+            <!-- Pagination Controls -->
+            <div
+              class="flex justify-end mt-6 space-x-2"
+              id="pagination-controls"
+            ></div>
           </div>
         </div>
       </div>
@@ -163,11 +178,29 @@
         window.location.href = "index.html";
       }
 
-      // Fetch and render users, with optional search
-      async function loadUsers(query = "") {
-        let url = "http://localhost:3600/users/get";
-        if (query) {
-          url += `?search=${encodeURIComponent(query)}`;
+      // Show admin profile info in sidebar
+      document.addEventListener("DOMContentLoaded", function () {
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        if (user && user.username) {
+          document.getElementById("admin-username").textContent = user.username;
+          document.getElementById("admin-avatar").src =
+            user.avatar ||
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(
+              user.username
+            )}&background=random`;
+        }
+      });
+
+      let currentPage = 1;
+      let currentSearch = "";
+
+      // Fetch and render users, with pagination and search
+      async function loadUsers(page = 1, search = "") {
+        currentPage = page;
+        const limit = 10;
+        let url = `http://localhost:3600/users/get?page=${page}&limit=${limit}`;
+        if (search) {
+          url += `&search=${encodeURIComponent(search)}`;
         }
         const res = await fetch(url, {
           headers: {
@@ -183,7 +216,7 @@
             const tr = document.createElement("tr");
             tr.className = "border-b border-dashed last:border-b-0";
             tr.innerHTML = `
-              <td class="p-3 pl-0">${idx + 1}</td>
+              <td class="p-3 pl-0">${(page - 1) * limit + idx + 1}</td>
               <td class="p-3 pl-0">
                 <div class="flex items-center">
                   <div class="relative inline-block shrink-0 rounded-2xl me-3">
@@ -234,23 +267,64 @@
                 );
                 const result = await res.json();
                 if (result.success) {
-                  loadUsers(
-                    document.getElementById("user-search").value.trim()
-                  );
+                  loadUsers(currentPage, currentSearch);
                 } else {
                   alert(result.message || "Failed to delete user.");
                 }
               }
             });
           });
+
+          // Pagination controls
+          renderPagination(data.meta);
         }
       }
 
-      // Listen for search input
+      function renderPagination(meta) {
+        const controls = document.getElementById("pagination-controls");
+        controls.innerHTML = "";
+        if (!meta) return;
+
+        // Previous button
+        const prevBtn = document.createElement("button");
+        prevBtn.textContent = "Previous";
+        prevBtn.className =
+          "px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300";
+        prevBtn.disabled = meta.page <= 1;
+        prevBtn.onclick = () => {
+          if (meta.page > 1) {
+            loadUsers(meta.page - 1, currentSearch);
+          }
+        };
+        controls.appendChild(prevBtn);
+
+        // Page info
+        const pageInfo = document.createElement("span");
+        pageInfo.className = "px-4 py-2 font-semibold";
+        pageInfo.textContent = `Page ${meta.page}`;
+        controls.appendChild(pageInfo);
+
+        // Next button
+        const nextBtn = document.createElement("button");
+        nextBtn.textContent = "Next";
+        nextBtn.className =
+          "px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300";
+        nextBtn.disabled = !meta.hasNext;
+        nextBtn.onclick = () => {
+          if (meta.hasNext) {
+            loadUsers(meta.page + 1, currentSearch);
+          }
+        };
+        controls.appendChild(nextBtn);
+      }
+
+      // Listen for search input and initial load
       document.addEventListener("DOMContentLoaded", function () {
         const searchInput = document.getElementById("user-search");
         searchInput.addEventListener("input", function () {
-          loadUsers(this.value.trim());
+          currentSearch = this.value.trim();
+          currentPage = 1;
+          loadUsers(currentPage, currentSearch);
         });
         loadUsers();
       });
