@@ -171,7 +171,7 @@
             </div>
             <div id="recent-posts-list" class="space-y-4"></div>
           </div>
-          <!-- Recent Users -->
+          <!-- Recent Users (bigger list) -->
           <div class="bg-gray-100 rounded-lg shadow p-6">
             <div class="flex justify-between items-center mb-3">
               <h3 class="text-lg font-bold text-black">Users</h3>
@@ -182,7 +182,7 @@
                 >See more</a
               >
             </div>
-            <ul id="recent-users-list" class="space-y-2 text-black"></ul>
+            <ul id="recent-users-list" class="space-y-3 text-black"></ul>
           </div>
         </div>
       </section>
@@ -268,8 +268,8 @@
         if (data.success && data.data && Array.isArray(data.data.all_users)) {
           const ul = document.getElementById("recent-users-list");
           ul.innerHTML = "";
-          // Show the 5 latest users (assuming last in array are latest)
-          const users = data.data.all_users.slice(-5).reverse();
+          // Show the 15 latest users (instead of 5)
+          const users = data.data.all_users.slice(-15).reverse();
           users.forEach((user, idx) => {
             const li = document.createElement("li");
             li.innerHTML = `
