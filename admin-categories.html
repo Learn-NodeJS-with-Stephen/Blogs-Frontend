@@ -35,7 +35,7 @@
         </div>
         <nav class="flex-1">
           <ul class="space-y-2 text-lg font-medium">
-              <li>
+            <li>
               <a
                 href="admin-dashboard.html"
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
@@ -126,6 +126,27 @@
               <!-- Categories will be rendered here -->
             </tbody>
           </table>
+          <!-- Pagination Controls -->
+          <div
+            class="flex justify-between items-center mt-4"
+            id="pagination-controls"
+          >
+            <button
+              id="prev-page"
+              class="px-3 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
+              disabled
+            >
+              Previous
+            </button>
+            <span id="pagination-info" class="text-sm text-gray-600"></span>
+            <button
+              id="next-page"
+              class="px-3 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
+              disabled
+            >
+              Next
+            </button>
+          </div>
         </div>
       </main>
     </div>
@@ -136,7 +157,12 @@
         window.location.href = "index.html";
       }
 
-      // Fetch and render categories in table
+      // Pagination variables
+      let categoriesData = [];
+      let currentPage = 1;
+      const pageSize = 7;
+
+      // Fetch and render categories in table with pagination
       async function loadCategories() {
         const res = await fetch("http://localhost:3600/admin/categories", {
           headers: {
@@ -148,59 +174,110 @@
         if (!res.ok) {
           tableBody.innerHTML =
             "<tr><td colspan='4' class='py-2 px-4 text-red-600'>Failed to load categories.</td></tr>";
+          categoriesData = [];
+          renderPagination();
           return;
         }
         const data = await res.json();
         if (data.success && Array.isArray(data.data)) {
-          if (data.data.length === 0) {
+          categoriesData = data.data;
+          if (categoriesData.length === 0) {
             tableBody.innerHTML =
               "<tr><td colspan='4' class='py-2 px-4 text-gray-500'>No categories found.</td></tr>";
-          } else {
-            data.data.forEach((cat, idx) => {
-              const tr = document.createElement("tr");
-              tr.innerHTML = `
-                <td class="py-2 px-4">${idx + 1}.</td>
-                <td class="py-2 px-4">${cat.name}</td>
-                <td class="py-2 px-4">${cat.id}</td>
-                <td class="py-2 px-4">
-                  <button class="text-red-600 underline delete-category-btn" data-id="${
-                    cat.id
-                  }">Delete</button>
-                </td>
-              `;
-              tableBody.appendChild(tr);
-            });
-
-            // Add delete functionality
-            document.querySelectorAll(".delete-category-btn").forEach((btn) => {
-              btn.addEventListener("click", async function () {
-                if (confirm("Are you sure you want to delete this category?")) {
-                  const categoryId = this.getAttribute("data-id");
-                  const res = await fetch(
-                    `http://localhost:3600/admin/category/${categoryId}`,
-                    {
-                      method: "DELETE",
-                      headers: {
-                        Authorization:
-                          "Bearer " + localStorage.getItem("token"),
-                      },
-                    }
-                  );
-                  const result = await res.json();
-                  if (result.success) {
-                    loadCategories();
-                  } else {
-                    alert(result.message || "Failed to delete category.");
-                  }
-                }
-              });
-            });
           }
+          currentPage = 1; // Reset to first page on reload
+          renderCategoriesTable();
+          renderPagination();
         } else {
           tableBody.innerHTML =
             "<tr><td colspan='4' class='py-2 px-4 text-red-600'>Failed to load categories.</td></tr>";
+          categoriesData = [];
+          renderPagination();
         }
       }
+
+      function renderCategoriesTable() {
+        const tableBody = document.getElementById("category-table-body");
+        tableBody.innerHTML = "";
+        const start = (currentPage - 1) * pageSize;
+        const end = start + pageSize;
+        const pageItems = categoriesData.slice(start, end);
+
+        if (pageItems.length === 0) {
+          tableBody.innerHTML =
+            "<tr><td colspan='4' class='py-2 px-4 text-gray-500'>No categories found.</td></tr>";
+          return;
+        }
+
+        pageItems.forEach((cat, idx) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="py-2 px-4">${start + idx + 1}.</td>
+            <td class="py-2 px-4">${cat.name}</td>
+            <td class="py-2 px-4">${cat.id}</td>
+            <td class="py-2 px-4">
+              <button class="text-red-600 underline delete-category-btn" data-id="${
+                cat.id
+              }">Delete</button>
+            </td>
+          `;
+          tableBody.appendChild(tr);
+        });
+
+        // Add delete functionality
+        document.querySelectorAll(".delete-category-btn").forEach((btn) => {
+          btn.addEventListener("click", async function () {
+            if (confirm("Are you sure you want to delete this category?")) {
+              const categoryId = this.getAttribute("data-id");
+              const res = await fetch(
+                `http://localhost:3600/admin/category/${categoryId}`,
+                {
+                  method: "DELETE",
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                }
+              );
+              const result = await res.json();
+              if (result.success) {
+                await loadCategories();
+              } else {
+                alert(result.message || "Failed to delete category.");
+              }
+            }
+          });
+        });
+      }
+
+      function renderPagination() {
+        const total = categoriesData.length;
+        const totalPages = Math.ceil(total / pageSize);
+        document.getElementById("pagination-info").textContent =
+          total === 0
+            ? ""
+            : `Page ${currentPage} of ${totalPages} (${total} categories)`;
+
+        document.getElementById("prev-page").disabled = currentPage <= 1;
+        document.getElementById("next-page").disabled =
+          currentPage >= totalPages || totalPages === 0;
+      }
+
+      document.getElementById("prev-page").onclick = function () {
+        if (currentPage > 1) {
+          currentPage--;
+          renderCategoriesTable();
+          renderPagination();
+        }
+      };
+
+      document.getElementById("next-page").onclick = function () {
+        const totalPages = Math.ceil(categoriesData.length / pageSize);
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderCategoriesTable();
+          renderPagination();
+        }
+      };
 
       // Handle create category form
       document.getElementById("create-category-form").onsubmit =
