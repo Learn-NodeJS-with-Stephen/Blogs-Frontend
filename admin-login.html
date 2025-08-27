@@ -43,6 +43,28 @@
       </form>
     </div>
     <script>
+      // Check if admin token exists and is valid
+      async function checkAdminToken() {
+        const token = localStorage.getItem("token");
+        if (token) {
+          try {
+            const res = await fetch("http://localhost:3600/admin/login", {
+              method: "GET",
+              headers: { Authorization: "Bearer " + token },
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+              // Token is valid, redirect to dashboard
+              window.location.href = "admin-dashboard.html";
+            }
+            // else, stay on login page
+          } catch (err) {
+            // Ignore and stay on login page
+          }
+        }
+      }
+      checkAdminToken();
+
       document
         .getElementById("admin-login-form")
         .addEventListener("submit", async (e) => {
@@ -63,7 +85,6 @@
             if (data.success && data.token) {
               // Store token and redirect to dashboard
               localStorage.setItem("token", data.token);
-              // Optionally, you can fetch user info if needed
               window.location.href = "admin-dashboard.html";
             } else {
               msg.textContent = data.message || "Invalid admin credentials.";
@@ -72,6 +93,27 @@
             msg.textContent = "Login failed. Please try again.";
           }
         });
+
+      // Optional: On protected pages, check token validity and redirect if unauthorized
+      async function protectAdminPage() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "admin-login.html";
+          return;
+        }
+        try {
+          const res = await fetch("http://localhost:3600/admin/login", {
+            method: "GET",
+            headers: { Authorization: "Bearer " + token },
+          });
+          if (!res.ok) {
+            window.location.href = "admin-login.html";
+          }
+        } catch {
+          window.location.href = "admin-login.html";
+        }
+      }
+      // Call protectAdminPage() on protected pages (not on login)
     </script>
   </body>
 </html>
