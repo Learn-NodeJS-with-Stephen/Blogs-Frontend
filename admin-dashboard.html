@@ -171,18 +171,82 @@
             </div>
             <div id="recent-posts-list" class="space-y-4"></div>
           </div>
-          <!-- Recent Users -->
-          <div class="bg-gray-100 rounded-lg shadow p-6">
-            <div class="flex justify-between items-center mb-3">
-              <h3 class="text-lg font-bold text-black">Users</h3>
-              <a
-                href="admin-users.html"
-                id="see-more-users-link"
-                class="text-blue-600 underline text-sm hover:text-black"
-                >See more</a
-              >
+          <!-- Users Table Styled Like Earnings Table -->
+          <div
+            class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md"
+          >
+            <div class="flex justify-between mb-4 items-start">
+              <div class="font-medium">Users</div>
+              <div class="dropdown">
+                <button
+                  type="button"
+                  class="dropdown-toggle text-gray-400 hover:text-gray-600"
+                >
+                  <i class="ri-more-fill"></i>
+                </button>
+                <ul
+                  class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]"
+                >
+                  <li>
+                    <a
+                      href="#"
+                      class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
+                      >Profile</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
+                      >Settings</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
+                      >Logout</a
+                    >
+                  </li>
+                </ul>
+              </div>
             </div>
-            <ul id="recent-users-list" class="space-y-2 text-black"></ul>
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[460px]">
+                <thead>
+                  <tr>
+                    <th
+                      class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md"
+                    >
+                      Avatar
+                    </th>
+                    <th
+                      class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left"
+                    >
+                      Username
+                    </th>
+                    <th
+                      class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left"
+                    >
+                      Email
+                    </th>
+                    <th
+                      class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left"
+                    >
+                      Role
+                    </th>
+                    <th
+                      class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left rounded-tr-md rounded-br-md"
+                    >
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="recent-users-list">
+                  <!-- Users will be rendered here by JS -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
@@ -260,27 +324,48 @@
 
       // --- Recent Users ---
       async function loadRecentUsers() {
-        // Now fetch from admin dashboard endpoint to use all_users
         const res = await fetch("http://localhost:3600/admin/dashboard", {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         });
         if (!res.ok) return;
         const data = await res.json();
         if (data.success && data.data && Array.isArray(data.data.all_users)) {
-          const ul = document.getElementById("recent-users-list");
-          ul.innerHTML = "";
-          // Show the 5 latest users (assuming last in array are latest)
-          const users = data.data.all_users.slice(-5).reverse();
-          users.forEach((user, idx) => {
-            const li = document.createElement("li");
-            li.innerHTML = `
-              <span class="font-bold text-base">${idx + 1}.</span>
-              <span class="font-bold text-base ml-1">${user.username}</span>
-              <span class="font-semibold text-xs text-gray-700 ml-1">${
+          const tbody = document.getElementById("recent-users-list");
+          tbody.innerHTML = "";
+          // Show the 15 latest users
+          const users = data.data.all_users.slice(-15).reverse();
+          users.forEach((user) => {
+            tbody.innerHTML += `
+          <tr>
+            <td class="py-2 px-4 border-b border-b-gray-50">
+              <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(
+                user.username
+              )}&background=random" alt="" class="w-8 h-8 rounded object-cover block">
+            </td>
+            <td class="py-2 px-4 border-b border-b-gray-50">
+              <span class="text-gray-600 text-sm font-medium">${
+                user.username
+              }</span>
+            </td>
+            <td class="py-2 px-4 border-b border-b-gray-50">
+              <span class="text-[13px] font-medium text-gray-400">${
                 user.email
               }</span>
-            `;
-            ul.appendChild(li);
+            </td>
+            <td class="py-2 px-4 border-b border-b-gray-50">
+              <span class="text-[13px] font-medium text-gray-400">${
+                user.user_type || "User"
+              }</span>
+            </td>
+            <td class="py-2 px-4 border-b border-b-gray-50">
+              ${
+                user.is_active
+                  ? '<span class="inline-block p-1 rounded bg-emerald-500/10 text-emerald-500 font-medium text-[12px] leading-none">Active</span>'
+                  : '<span class="inline-block p-1 rounded bg-rose-500/10 text-rose-500 font-medium text-[12px] leading-none">Suspended</span>'
+              }
+            </td>
+          </tr>
+        `;
           });
         }
       }
