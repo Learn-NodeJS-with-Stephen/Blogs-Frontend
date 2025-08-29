@@ -4,55 +4,78 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blog</title>
-    <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body
-    class="bg-gradient-to-br from-purple-100 via-purple-200 to-purple-300 text-gray-900 font-sans"
-  >
-    <header
-      class="bg-gradient-to-r from-purple-700 to-purple-500 text-white py-5 shadow-md sticky top-0 z-50"
-    >
-      <div class="container mx-auto px-4 flex justify-between items-center">
-        <h1 class="text-3xl font-bold tracking-wide">THOUGHT NEST</h1>
-        <nav>
-          <ul class="flex gap-6 text-lg font-medium">
-            <li><a href="index.html" class="hover:underline">HOME</a></li>
-            <li><a href="blog.html" class="hover:underline">BLOG</a></li>
-            <!-- <li>
-              <a href="admin-dashboard.html" class="hover:underline font-bold"
-                >ADMIN</a
-              >
-            </li> -->
-            <li>
-              <a href="admin-login.html" class="hover:underline font-bold"
-                >ADMIN</a
-              >
-            </li>
-            <!-- <li><a href="about.html" class="hover:underline">About</a></li>
-            <li><a href="contact.html" class="hover:underline">Contact</a></li> -->
-          </ul>
-        </nav>
+  <body class="overflow-x-hidden bg-gray-100">
+    <!-- Navbar -->
+    <nav class="px-6 py-4 bg-white shadow">
+      <div class="container flex flex-col mx-auto md:flex-row md:items-center md:justify-between">
+        <div class="flex items-center justify-between">
+          <div>
+            <a href="index.html" class="text-xl font-bold text-gray-800 md:text-2xl">THOUGHT NEST</a>
+          </div>
+          <div>
+            <button type="button" class="block text-gray-800 hover:text-gray-600 focus:text-gray-600 focus:outline-none md:hidden">
+              <svg viewBox="0 0 24 24" class="w-6 h-6 fill-current">
+                <path d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="flex-col hidden md:flex md:flex-row md:-mx-4">
+          <a href="index.html" class="my-1 text-gray-800 hover:text-blue-500 md:mx-4 md:my-0">Home</a>
+          <a href="blog.html" class="my-1 text-gray-800 hover:text-blue-500 md:mx-4 md:my-0">Blog</a>
+          <a href="admin-login.html" class="my-1 text-gray-800 hover:text-blue-500 md:mx-4 md:my-0">Admin</a>
+        </div>
       </div>
-    </header>
-    <section
-      class="blog-section max-w-4xl mx-auto mt-12 bg-white/90 p-8 rounded-xl shadow"
-    >
-      <h2 class="text-3xl font-bold text-purple-800 mb-6">All Blog Posts</h2>
-      <div class="post-list grid gap-8" id="all-posts"></div>
-      <div
-        class="flex justify-center items-center gap-2 mt-8"
-        id="pagination-controls"
-      >
-        <button id="prev-page" class="btn-primary px-4 py-2" disabled>
-          Prev
-        </button>
-        <span id="page-numbers" class="flex gap-1"></span>
-        <button id="next-page" class="btn-primary px-4 py-2" disabled>
-          Next
-        </button>
+    </nav>
+
+    <div class="px-6 py-8">
+      <div class="container flex flex-col lg:flex-row justify-between mx-auto">
+        <!-- Blog Posts Section -->
+        <div class="w-full lg:w-8/12">
+          <div class="flex items-center justify-between">
+            <h1 class="text-xl font-bold text-gray-700 md:text-2xl">All Blog Posts</h1>
+            <div>
+              <select id="sort-select" class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <option value="latest">Latest</option>
+                <option value="oldest">Oldest</option>
+              </select>
+            </div>
+          </div>
+          <div id="all-posts" class="mt-6 space-y-6"></div>
+          <!-- Pagination -->
+          <div class="mt-8 flex">
+            <button id="prev-page" class="px-3 py-2 mx-1 font-medium text-gray-500 bg-white rounded-md" disabled>
+              Previous
+            </button>
+            <span id="page-numbers" class="flex"></span>
+            <button id="next-page" class="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md">
+              Next
+            </button>
+          </div>
+        </div>
+        <!-- Sidebar -->
+        <div class="hidden w-full lg:w-4/12 lg:block lg:-mx-8">
+          <div class="px-8">
+            <h1 class="mb-4 text-xl font-bold text-gray-700">Authors</h1>
+            <div class="flex flex-col max-w-sm px-6 py-4 mx-auto bg-white rounded-lg shadow-md">
+              <ul id="authors-list" class="-mx-4"></ul>
+            </div>
+          </div>
+          <div class="px-8 mt-10">
+            <h1 class="mb-4 text-xl font-bold text-gray-700">Categories</h1>
+            <div class="flex flex-col max-w-sm px-4 py-6 mx-auto bg-white rounded-lg shadow-md">
+              <ul id="categories-list"></ul>
+            </div>
+          </div>
+          <div class="px-8 mt-10">
+            <h1 class="mb-4 text-xl font-bold text-gray-700">Recent Post</h1>
+            <div id="recent-post" class="flex flex-col max-w-sm px-8 py-6 mx-auto bg-white rounded-lg shadow-md"></div>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
 
     <!-- Modal for comments -->
     <div
@@ -91,11 +114,39 @@
         </form>
       </div>
     </div>
+
+    <footer class="px-6 py-2 text-gray-100 bg-gray-800 mt-10">
+      <div class="container flex flex-col items-center justify-between mx-auto md:flex-row">
+        <a href="#" class="text-2xl font-bold">THOUGHT NEST</a>
+        <p class="mt-2 md:mt-0">All rights reserved 2025.</p>
+        <div class="flex mt-4 mb-2 -mx-2 md:mt-0 md:mb-0">
+          <a href="#" class="mx-2 text-gray-100 hover:text-gray-400">
+            <!-- Social icons here -->
+            <svg viewBox="0 0 512 512" class="w-4 h-4 fill-current">
+              <path d="M444.17,32H70.28C49.85,32,32,46.7,32,66.89V441.61C32,461.91,49.85,480,70.28,480H444.06C464.6,480,480,461.79,480,441.61V66.89C480.12,46.7,464.6,32,444.17,32ZM170.87,405.43H106.69V205.88h64.18ZM141,175.54h-.46c-20.54,0-33.84-15.29-33.84-34.43,0-19.49,13.65-34.42,34.65-34.42s33.85,14.82,34.31,34.42C175.65,160.25,162.35,175.54,141,175.54ZM405.43,405.43H341.25V296.32c0-26.14-9.34-44-32.56-44-17.74,0-28.24,12-32.91,23.69-1.75,4.2-2.22,9.92-2.22,15.76V405.43H209.38V205.88h64.18v27.77c9.34-13.3,23.93-32.44,57.88-32.44,42.13,0,74,27.77,74,87.64Z"></path>
+            </svg>
+          </a>
+          <a href="#" class="mx-2 text-gray-100 hover:text-gray-400">
+            <svg viewBox="0 0 512 512" class="w-4 h-4 fill-current">
+              <path d="M455.27,32H56.73A24.74,24.74,0,0,0,32,56.73V455.27A24.74,24.74,0,0,0,56.73,480H256V304H202.45V240H256V189c0-57.86,40.13-89.36,91.82-89.36,24.73,0,51.33,1.86,57.51,2.68v60.43H364.15c-28.12,0-33.48,13.3-33.48,32.9V240h67l-8.75,64H330.67V480h124.6A24.74,24.74,0,0,0,480,455.27V56.73A24.74,24.74,0,0,0,455.27,32Z"></path>
+            </svg>
+          </a>
+          <a href="#" class="mx-2 text-gray-100 hover:text-gray-400">
+            <svg viewBox="0 0 512 512" class="w-4 h-4 fill-current">
+              <path d="M496,109.5a201.8,201.8,0,0,1-56.55,15.3,97.51,97.51,0,0,0,43.33-53.6,197.74,197.74,0,0,1-62.56,23.5A99.14,99.14,0,0,0,348.31,64c-54.42,0-98.46,43.4-98.46,96.9a93.21,93.21,0,0,0,2.54,22.1,280.7,280.7,0,0,1-203-101.3A95.69,95.69,0,0,0,36,130.4C36,164,53.53,193.7,80,211.1A97.5,97.5,0,0,1,35.22,199v1.2c0,47,34,86.1,79,95a100.76,100.76,0,0,1-25.94,3.4,94.38,94.38,0,0,1-18.51-1.8c12.51,38.5,48.92,66.5,92.05,67.3A199.59,199.59,0,0,1,39.5,405.6,203,203,0,0,1,16,404.2,278.68,278.68,0,0,0,166.74,448c181.36,0,280.44-147.7,280.44-275.8,0-4.2-.11-8.4-.31-12.5A198.48,198.48,0,0,0,496,109.5Z"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+
     <script>
       const POSTS_PER_PAGE = 5;
       let currentPage = 1;
       let totalPages = 1;
       let allPosts = [];
+      let allAuthors = [];
+      let allCategories = [];
       let selectedPostId = null;
       let selectedPostTitle = "";
 
@@ -103,84 +154,89 @@
         return !!localStorage.getItem("token");
       }
 
+      // Fetch posts, authors, categories
+      async function fetchData() {
+        try {
+          const [postsRes, authorsRes, categoriesRes] = await Promise.all([
+            fetch("http://localhost:3600/blogs"),
+            fetch("http://localhost:3600/authors"),
+            fetch("http://localhost:3600/categories"),
+          ]);
+          const postsData = await postsRes.json();
+          const authorsData = await authorsRes.json();
+          const categoriesData = await categoriesRes.json();
+
+          allPosts = postsData.success && postsData.data ? postsData.data : [];
+          allAuthors = authorsData.success && authorsData.data ? authorsData.data : [];
+          allCategories = categoriesData.success && categoriesData.data ? categoriesData.data : [];
+
+          totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+          renderPosts();
+          renderAuthors();
+          renderCategories();
+          renderRecentPost();
+        } catch (err) {
+          document.getElementById("all-posts").innerHTML =
+            "<p class='text-red-500'>Failed to load blog posts.</p>";
+        }
+      }
+
       function renderPosts() {
         const postContainer = document.getElementById("all-posts");
         postContainer.innerHTML = "";
         if (allPosts.length > 0) {
+          // Sort
+          const sortValue = document.getElementById("sort-select").value;
+          let posts = [...allPosts];
+          if (sortValue === "latest") {
+            posts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+          } else {
+            posts.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+          }
           const start = (currentPage - 1) * POSTS_PER_PAGE;
           const end = start + POSTS_PER_PAGE;
-          allPosts.slice(start, end).forEach((post) => {
+          posts.slice(start, end).forEach((post) => {
             const div = document.createElement("div");
-            div.className =
-              "bg-white p-6 rounded-lg shadow border border-purple-200";
-            const isLong = post.content.length > 300;
-            let previewHtml;
-            if (isLong) {
-              const previewText = post.content.substring(0, 300);
-              previewHtml = `${previewText}<button class="see-more-btn text-purple-400 underline ml-2" data-id="${post.id}" data-state="less">See more</button>`;
-            } else {
-              previewHtml = post.content;
-            }
+            div.className = "max-w-4xl px-10 py-6 mx-auto bg-white rounded-lg shadow-md";
             div.innerHTML = `
-              <h3 class="text-xl font-semibold mb-2 text-purple-800">${
-                post.title
-              }</h3>
-              <div class="prose prose-p:mb-2 prose-p:whitespace-pre-line text-justify text-black mb-2" style="white-space:pre-line;">
-                <span class="blog-preview">${previewHtml}</span>
+              <div class="flex items-center justify-between">
+                <span class="font-light text-gray-600">${new Date(post.created_at).toLocaleDateString()}</span>
+                <a href="#" class="px-2 py-1 font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500">${post.category || "General"}</a>
               </div>
-              <span class="text-xs text-purple-500">By ${
-                post.username || "Unknown"
-              } | ${new Date(post.created_at).toLocaleString()}</span>
-              <button class="show-comments-btn mt-4 block text-purple-700 underline font-semibold" data-id="${
-                post.id
-              }" data-title="${encodeURIComponent(
-              post.title
-            )}">Show Comments</button>
+              <div class="mt-2">
+                <a href="#" class="text-2xl font-bold text-gray-700 hover:underline">${post.title}</a>
+                <p class="mt-2 text-gray-600">${post.content.length > 300 ? post.content.substring(0, 300) + "..." : post.content}</p>
+              </div>
+              <div class="flex items-center justify-between mt-4">
+                <button class="show-comments-btn text-blue-500 hover:underline" data-id="${post.id}" data-title="${encodeURIComponent(post.title)}">Show Comments</button>
+                <div>
+                  <a href="#" class="flex items-center">
+                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(post.username || 'Unknown')}&background=random" alt="avatar" class="hidden object-cover w-10 h-10 mx-4 rounded-full sm:block">
+                    <h1 class="font-bold text-gray-700 hover:underline">${post.username || "Unknown"}</h1>
+                  </a>
+                </div>
+              </div>
             `;
             postContainer.appendChild(div);
-          });
-
-          // Attach see more/see less listeners
-          document.querySelectorAll(".see-more-btn").forEach((btn) => {
-            btn.addEventListener("click", function handler() {
-              const post = allPosts.find(
-                (p) => p.id == btn.getAttribute("data-id")
-              );
-              const previewSpan = btn.parentElement;
-              if (btn.getAttribute("data-state") === "less") {
-                previewSpan.innerHTML = `${post.content}<button class="see-more-btn text-purple-400 underline ml-2" data-id="${post.id}" data-state="more">See less</button>`;
-              } else {
-                const previewText = post.content.substring(0, 300);
-                previewSpan.innerHTML = `${previewText}<button class="see-more-btn text-purple-400 underline ml-2" data-id="${post.id}" data-state="less">See more</button>`;
-              }
-              // Re-attach listener to the new button
-              previewSpan
-                .querySelector(".see-more-btn")
-                .addEventListener("click", handler);
-            });
           });
 
           // Attach show comments listeners
           document.querySelectorAll(".show-comments-btn").forEach((btn) => {
             btn.addEventListener("click", function () {
               selectedPostId = btn.getAttribute("data-id");
-              selectedPostTitle = decodeURIComponent(
-                btn.getAttribute("data-title")
-              );
+              selectedPostTitle = decodeURIComponent(btn.getAttribute("data-title"));
               openCommentsModal(selectedPostId, selectedPostTitle);
             });
           });
         } else {
-          postContainer.innerHTML =
-            "<p class='text-purple-500'>No blog posts found.</p>";
+          postContainer.innerHTML = "<p class='text-purple-500'>No blog posts found.</p>";
         }
         updatePaginationControls();
       }
 
       function updatePaginationControls() {
         document.getElementById("prev-page").disabled = currentPage === 1;
-        document.getElementById("next-page").disabled =
-          currentPage === totalPages || totalPages === 0;
+        document.getElementById("next-page").disabled = currentPage === totalPages || totalPages === 0;
 
         // Render page numbers
         const pageNumbers = document.getElementById("page-numbers");
@@ -189,10 +245,10 @@
           const btn = document.createElement("button");
           btn.textContent = i;
           btn.className =
-            "px-3 py-1 rounded border border-purple-300 mx-1 text-purple-700 font-semibold transition " +
+            "px-3 py-2 mx-1 font-medium rounded-md " +
             (i === currentPage
-              ? "bg-purple-600 text-white"
-              : "bg-white hover:bg-purple-100");
+              ? "bg-blue-500 text-white"
+              : "bg-white text-gray-700 hover:bg-blue-500 hover:text-white");
           btn.onclick = function () {
             currentPage = i;
             renderPosts();
@@ -215,30 +271,77 @@
         }
       };
 
-      fetch("http://localhost:3600/blogs")
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success && data.data && data.data.length > 0) {
-            allPosts = data.data;
-            totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
-            renderPosts();
-          } else {
-            allPosts = [];
-            totalPages = 1;
-            renderPosts();
-          }
-        })
-        .catch((err) => {
-          document.getElementById("all-posts").innerHTML =
-            "<p class='text-red-500'>Failed to load blog posts.</p>";
-          console.error("Error fetching blogs:", err);
+      document.getElementById("sort-select").onchange = function () {
+        currentPage = 1;
+        renderPosts();
+      };
+
+      // Sidebar: Authors
+      function renderAuthors() {
+        const authorsList = document.getElementById("authors-list");
+        authorsList.innerHTML = "";
+        if (allAuthors.length === 0) {
+          authorsList.innerHTML = "<li class='text-gray-500'>No authors found.</li>";
+          return;
+        }
+        allAuthors.forEach((author) => {
+          const li = document.createElement("li");
+          li.className = "flex items-center mt-6 first:mt-0";
+          li.innerHTML = `
+            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(author.username)}&background=random" alt="avatar" class="object-cover w-10 h-10 mx-4 rounded-full">
+            <p>
+              <a href="#" class="mx-1 font-bold text-gray-700 hover:underline">${author.username}</a>
+              <span class="text-sm font-light text-gray-700">Created ${author.post_count || 0} Posts</span>
+            </p>
+          `;
+          authorsList.appendChild(li);
         });
+      }
+
+      // Sidebar: Categories
+      function renderCategories() {
+        const categoriesList = document.getElementById("categories-list");
+        categoriesList.innerHTML = "";
+        if (allCategories.length === 0) {
+          categoriesList.innerHTML = "<li class='text-gray-500'>No categories found.</li>";
+          return;
+        }
+        allCategories.forEach((cat) => {
+          const li = document.createElement("li");
+          li.className = "mt-2 first:mt-0";
+          li.innerHTML = `<a href="#" class="mx-1 font-bold text-gray-700 hover:text-gray-600 hover:underline">- ${cat.name}</a>`;
+          categoriesList.appendChild(li);
+        });
+      }
+
+      // Sidebar: Recent Post
+      function renderRecentPost() {
+        const recentPostDiv = document.getElementById("recent-post");
+        if (allPosts.length === 0) {
+          recentPostDiv.innerHTML = "<div class='text-gray-500'>No recent post.</div>";
+          return;
+        }
+        const post = [...allPosts].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
+        recentPostDiv.innerHTML = `
+          <div class="flex items-center justify-center">
+            <a href="#" class="px-2 py-1 text-sm text-green-100 bg-gray-600 rounded hover:bg-gray-500">${post.category || "General"}</a>
+          </div>
+          <div class="mt-4">
+            <a href="#" class="text-lg font-medium text-gray-700 hover:underline">${post.title}</a>
+          </div>
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex items-center">
+              <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(post.username || 'Unknown')}&background=random" alt="avatar" class="object-cover w-8 h-8 rounded-full">
+              <a href="#" class="mx-3 text-sm text-gray-700 hover:underline">${post.username || "Unknown"}</a>
+            </div>
+            <span class="text-sm font-light text-gray-600">${new Date(post.created_at).toLocaleDateString()}</span>
+          </div>
+        `;
+      }
 
       // --- Comments Modal Logic ---
       const commentsModal = document.getElementById("comments-modal");
-      const closeCommentsModalBtn = document.getElementById(
-        "close-comments-modal"
-      );
+      const closeCommentsModalBtn = document.getElementById("close-comments-modal");
       const commentsList = document.getElementById("comments-list");
       const addCommentForm = document.getElementById("add-comment-form");
       const commentInput = document.getElementById("comment-input");
@@ -273,41 +376,31 @@
       };
 
       async function loadComments(postId) {
-        commentsList.innerHTML =
-          "<div class='text-gray-500'>Loading comments...</div>";
+        commentsList.innerHTML = "<div class='text-gray-500'>Loading comments...</div>";
         try {
-          const res = await fetch(
-            `http://localhost:3600/blogs/${postId}/comments`
-          );
+          const res = await fetch(`http://localhost:3600/blogs/${postId}/comments`);
           const data = await res.json();
           if (data.success && Array.isArray(data.comments)) {
             if (data.comments.length === 0) {
-              commentsList.innerHTML =
-                "<div class='text-gray-500'>No comments yet.</div>";
+              commentsList.innerHTML = "<div class='text-gray-500'>No comments yet.</div>";
             } else {
               commentsList.innerHTML = "";
               data.comments.forEach((comment) => {
                 const div = document.createElement("div");
                 div.className = "mb-3 border-b pb-2";
                 div.innerHTML = `
-                  <div class="font-semibold text-purple-700">${
-                    comment.username || "Anonymous"
-                  }</div>
+                  <div class="font-semibold text-purple-700">${comment.username || "Anonymous"}</div>
                   <div class="text-gray-800">${comment.content}</div>
-                  <div class="text-xs text-gray-400">${new Date(
-                    comment.created_at
-                  ).toLocaleString()}</div>
+                  <div class="text-xs text-gray-400">${new Date(comment.created_at).toLocaleString()}</div>
                 `;
                 commentsList.appendChild(div);
               });
             }
           } else {
-            commentsList.innerHTML =
-              "<div class='text-red-500'>Failed to load comments.</div>";
+            commentsList.innerHTML = "<div class='text-red-500'>Failed to load comments.</div>";
           }
         } catch (err) {
-          commentsList.innerHTML =
-            "<div class='text-red-500'>Failed to load comments.</div>";
+          commentsList.innerHTML = "<div class='text-red-500'>Failed to load comments.</div>";
         }
       }
 
@@ -344,8 +437,7 @@
             commentMessage.className = "text-green-600 text-center mt-2";
             loadComments(selectedPostId);
           } else {
-            commentMessage.textContent =
-              data.message || "Failed to add comment.";
+            commentMessage.textContent = data.message || "Failed to add comment.";
             commentMessage.className = "text-red-600 text-center mt-2";
           }
         } catch (err) {
@@ -353,19 +445,9 @@
           commentMessage.className = "text-red-600 text-center mt-2";
         }
       };
-    </script>
 
-    <footer
-      class="bg-gradient-to-r from-purple-700 to-purple-900 text-white py-8 mt-10"
-    >
-      <div class="container mx-auto px-4 text-center space-y-4">
-        <div class="flex justify-center gap-6">
-          <a href="#" class="hover:text-purple-200">Instagram</a>
-          <a href="#" class="hover:text-purple-200">Twitter</a>
-          <a href="#" class="hover:text-purple-200">Facebook</a>
-        </div>
-        <p>© 2025 Blog Post</p>
-      </div>
-    </footer>
+      // Initial load
+      fetchData();
+    </script>
   </body>
 </html>
