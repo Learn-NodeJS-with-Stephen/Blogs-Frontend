@@ -262,6 +262,13 @@
         }
       };
 
+      document
+        .getElementById("sort-select")
+        .addEventListener("change", function () {
+          currentPage = 1; // Reset to first page when sorting changes
+          renderPosts();
+        });
+
       fetch("http://localhost:3600/blogs")
         .then((res) => res.json())
         .then((data) => {
