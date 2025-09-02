@@ -9,10 +9,20 @@
   </head>
   <body class="bg-gray-100 text-gray-900 font-sans">
     <header class="bg-white border-b border-gray-200 py-5 sticky top-0 z-50">
-      <div class="container mx-auto px-4 flex justify-between items-center">
+      <div class="container mx-auto px-4 flex items-center justify-between">
         <h1 class="text-3xl font-bold tracking-wide text-gray-900">
           THOUGHT NEST
         </h1>
+        <!-- Centered Dark Mode Button -->
+        <div class="flex-1 flex justify-center">
+          <button
+            id="theme-toggle"
+            class="px-3 py-1 rounded bg-gray-200 text-gray-800 hover:bg-gray-300 transition"
+          >
+            Dark Mode
+          </button>
+        </div>
+        <!-- Right-aligned Navigation -->
         <nav>
           <ul class="flex gap-6 text-lg font-medium">
             <li>
@@ -30,12 +40,6 @@
             </li>
           </ul>
         </nav>
-        <button
-          id="theme-toggle"
-          class="ml-4 px-3 py-1 rounded bg-gray-200 text-gray-800 hover:bg-gray-300 transition"
-        >
-          Dark Mode
-        </button>
       </div>
     </header>
     <section
@@ -194,7 +198,22 @@
                 }
               </div>
               <div class="flex items-center justify-between mt-4">
-                <div></div>
+                <div class="flex items-center gap-6">
+                  <!-- Like Button -->
+                  <button class="flex items-center gap-1 text-gray-500 hover:text-blue-600 like-btn" data-id="${
+                    post.id
+                  }">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-current" viewBox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/></svg>
+                    <span class="like-count">${post.likes || 0}</span>
+                  </button>
+                  <!-- Comment Button -->
+                  <button class="flex items-center gap-1 text-gray-500 hover:text-purple-600 comment-btn" data-id="${
+                    post.id
+                  }">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-current" viewBox="0 0 20 20"><path d="M18 10c0 3.866-3.582 7-8 7a8.96 8.96 0 01-4.688-1.313L2 17l1.313-3.312A7.963 7.963 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7z"/></svg>
+                    <span>${post.comments_count || 0}</span>
+                  </button>
+                </div>
                 <div class="flex items-center">
                   <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(
                     post.username || "Unknown"
@@ -203,6 +222,17 @@
                     post.username || "Unknown"
                   }</span>
                 </div>
+              </div>
+              <div class="inline-comment-section mt-4 hidden" id="inline-comment-${
+                post.id
+              }">
+                <div class="mb-2 font-semibold text-purple-700">Comments</div>
+                <div class="comments-list mb-2"></div>
+                <form class="add-comment-form space-y-2">
+                  <textarea class="w-full border border-purple-300 rounded p-2 comment-input" rows="2" placeholder="Add a comment..." required></textarea>
+                  <button type="submit" class="btn-primary px-4 py-2 rounded font-bold text-white bg-purple-600 hover:bg-purple-700">Post Comment</button>
+                  <div class="comment-message text-sm mt-1"></div>
+                </form>
               </div>
             `;
             postContainer.appendChild(div);
@@ -222,6 +252,81 @@
                 }
               };
             }
+            // Like button event
+            div.querySelector(".like-btn").onclick = function () {
+              const countSpan = this.querySelector(".like-count");
+              let count = parseInt(countSpan.textContent, 10) || 0;
+              count++;
+              countSpan.textContent = count;
+              // TODO: send like to backend if needed
+            };
+
+            // Inline comment logic
+            const commentBtn = div.querySelector(".comment-btn");
+            const inlineSection = div.querySelector(
+              `#inline-comment-${post.id}`
+            );
+            commentBtn.onclick = function () {
+              // Hide all other inline comment sections
+              document
+                .querySelectorAll(".inline-comment-section")
+                .forEach((el) => el.classList.add("hidden"));
+              // Show this one
+              inlineSection.classList.toggle("hidden");
+              if (!inlineSection.classList.contains("hidden")) {
+                loadInlineComments(post.id, inlineSection);
+              }
+            };
+
+            // Handle comment form submit
+            const addCommentForm =
+              inlineSection.querySelector(".add-comment-form");
+            const commentInput = inlineSection.querySelector(".comment-input");
+            const commentMessage =
+              inlineSection.querySelector(".comment-message");
+            addCommentForm.onsubmit = async function (e) {
+              e.preventDefault();
+              commentMessage.textContent = "";
+              if (!isLoggedIn()) {
+                commentMessage.textContent =
+                  "You must be logged in to comment.";
+                commentMessage.className = "text-red-600 text-center mt-2";
+                return;
+              }
+              const content = commentInput.value.trim();
+              if (!content) {
+                commentMessage.textContent = "Comment cannot be empty.";
+                commentMessage.className = "text-red-600 text-center mt-2";
+                return;
+              }
+              try {
+                const res = await fetch(
+                  `http://localhost:3600/blogs/${post.id}/comments`,
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                    body: JSON.stringify({ content }),
+                  }
+                );
+                const data = await res.json();
+                if (data.success) {
+                  commentInput.value = "";
+                  commentMessage.textContent = "Comment added!";
+                  commentMessage.className = "text-green-600 text-center mt-2";
+                  loadInlineComments(post.id, inlineSection);
+                } else {
+                  commentMessage.textContent =
+                    data.message || "Failed to add comment.";
+                  commentMessage.className = "text-red-600 text-center mt-2";
+                }
+              } catch (err) {
+                commentMessage.textContent = "Failed to add comment.";
+                commentMessage.className = "text-red-600 text-center mt-2";
+              }
+            };
           });
         } else {
           postContainer.innerHTML =
