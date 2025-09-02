@@ -269,10 +269,12 @@
             allPosts = data.data;
             totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
             renderPosts();
+            renderRecentPost(); // <-- Add this line
           } else {
             allPosts = [];
             totalPages = 1;
             renderPosts();
+            renderRecentPost(); // <-- Add this line
           }
         })
         .catch((err) => {
