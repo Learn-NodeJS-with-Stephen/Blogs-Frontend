@@ -163,33 +163,68 @@
                     required
                   />
                 </div>
-                <div>
-                  <label class="block font-semibold mb-1" for="current-password"
-                    >Current Password</label
+                <!-- Change Password Button -->
+                <button
+                  type="button"
+                  id="toggle-password-fields"
+                  class="btn-primary px-4 py-2 rounded font-bold text-white bg-purple-600 hover:bg-purple-700 w-full"
+                >
+                  Change Password
+                </button>
+                <!-- Password Fields (hidden by default) -->
+                <div id="password-fields" class="space-y-4 mt-2 hidden">
+                  <div>
+                    <label
+                      class="block font-semibold mb-1"
+                      for="current-password"
+                      >Current Password</label
+                    >
+                    <input
+                      type="password"
+                      id="current-password"
+                      class="input border border-gray-300 rounded px-4 py-2 w-full"
+                      placeholder="Enter current password"
+                      autocomplete="current-password"
+                    />
+                  </div>
+                  <div>
+                    <label class="block font-semibold mb-1" for="new-password"
+                      >New Password</label
+                    >
+                    <input
+                      type="password"
+                      id="new-password"
+                      class="input border border-gray-300 rounded px-4 py-2 w-full"
+                      placeholder="New password"
+                      autocomplete="new-password"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block font-semibold mb-1"
+                      for="confirm-password"
+                      >Confirm New Password</label
+                    >
+                    <input
+                      type="password"
+                      id="confirm-password"
+                      class="input border border-gray-300 rounded px-4 py-2 w-full"
+                      placeholder="Confirm new password"
+                      autocomplete="new-password"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    id="submit-password-change"
+                    class="btn-primary px-4 py-2 rounded font-bold text-white bg-blue-600 hover:bg-blue-700 w-full"
                   >
-                  <input
-                    type="password"
-                    id="current-password"
-                    class="input border border-gray-300 rounded px-4 py-2 w-full"
-                    placeholder="Enter current password to change password"
-                    autocomplete="current-password"
-                  />
+                    Update Password
+                  </button>
                 </div>
-                <div>
-                  <label class="block font-semibold mb-1" for="new-password"
-                    >New Password</label
-                  >
-                  <input
-                    type="password"
-                    id="new-password"
-                    class="input border border-gray-300 rounded px-4 py-2 w-full"
-                    placeholder="Leave blank to keep current password"
-                    autocomplete="new-password"
-                  />
-                </div>
+                <!-- Update Profile Button -->
                 <button
                   type="submit"
-                  class="btn-primary px-4 py-2 rounded font-bold text-white bg-blue-600 hover:bg-blue-700 w-full"
+                  class="btn-primary px-4 py-2 rounded font-bold text-white bg-green-600 hover:bg-green-700 w-full"
                 >
                   Update Profile
                 </button>
@@ -207,7 +242,7 @@
       function logout() {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        window.location.href = "index.html";
+        window.location.href = "blog.html";
       }
 
       // Load admin profile info
@@ -230,7 +265,13 @@
         }
       });
 
-      // Handle profile update
+      // Toggle password fields
+      document.getElementById("toggle-password-fields").onclick = function () {
+        const fields = document.getElementById("password-fields");
+        fields.classList.toggle("hidden");
+      };
+
+      // Handle profile update (username/email/avatar)
       document
         .getElementById("admin-profile-form")
         .addEventListener("submit", async function (e) {
@@ -239,9 +280,6 @@
             .getElementById("profile-username")
             .value.trim();
           const email = document.getElementById("profile-email").value.trim();
-          const currentPassword =
-            document.getElementById("current-password").value;
-          const newPassword = document.getElementById("new-password").value;
           const msg = document.getElementById("profile-message");
           msg.textContent = "";
 
@@ -255,18 +293,6 @@
             username,
             email,
           };
-
-          // Only send password fields if user is trying to change password
-          if (currentPassword || newPassword) {
-            if (!currentPassword || !newPassword) {
-              msg.textContent =
-                "Both current and new password are required to change password.";
-              msg.className = "mb-4 text-center font-semibold text-red-600";
-              return;
-            }
-            formData.currentPassword = currentPassword;
-            formData.newPassword = newPassword;
-          }
 
           // Handle avatar upload (optional)
           const avatarInput = document.getElementById("avatar-upload");
@@ -302,15 +328,67 @@
                 email,
               })
             );
-            // Clear password fields
-            document.getElementById("current-password").value = "";
-            document.getElementById("new-password").value = "";
           } else {
             msg.textContent =
               data.message || data.error || "Failed to update profile.";
             msg.className = "mb-4 text-center font-semibold text-red-600";
           }
         });
+
+      // Handle password change
+      document.getElementById("submit-password-change").onclick =
+        async function () {
+          const currentPassword =
+            document.getElementById("current-password").value;
+          const newPassword = document.getElementById("new-password").value;
+          const confirmPassword =
+            document.getElementById("confirm-password").value;
+          const msg = document.getElementById("profile-message");
+          msg.textContent = "";
+
+          if (!currentPassword || !newPassword || !confirmPassword) {
+            msg.textContent =
+              "All password fields are required to change password.";
+            msg.className = "mb-4 text-center font-semibold text-red-600";
+            return;
+          }
+          if (newPassword !== confirmPassword) {
+            msg.textContent = "New password and confirm password do not match.";
+            msg.className = "mb-4 text-center font-semibold text-red-600";
+            return;
+          }
+
+          const formData = {
+            currentPassword,
+            newPassword,
+          };
+
+          const res = await fetch(
+            "http://localhost:3600/admin/profile/password",
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+              body: JSON.stringify(formData),
+            }
+          );
+          const data = await res.json();
+          if (data.success) {
+            msg.textContent = "Password updated!";
+            msg.className = "mb-4 text-center font-semibold text-green-600";
+            // Clear password fields and hide them
+            document.getElementById("current-password").value = "";
+            document.getElementById("new-password").value = "";
+            document.getElementById("confirm-password").value = "";
+            document.getElementById("password-fields").classList.add("hidden");
+          } else {
+            msg.textContent =
+              data.message || data.error || "Failed to update password.";
+            msg.className = "mb-4 text-center font-semibold text-red-600";
+          }
+        };
     </script>
   </body>
 </html>
