@@ -9,147 +9,179 @@
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/Loopple/loopple-public-assets@main/riva-dashboard-tailwind/riva-dashboard.css"
+    />
+    <style>
+      body {
+        min-height: 100vh;
+      }
+      main {
+        margin-left: 16rem;
+      }
+    </style>
   </head>
-  <body class="bg-white text-black font-sans min-h-screen flex flex-col">
-    <div class="flex flex-1 min-h-0">
-      <!-- Sidebar (matches admin-dashboard.html) -->
-      <aside
-        class="w-64 bg-zinc-900 text-white min-h-screen p-6 fixed inset-y-0 left-0"
+  <body class="bg-white text-black font-sans min-h-screen">
+    <!-- Sidebar (same as your other admin pages) -->
+    <aside
+      class="w-64 bg-zinc-900 text-white min-h-screen p-6 fixed inset-y-0 left-0"
+    >
+      <div class="mb-10">
+        <h1 class="text-2xl font-bold tracking-wide mb-2">Admin Panel</h1>
+        <span class="text-zinc-400 text-sm">Thought Nest</span>
+      </div>
+      <!-- Admin Profile Section -->
+      <div class="flex flex-col items-center mb-8">
+        <img
+          id="admin-avatar"
+          src="https://ui-avatars.com/api/?name=Admin&background=random"
+          alt="Admin Avatar"
+          class="w-16 h-16 rounded-full mb-2"
+        />
+        <h2 id="admin-username" class="font-semibold text-lg text-teal-400">
+          Admin User
+        </h2>
+        <p class="text-xs text-gray-300">Administrator</p>
+      </div>
+      <nav class="flex-1">
+        <ul class="space-y-2 text-lg font-medium">
+          <li>
+            <a
+              href="admin-dashboard.html"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-bar-chart"></i></span> Dashboard
+            </a>
+          </li>
+          <li>
+            <a
+              href="admin-users.html"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-user"></i></span> Users
+            </a>
+          </li>
+          <li>
+            <a
+              href="admin-posts.html"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-file"></i></span> Posts
+            </a>
+          </li>
+          <li>
+            <a
+              href="admin-categories.html"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-category"></i></span> Categories
+            </a>
+          </li>
+          <li>
+            <a
+              href="admin-reports.html"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-flag"></i></span> Report/Flags
+            </a>
+          </li>
+          <li>
+            <a
+              href="admin-profile.html"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-user-circle"></i></span> Profile
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              onclick="logout()"
+              class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
+            >
+              <span><i class="bx bx-log-out"></i></span> Logout
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="p-8">
+      <h2 class="text-2xl font-bold mb-6">Categories</h2>
+      <!-- Categories Table with Add Category and Search Bar in Header -->
+      <div
+        class="relative flex-[1_auto] flex flex-col break-words min-w-0 bg-clip-border rounded-[.95rem] bg-white m-5"
       >
-        <div class="mb-10">
-          <h1 class="text-2xl font-bold tracking-wide mb-2">Admin Panel</h1>
-          <span class="text-zinc-400 text-sm">Thought Nest</span>
-        </div>
-        <!-- Admin Profile Section -->
-        <div class="flex flex-col items-center mb-8">
-          <img
-            id="admin-avatar"
-            src="https://ui-avatars.com/api/?name=Admin&background=random"
-            alt="Admin Avatar"
-            class="w-16 h-16 rounded-full mb-2"
-          />
-          <h2 id="admin-username" class="font-semibold text-lg text-teal-400">
-            Admin User
-          </h2>
-          <p class="text-xs text-gray-300">Administrator</p>
-        </div>
-        <nav class="flex-1">
-          <ul class="space-y-2 text-lg font-medium">
-            <li>
-              <a
-                href="admin-dashboard.html"
-                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span><i class="bx bx-bar-chart"></i></span> Dashboard</a
-              >
-            </li>
-            <li>
-              <a
-                href="admin-users.html"
-                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span><i class="bx bx-user"></i></span> Users</a
-              >
-            </li>
-            <li>
-              <a
-                href="admin-posts.html"
-                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span><i class="bx bx-file"></i></span> Posts</a
-              >
-            </li>
-            <li>
-              <a
-                href="admin-categories.html"
-                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span><i class="bx bx-category"></i></span> Categories</a
-              >
-            </li>
-            <li>
-              <a
-                href="admin-reports.html"
-                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span><i class="bx bx-flag"></i></span> Report/Flags</a
-              >
-            </li>
-            <li>
-              <a
-                href="admin-profile.html"
-                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span><i class="bx bx-user-circle"></i></span> Profile</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                onclick="logout()"
-                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-zinc-800 transition"
-                ><span><i class="bx bx-log-out"></i></span> Logout</a
-              >
-            </li>
-          </ul>
-        </nav>
-      </aside>
-      <main class="flex-1 px-6 py-10 bg-white text-black min-h-screen">
-        <h2 class="text-2xl font-bold mb-6">Categories</h2>
-        <div class="bg-gray-100 rounded-lg shadow p-6 max-w-xl mx-auto">
-          <!-- Create Category Form -->
-          <form id="create-category-form" class="flex gap-2 mb-6">
-            <input
-              type="text"
-              id="category-name"
-              class="input border border-gray-300 rounded px-4 py-2 flex-1"
-              placeholder="New category name"
-              required
-            />
-            <button
-              type="submit"
-              class="btn-primary px-4 py-2 rounded font-bold text-white bg-blue-600 hover:bg-blue-700"
-            >
-              Add Category
-            </button>
-          </form>
+        <div
+          class="relative flex flex-col min-w-0 break-words border border-dashed bg-clip-border rounded-2xl border-stone-200 bg-light/30"
+        >
           <div
-            id="category-message"
-            class="mb-4 text-center font-semibold"
-          ></div>
-          <!-- Category Table -->
-          <h3 class="font-semibold mb-2">Category List</h3>
-          <table class="w-full border border-gray-300 rounded mb-2 bg-white">
-            <thead>
-              <tr class="bg-gray-200">
-                <th class="py-2 px-4 text-left">No.</th>
-                <th class="py-2 px-4 text-left">Category Name</th>
-                <th class="py-2 px-4 text-left">Category ID</th>
-                <th class="py-2 px-4 text-left">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="category-table-body">
-              <!-- Categories will be rendered here -->
-            </tbody>
-          </table>
-          <!-- Pagination Controls -->
-          <div
-            class="flex justify-between items-center mt-4"
-            id="pagination-controls"
+            class="px-9 pt-5 flex justify-between items-center flex-wrap min-h-[70px] pb-0 bg-transparent"
           >
-            <button
-              id="prev-page"
-              class="px-3 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
-              disabled
+            <h3
+              class="flex flex-col items-start justify-center m-2 ml-0 font-medium text-xl/tight text-dark"
             >
-              Previous
-            </button>
-            <span id="pagination-info" class="text-sm text-gray-600"></span>
-            <button
-              id="next-page"
-              class="px-3 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
-              disabled
+              <span class="mr-3 font-semibold text-dark">Category Table</span>
+            </h3>
+            <!-- Add Category and Search Bar -->
+            <div
+              class="flex flex-col sm:flex-row gap-2 items-end sm:items-center mb-0 w-full sm:w-auto"
             >
-              Next
-            </button>
+              <form id="create-category-form" class="flex gap-2">
+                <input
+                  type="text"
+                  id="category-name"
+                  class="input border border-gray-300 rounded px-4 py-2"
+                  placeholder="New category name"
+                  required
+                />
+                <button
+                  type="submit"
+                  class="btn-primary px-4 py-2 rounded font-bold text-white bg-blue-600 hover:bg-blue-700"
+                >
+                  Add
+                </button>
+              </form>
+              <input
+                type="text"
+                id="category-search"
+                placeholder="Search categories..."
+                class="input border border-gray-300 rounded px-4 py-2 w-full sm:w-80"
+              />
+            </div>
+          </div>
+          <div class="flex-auto block py-8 pt-6 px-9">
+            <div class="overflow-x-auto">
+              <table
+                class="w-full my-0 align-middle text-dark border-neutral-200"
+              >
+                <thead class="align-bottom">
+                  <tr class="font-semibold text-[0.95rem] text-secondary-dark">
+                    <th class="pb-3 text-start min-w-[100px]">No.</th>
+                    <th class="pb-3 text-start min-w-[175px]">Category Name</th>
+                    <th class="pb-3 text-start min-w-[175px]">Category ID</th>
+                    <th class="pb-3 text-end min-w-[100px]">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="category-table-body">
+                  <!-- Categories will be rendered here -->
+                </tbody>
+              </table>
+            </div>
+            <!-- Pagination Controls -->
+            <div
+              class="flex justify-end mt-6 space-x-2"
+              id="pagination-controls"
+            ></div>
+            <div
+              id="category-message"
+              class="mb-4 text-center font-semibold"
+            ></div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
     <script>
       function logout() {
         localStorage.removeItem("token");
@@ -157,12 +189,26 @@
         window.location.href = "index.html";
       }
 
-      // Pagination variables
+      // Show admin profile info in sidebar
+      document.addEventListener("DOMContentLoaded", function () {
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        if (user && user.username) {
+          document.getElementById("admin-username").textContent = user.username;
+          document.getElementById("admin-avatar").src =
+            user.avatar ||
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(
+              user.username
+            )}&background=random`;
+        }
+      });
+
       let categoriesData = [];
+      let filteredCategories = [];
       let currentPage = 1;
       const pageSize = 7;
+      let currentSearch = "";
 
-      // Fetch and render categories in table with pagination
+      // Fetch and render categories in table with pagination and search
       async function loadCategories() {
         const res = await fetch("http://localhost:3600/admin/categories", {
           headers: {
@@ -175,12 +221,14 @@
           tableBody.innerHTML =
             "<tr><td colspan='4' class='py-2 px-4 text-red-600'>Failed to load categories.</td></tr>";
           categoriesData = [];
+          filteredCategories = [];
           renderPagination();
           return;
         }
         const data = await res.json();
         if (data.success && Array.isArray(data.data)) {
           categoriesData = data.data;
+          filteredCategories = categoriesData;
           if (categoriesData.length === 0) {
             tableBody.innerHTML =
               "<tr><td colspan='4' class='py-2 px-4 text-gray-500'>No categories found.</td></tr>";
@@ -192,6 +240,7 @@
           tableBody.innerHTML =
             "<tr><td colspan='4' class='py-2 px-4 text-red-600'>Failed to load categories.</td></tr>";
           categoriesData = [];
+          filteredCategories = [];
           renderPagination();
         }
       }
@@ -201,7 +250,7 @@
         tableBody.innerHTML = "";
         const start = (currentPage - 1) * pageSize;
         const end = start + pageSize;
-        const pageItems = categoriesData.slice(start, end);
+        const pageItems = filteredCategories.slice(start, end);
 
         if (pageItems.length === 0) {
           tableBody.innerHTML =
@@ -211,12 +260,13 @@
 
         pageItems.forEach((cat, idx) => {
           const tr = document.createElement("tr");
+          tr.className = "border-b border-dashed last:border-b-0";
           tr.innerHTML = `
-            <td class="py-2 px-4">${start + idx + 1}.</td>
-            <td class="py-2 px-4">${cat.name}</td>
-            <td class="py-2 px-4">${cat.id}</td>
-            <td class="py-2 px-4">
-              <button class="text-red-600 underline delete-category-btn" data-id="${
+            <td class="p-3 pl-0">${start + idx + 1}.</td>
+            <td class="p-3 pl-0">${cat.name}</td>
+            <td class="p-3 pl-0">${cat.id}</td>
+            <td class="p-3 pr-0 text-end">
+              <button class="text-red-600 underline ml-2 delete-category-btn" data-id="${
                 cat.id
               }">Delete</button>
             </td>
@@ -250,34 +300,67 @@
       }
 
       function renderPagination() {
-        const total = categoriesData.length;
+        const total = filteredCategories.length;
         const totalPages = Math.ceil(total / pageSize);
-        document.getElementById("pagination-info").textContent =
+        const controls = document.getElementById("pagination-controls");
+        controls.innerHTML = "";
+
+        // Previous button
+        const prevBtn = document.createElement("button");
+        prevBtn.textContent = "Previous";
+        prevBtn.className =
+          "px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300";
+        prevBtn.disabled = currentPage <= 1;
+        prevBtn.onclick = () => {
+          if (currentPage > 1) {
+            currentPage--;
+            renderCategoriesTable();
+            renderPagination();
+          }
+        };
+        controls.appendChild(prevBtn);
+
+        // Page info
+        const pageInfo = document.createElement("span");
+        pageInfo.className = "px-4 py-2 font-semibold";
+        pageInfo.textContent =
           total === 0
             ? ""
             : `Page ${currentPage} of ${totalPages} (${total} categories)`;
+        controls.appendChild(pageInfo);
 
-        document.getElementById("prev-page").disabled = currentPage <= 1;
-        document.getElementById("next-page").disabled =
-          currentPage >= totalPages || totalPages === 0;
+        // Next button
+        const nextBtn = document.createElement("button");
+        nextBtn.textContent = "Next";
+        nextBtn.className =
+          "px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300";
+        nextBtn.disabled = currentPage >= totalPages || totalPages === 0;
+        nextBtn.onclick = () => {
+          if (currentPage < totalPages) {
+            currentPage++;
+            renderCategoriesTable();
+            renderPagination();
+          }
+        };
+        controls.appendChild(nextBtn);
       }
 
-      document.getElementById("prev-page").onclick = function () {
-        if (currentPage > 1) {
-          currentPage--;
+      // Listen for search input
+      document
+        .getElementById("category-search")
+        .addEventListener("input", function () {
+          currentSearch = this.value.trim().toLowerCase();
+          if (!currentSearch) {
+            filteredCategories = categoriesData;
+          } else {
+            filteredCategories = categoriesData.filter((cat) =>
+              cat.name.toLowerCase().includes(currentSearch)
+            );
+          }
+          currentPage = 1;
           renderCategoriesTable();
           renderPagination();
-        }
-      };
-
-      document.getElementById("next-page").onclick = function () {
-        const totalPages = Math.ceil(categoriesData.length / pageSize);
-        if (currentPage < totalPages) {
-          currentPage++;
-          renderCategoriesTable();
-          renderPagination();
-        }
-      };
+        });
 
       // Handle create category form
       document.getElementById("create-category-form").onsubmit =
@@ -313,19 +396,6 @@
         };
 
       window.onload = loadCategories;
-
-      // Show admin profile info in sidebar
-      document.addEventListener("DOMContentLoaded", function () {
-        const user = JSON.parse(localStorage.getItem("user") || "{}");
-        if (user && user.username) {
-          document.getElementById("admin-username").textContent = user.username;
-          document.getElementById("admin-avatar").src =
-            user.avatar ||
-            `https://ui-avatars.com/api/?name=${encodeURIComponent(
-              user.username
-            )}&background=random`;
-        }
-      });
     </script>
   </body>
 </html>
