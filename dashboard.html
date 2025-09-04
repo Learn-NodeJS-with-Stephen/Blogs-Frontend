@@ -23,23 +23,13 @@
           </button>
         </div>
         <nav>
-          <nav>
-        <ul class="flex gap-6 text-lg font-medium">
-          <li><a href="index.html" class="hover:underline">HOME</a></li>
-          <li><a href="blog.html" class="hover:underline">BLOG</a></li>
-          <!-- <li>
-            <a href="admin-dashboard.html" class="hover:underline font-bold"
-              >ADMIN</a
-            >
-          </li> -->
-          <li>
-            <a href="admin-login.html" class="hover:underline"
-              >ADMIN</a
-            >
-          </li>
-          <!-- <li><a href="about.html" class="hover:underline">About</a></li>
-            <li><a href="contact.html" class="hover:underline">Contact</a></li> -->
-        </ul>
+          <ul class="flex gap-6 text-lg font-medium">
+            <li><a href="index.html" class="hover:underline">HOME</a></li>
+            <li><a href="blog.html" class="hover:underline">BLOG</a></li>
+            <li>
+              <a href="admin-login.html" class="hover:underline">ADMIN</a>
+            </li>
+          </ul>
         </nav>
       </div>
     </header>
@@ -113,6 +103,16 @@
           class="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md"
         >
           Next
+        </button>
+      </div>
+
+      <!-- Logout Button -->
+      <div class="text-right mt-10">
+        <button
+          id="logout-btn"
+          class="px-6 py-2 rounded font-bold text-white bg-red-600 hover:bg-red-700"
+        >
+          Logout
         </button>
       </div>
     </section>
@@ -223,10 +223,11 @@
               .then((res) => res.json())
               .then((data) => {
                 if (data && data.success) {
-                  document.getElementById(`like-count-${post.id}`).textContent =
-                    `${data.total_likes} like${
-                      data.total_likes === 1 ? "" : "s"
-                    }`;
+                  document.getElementById(
+                    `like-count-${post.id}`
+                  ).textContent = `${data.total_likes} like${
+                    data.total_likes === 1 ? "" : "s"
+                  }`;
                 }
               });
 
