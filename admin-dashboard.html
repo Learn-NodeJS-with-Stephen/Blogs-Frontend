@@ -294,8 +294,8 @@
             let preview;
             if (isLong) {
               const previewText = post.content.substring(0, 200).trimEnd();
-              // Updated: See more button links directly to the post
-              preview = `${previewText}<a href="blog.html?postId=${post.id}" target="_blank" class="inline-block text-blue-600 underline hover:text-blue-800 text-sm ml-2">See more</a>...`;
+              // "See more" links to blog.html with postId as a query parameter
+              preview = `${previewText}<a href="blog.html?postId=${post.id}" class="inline-block text-blue-600 underline hover:text-blue-800 text-sm ml-2" target="_blank">See more</a>...`;
             } else {
               preview = post.content;
             }

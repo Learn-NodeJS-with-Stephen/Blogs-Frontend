@@ -58,7 +58,7 @@
           </select>
         </div>
         <div id="all-posts" class="space-y-8"></div>
-        <div class="flex mt-8">
+        <div class="flex mt-8" id="pagination-controls">
           <button
             id="prev-page"
             class="px-3 py-2 mx-1 font-medium text-gray-500 bg-white rounded-md"
@@ -380,165 +380,72 @@
           renderPosts();
         });
 
-      fetch("http://localhost:3600/blogs")
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success && data.data && data.data.length > 0) {
-            allPosts = data.data;
-            totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
-            renderPosts();
-            renderRecentPost(); // <-- Add this line
-          } else {
-            allPosts = [];
-            totalPages = 1;
-            renderPosts();
-            renderRecentPost(); // <-- Add this line
-          }
-        })
-        .catch((err) => {
-          document.getElementById("all-posts").innerHTML =
-            "<p class='text-red-500'>Failed to load blog posts.</p>";
-          console.error("Error fetching blogs:", err);
-        });
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get("postId");
 
-      // --- Comments Modal Logic ---
-      const commentsModal = document.getElementById("comments-modal");
-      const closeCommentsModalBtn = document.getElementById(
-        "close-comments-modal"
-      );
-      const commentsList = document.getElementById("comments-list");
-      const addCommentForm = document.getElementById("add-comment-form");
-      const commentInput = document.getElementById("comment-input");
-      const commentMessage = document.getElementById("comment-message");
-      const modalPostTitle = document.getElementById("modal-post-title");
-
-      function openCommentsModal(postId, postTitle) {
-        modalPostTitle.textContent = `Comments for: ${postTitle}`;
-        commentsModal.classList.remove("hidden");
-        commentInput.value = "";
-        commentMessage.textContent = "";
-        // Show/hide comment form based on login
-        if (isLoggedIn()) {
-          addCommentForm.classList.remove("hidden");
+        if (postId) {
+          // If a postId is in the URL, load only that post
+          loadSinglePost(postId);
+          // Hide elements not needed for single post view
+          document.getElementById("pagination-controls").style.display = "none";
+          document.getElementById("sort-select").style.display = "none";
         } else {
-          addCommentForm.classList.add("hidden");
-          commentMessage.textContent = "You must be logged in to comment.";
-          commentMessage.className = "text-red-600 text-center mt-2";
+          // Otherwise, load all posts as usual
+          loadAllPosts();
         }
-        loadComments(postId);
-      }
 
-      function closeCommentsModal() {
-        commentsModal.classList.add("hidden");
-        commentsList.innerHTML = "";
-        commentMessage.textContent = "";
-      }
+        // Load sidebar content regardless
+        loadAuthors();
+        loadCategories();
+      });
 
-      closeCommentsModalBtn.onclick = closeCommentsModal;
-      commentsModal.onclick = function (e) {
-        if (e.target === commentsModal) closeCommentsModal();
-      };
-
-      async function loadComments(postId) {
-        commentsList.innerHTML =
-          "<div class='text-gray-500'>Loading comments...</div>";
+      // Function to load a single post
+      async function loadSinglePost(postId) {
+        const postContainer = document.getElementById("all-posts");
+        postContainer.innerHTML = "<p>Loading post...</p>";
         try {
-          const res = await fetch(
-            `http://localhost:3600/blogs/${postId}/comments`
-          );
+          const res = await fetch(`http://localhost:3600/blogs/${postId}`);
           const data = await res.json();
-          if (data.success && Array.isArray(data.comments)) {
-            if (data.comments.length === 0) {
-              commentsList.innerHTML =
-                "<div class='text-gray-500'>No comments yet.</div>";
+          if (data.success && data.data) {
+            allPosts = [data.data]; // Set allPosts to an array with the single post
+            currentPage = 1;
+            totalPages = 1;
+            renderPosts(); // Reuse your existing renderPosts function
+            renderRecentPost(); // Update recent post sidebar
+          } else {
+            postContainer.innerHTML =
+              "<p class='text-red-500'>Post not found.</p>";
+          }
+        } catch (err) {
+          postContainer.innerHTML =
+            "<p class='text-red-500'>Failed to load post.</p>";
+        }
+      }
+
+      // Wrap your existing post-loading logic in a function
+      function loadAllPosts() {
+        fetch("http://localhost:3600/blogs")
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success && data.data && data.data.length > 0) {
+              allPosts = data.data;
+              totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+              renderPosts();
+              renderRecentPost();
             } else {
-              commentsList.innerHTML = "";
-              data.comments.forEach((comment) => {
-                const div = document.createElement("div");
-                div.className = "mb-3 border-b pb-2";
-                div.innerHTML = `
-                  <div class="font-semibold text-purple-700">${
-                    comment.username || "Anonymous"
-                  }</div>
-                  <div class="text-gray-800">${comment.content}</div>
-                  <div class="text-xs text-gray-400">${new Date(
-                    comment.created_at
-                  ).toLocaleString()}</div>
-                `;
-                commentsList.appendChild(div);
-              });
+              allPosts = [];
+              totalPages = 1;
+              renderPosts();
+              renderRecentPost();
             }
-          } else {
-            commentsList.innerHTML =
-              "<div class='text-red-500'>Failed to load comments.</div>";
-          }
-        } catch (err) {
-          commentsList.innerHTML =
-            "<div class='text-red-500'>Failed to load comments.</div>";
-        }
+          })
+          .catch((err) => {
+            document.getElementById("all-posts").innerHTML =
+              "<p class='text-red-500'>Failed to load blog posts.</p>";
+            console.error("Error fetching blogs:", err);
+          });
       }
-
-      addCommentForm.onsubmit = async function (e) {
-        e.preventDefault();
-        commentMessage.textContent = "";
-        if (!isLoggedIn()) {
-          commentMessage.textContent = "You must be logged in to comment.";
-          commentMessage.className = "text-red-600 text-center mt-2";
-          return;
-        }
-        const content = commentInput.value.trim();
-        if (!content) {
-          commentMessage.textContent = "Comment cannot be empty.";
-          commentMessage.className = "text-red-600 text-center mt-2";
-          return;
-        }
-        try {
-          const res = await fetch(
-            `http://localhost:3600/blogs/${selectedPostId}/comments`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("token"),
-              },
-              body: JSON.stringify({ content }),
-            }
-          );
-          const data = await res.json();
-          if (data.success) {
-            commentInput.value = "";
-            commentMessage.textContent = "Comment added!";
-            commentMessage.className = "text-green-600 text-center mt-2";
-            loadComments(selectedPostId);
-          } else {
-            commentMessage.textContent =
-              data.message || "Failed to add comment.";
-            commentMessage.className = "text-red-600 text-center mt-2";
-          }
-        } catch (err) {
-          commentMessage.textContent = "Failed to add comment.";
-          commentMessage.className = "text-red-600 text-center mt-2";
-        }
-      };
-
-      let allAuthors = [];
-      let allCategories = [];
-
-      // Fetch and render authors
-      fetch("http://localhost:3600/blogs/authors")
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success && data.data && data.data.length > 0) {
-            allAuthors = data.data;
-            renderAuthors();
-          }
-        })
-        .catch((err) => {
-          const authorsList = document.getElementById("authors-list");
-          authorsList.innerHTML =
-            "<li class='text-red-500'>Failed to load authors.</li>";
-          console.error("Error fetching authors:", err);
-        });
 
       // Sidebar: Authors
       function renderAuthors() {
