@@ -1,12 +1,13 @@
 /* Add this to your style.css for improved dark mode */
 
 body.dark {
-  background-color: #18181b !important;
+  background: linear-gradient(to bottom right, #281c46, #1e1b4b) !important;
   color: #e5e7eb !important;
 }
 
-body.dark .bg-white {
-  background-color: #23232a !important;
+body.dark .bg-white,
+body.dark .bg-white\/90 {
+  background-color: #1f2937 !important; /* gray-800 */
 }
 
 body.dark .text-gray-900,
@@ -15,28 +16,16 @@ body.dark .text-gray-700 {
   color: #e5e7eb !important;
 }
 
+body.dark .text-purple-800 {
+  color: #c4b5fd !important; /* violet-300 */
+}
+
 body.dark .text-gray-600 {
   color: #a1a1aa !important;
 }
 
 body.dark .border-gray-200 {
-  border-color: #27272a !important;
-}
-
-body.dark .bg-gray-100 {
-  background-color: #18181b !important;
-}
-
-body.dark .bg-gray-200 {
-  background-color: #23232a !important;
-}
-
-body.dark .bg-gray-600 {
-  background-color: #52525b !important;
-}
-
-body.dark .hover\:bg-gray-500:hover {
-  background-color: #3f3f46 !important;
+  border-color: #374151 !important; /* gray-700 */
 }
 
 body.dark .shadow,
@@ -46,7 +35,7 @@ body.dark .shadow-lg {
 }
 
 body.dark .border-purple-300 {
-  border-color: #a78bfa !important;
+  border-color: #5b21b6 !important; /* violet-700 */
 }
 
 body.dark .bg-purple-600 {
@@ -61,12 +50,6 @@ body.dark .text-purple-700 {
   color: #a78bfa !important;
 }
 
-body.dark .bg-white,
-body.dark .bg-gray-100,
-body.dark .bg-gray-200 {
-  background-color: #23232a !important;
-}
-
 body.dark .text-blue-500 {
   color: #60a5fa !important;
 }
@@ -75,30 +58,5 @@ body.dark .hover\:text-blue-500:hover {
   color: #3b82f6 !important;
 }
 
-body.dark .bg-gray-900 {
-  background-color: #18181b !important;
-}
-
-body.dark .bg-gray-700 {
-  background-color: #27272a !important;
-}
-
-body.dark .text-gray-100 {
-  color: #f4f4f5 !important;
-}
-
-body.dark .text-gray-500 {
-  color: #71717a !important;
-}
-
-body.dark .bg-gray-300 {
-  background-color: #27272a !important;
-}
-
-body.dark .hover\:bg-gray-300:hover {
-  background-color: #18181b !important;
-}
-
 body.dark .border {
-  border-color: #27272a !important;
-}
+  border-color: #374151
