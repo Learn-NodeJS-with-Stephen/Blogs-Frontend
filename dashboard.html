@@ -309,20 +309,42 @@
           };
         });
 
+        // See more button
+        document.querySelectorAll(".see-more-btn").forEach((btn) => {
+          btn.onclick = function () {
+            const postId = this.getAttribute("data-post-id");
+            const contentP = document.getElementById(`post-content-${postId}`);
+            const post = allPosts.find((p) => p.id == postId);
+
+            if (this.textContent === "See more") {
+              // Expand the text
+              contentP.textContent = post.content;
+              this.textContent = "Show less";
+            } else {
+              // Collapse the text
+              contentP.textContent = post.content.substring(0, 200) + "...";
+              this.textContent = "See more";
+            }
+          };
+        });
+
         // Like button
         document.querySelectorAll(".like-btn").forEach((btn) => {
           btn.onclick = async function () {
             const postId = this.getAttribute("data-id");
-            // For simplicity, this just "likes". A full implementation would toggle.
-            await fetch(`http://localhost:3600/blogs/${postId}/like`, {
-              method: "POST",
-              headers: { Authorization: `Bearer ${authToken}` },
-            });
-            // Optimistically update UI, or re-fetch post data
-            const countSpan = this.querySelector(".like-count");
-            const currentLikes = parseInt(countSpan.textContent) || 0;
-            countSpan.textContent = `${currentLikes + 1} likes`;
-            this.disabled = true; // Prevent multiple clicks
+            const res = await fetch(
+              `http://localhost:3600/blogs/${postId}/like`,
+              {
+                method: "POST",
+                headers: { Authorization: `Bearer ${authToken}` },
+              }
+            );
+            const result = await res.json();
+            if (result.success) {
+              fetchUserPosts();
+            } else {
+              alert(result.message);
+            }
           };
         });
 
@@ -348,20 +370,6 @@
               "-"
             )[2];
             handleCommentSubmit(e, postId);
-          };
-        });
-
-        // See more button
-        document.querySelectorAll(".see-more-btn").forEach((btn) => {
-          btn.onclick = function () {
-            const postId = this.getAttribute("data-post-id");
-            const postContent = document.getElementById(
-              `post-content-${postId}`
-            );
-            postContent.textContent = allPosts.find(
-              (post) => post.id == postId
-            ).content;
-            this.remove(); // Remove the "See more" button
           };
         });
       }
