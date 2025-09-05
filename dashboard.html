@@ -178,6 +178,15 @@
           allPosts.slice(start, end).forEach((post) => {
             const div = document.createElement("div");
             div.className = "bg-white rounded-lg shadow-md px-8 py-6";
+
+            const isLong = post.content.length > 200;
+            const contentToShow = isLong
+              ? post.content.substring(0, 200) + "..."
+              : post.content;
+            const seeMoreButton = isLong
+              ? `<button class="see-more-btn text-blue-600 hover:underline mt-2" data-post-id="${post.id}">See more</button>`
+              : "";
+
             div.innerHTML = `
               <div class="flex items-center justify-between">
                 <span class="font-light text-gray-600">${new Date(
@@ -193,7 +202,10 @@
               </div>
               <div class="mt-2">
                 <h4 class="text-2xl font-bold text-gray-800">${post.title}</h4>
-                <p class="mt-2 text-gray-600">${post.content}</p>
+                <p class="mt-2 text-gray-600 text-justify" id="post-content-${
+                  post.id
+                }">${contentToShow}</p>
+                ${seeMoreButton}
               </div>
               <div class="flex items-center justify-between mt-4">
                 <div class="flex items-center gap-4">
@@ -336,6 +348,20 @@
               "-"
             )[2];
             handleCommentSubmit(e, postId);
+          };
+        });
+
+        // See more button
+        document.querySelectorAll(".see-more-btn").forEach((btn) => {
+          btn.onclick = function () {
+            const postId = this.getAttribute("data-post-id");
+            const postContent = document.getElementById(
+              `post-content-${postId}`
+            );
+            postContent.textContent = allPosts.find(
+              (post) => post.id == postId
+            ).content;
+            this.remove(); // Remove the "See more" button
           };
         });
       }
