@@ -149,14 +149,17 @@
           e.preventDefault();
           const formData = new FormData(e.target);
           const body = Object.fromEntries(formData);
-          const res = await fetch("http://localhost:3600/blogs", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${authToken}`,
-            },
-            body: JSON.stringify(body),
-          });
+          const res = await fetch(
+            "https://blogs-api-q51w.onrender.com/blogs",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authToken}`,
+              },
+              body: JSON.stringify(body),
+            }
+          );
           const data = await res.json();
           alert(data.message || "Post created!");
           e.target.reset();
@@ -307,18 +310,20 @@
           const commentBtn = e.target.closest(".comment-btn");
           const deleteBtn = e.target.closest(".delete-btn");
           const seeMoreBtn = e.target.closest(".see-more-btn");
-          const commentForm = e.target.closest(".add-comment-form");
 
           // Handle Like Button Click
           if (likeBtn) {
             const postId = likeBtn.getAttribute("data-id");
-            const isLiked = likeBtn.getAttribute("data-liked") === "true";
+            // FIX: Check for "1" or "true" to correctly determine liked status
+            const isLiked =
+              likeBtn.getAttribute("data-liked") === "1" ||
+              likeBtn.getAttribute("data-liked") === "true";
 
             // Determine the action: unlike or like
             const method = isLiked ? "DELETE" : "POST";
             const endpoint = isLiked
-              ? `http://localhost:3600/blogs/${postId}/unlike`
-              : `http://localhost:3600/blogs/${postId}/like`;
+              ? `https://blogs-api-q51w.onrender.com/blogs/${postId}/unlike`
+              : `https://blogs-api-q51w.onrender.com/blogs/${postId}/like`;
 
             const res = await fetch(endpoint, {
               method: method,
@@ -348,10 +353,13 @@
           if (deleteBtn) {
             if (confirm("Are you sure you want to delete this post?")) {
               const postId = deleteBtn.getAttribute("data-id");
-              await fetch(`http://localhost:3600/blogs/${postId}`, {
-                method: "DELETE",
-                headers: { Authorization: `Bearer ${authToken}` },
-              });
+              await fetch(
+                `https://blogs-api-q51w.onrender.com/blogs/${postId}`,
+                {
+                  method: "DELETE",
+                  headers: { Authorization: `Bearer ${authToken}` },
+                }
+              );
               fetchUserPosts();
             }
           }
@@ -390,7 +398,7 @@
         commentsList.innerHTML = "<p>Loading comments...</p>";
         try {
           const res = await fetch(
-            `http://localhost:3600/blogs/${postId}/comments`
+            `https://blogs-api-q51w.onrender.com/blogs/${postId}/comments`
           );
           const data = await res.json();
           if (data.success && Array.isArray(data.data)) {
@@ -429,7 +437,7 @@
 
         try {
           const res = await fetch(
-            `http://localhost:3600/blogs/${postId}/comment`,
+            `https://blogs-api-q51w.onrender.com/blogs/${postId}/comment`,
             {
               method: "POST",
               headers: {
@@ -457,7 +465,7 @@
       // They are no longer needed as we are using the main post data counts.
 
       function fetchUserPosts() {
-        fetch("http://localhost:3600/blogs/my/post", {
+        fetch("https://blogs-api-q51w.onrender.com/blogs/my/post", {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },

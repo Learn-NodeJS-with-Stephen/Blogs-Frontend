@@ -48,10 +48,13 @@
         const token = localStorage.getItem("token");
         if (token) {
           try {
-            const res = await fetch("http://localhost:3600/admin/login", {
-              method: "GET",
-              headers: { Authorization: "Bearer " + token },
-            });
+            const res = await fetch(
+              "https://blogs-api-q51w.onrender.com/admin/login",
+              {
+                method: "GET",
+                headers: { Authorization: "Bearer " + token },
+              }
+            );
             const data = await res.json();
             if (res.ok && data.success) {
               // Token is valid, redirect to dashboard
@@ -75,11 +78,14 @@
           msg.textContent = "";
 
           try {
-            const res = await fetch("http://localhost:3600/admin/login", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email, password }),
-            });
+            const res = await fetch(
+              "https://blogs-api-q51w.onrender.com/admin/login",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+              }
+            );
 
             const data = await res.json();
             if (data.success && data.token) {
@@ -102,10 +108,13 @@
           return;
         }
         try {
-          const res = await fetch("http://localhost:3600/admin/login", {
-            method: "GET",
-            headers: { Authorization: "Bearer " + token },
-          });
+          const res = await fetch(
+            "https://blogs-api-q51w.onrender.com/admin/login",
+            {
+              method: "GET",
+              headers: { Authorization: "Bearer " + token },
+            }
+          );
           if (!res.ok) {
             window.location.href = "admin-login.html";
           }

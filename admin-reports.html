@@ -216,7 +216,7 @@
         const usersTbody = document.getElementById("restricted-users-table");
         usersTbody.innerHTML = "";
         try {
-          const res = await fetch("http://localhost:3600/admin/users", {
+          const res = await fetch("https://blogs-api-q51w.onrender.com/admin/users", {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("token"),
             },
@@ -264,7 +264,7 @@
         postsTbody.innerHTML = "";
         try {
           const res = await fetch(
-            "http://localhost:3600/admin/posts/restricted",
+            "https://blogs-api-q51w.onrender.com/admin/posts/restricted",
             {
               headers: {
                 Authorization: "Bearer " + localStorage.getItem("token"),

@@ -301,7 +301,7 @@
               }
               try {
                 const res = await fetch(
-                  `http://localhost:3600/blogs/${post.id}/comment`,
+                  `https://blogs-api-q51w.onrender.com/blogs/${post.id}/comment`,
                   {
                     method: "POST",
                     headers: {
@@ -380,7 +380,7 @@
           renderPosts();
         });
 
-      fetch("http://localhost:3600/blogs")
+      fetch("https://blogs-api-q51w.onrender.com/blogs")
         .then((res) => res.json())
         .then((data) => {
           if (data.success && data.data && data.data.length > 0) {
@@ -444,7 +444,7 @@
           "<div class='text-gray-500'>Loading comments...</div>";
         try {
           const res = await fetch(
-            `http://localhost:3600/blogs/${postId}/comments`
+            `https://blogs-api-q51w.onrender.com/blogs/${postId}/comments`
           );
           const data = await res.json();
           if (data.success && Array.isArray(data.comments)) {
@@ -494,7 +494,7 @@
         }
         try {
           const res = await fetch(
-            `http://localhost:3600/blogs/${selectedPostId}/comments`,
+            `https://blogs-api-q51w.onrender.com/blogs/${selectedPostId}/comments`,
             {
               method: "POST",
               headers: {
@@ -525,7 +525,7 @@
       let allCategories = [];
 
       // Fetch and render authors
-      fetch("http://localhost:3600/blogs/authors")
+      fetch("https://blogs-api-q51w.onrender.com/blogs/authors")
         .then((res) => res.json())
         .then((data) => {
           if (data.success && data.data && data.data.length > 0) {
@@ -630,7 +630,7 @@
       // Fetch and render categories from admin dashboard endpoint
       const token = localStorage.getItem("token"); // or your token key
 
-      fetch("http://localhost:3600/admin/dashboard", {
+      fetch("https://blogs-api-q51w.onrender.com/admin/dashboard", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

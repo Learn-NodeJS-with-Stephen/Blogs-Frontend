@@ -190,7 +190,7 @@
       async function loadUsers(page = 1, search = "") {
         currentPage = page;
         const limit = 10;
-        let url = `http://localhost:3600/users/get?page=${page}&limit=${limit}`;
+        let url = `https://blogs-api-q51w.onrender.com/users/get?page=${page}&limit=${limit}`;
         if (search) {
           url += `&search=${encodeURIComponent(search)}`;
         }
@@ -249,7 +249,7 @@
               if (confirm("Are you sure you want to delete this user?")) {
                 const userId = this.getAttribute("data-id");
                 const res = await fetch(
-                  `http://localhost:3600/users/${userId}`,
+                  `https://blogs-api-q51w.onrender.com/users/${userId}`,
                   {
                     method: "DELETE",
                     headers: {

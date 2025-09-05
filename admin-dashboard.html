@@ -264,7 +264,7 @@
 
       // --- Overview / Analytics ---
       async function loadAnalytics() {
-        const res = await fetch("http://localhost:3600/admin/dashboard", {
+        const res = await fetch("https://blogs-api-q51w.onrender.com/admin/dashboard", {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         });
         if (!res.ok) return;
@@ -283,7 +283,7 @@
 
       // --- Recent Posts ---
       async function loadRecentPosts() {
-        const res = await fetch("http://localhost:3600/blogs");
+        const res = await fetch("https://blogs-api-q51w.onrender.com/blogs");
         if (!res.ok) return;
         const data = await res.json();
         if (data.success && data.data) {
@@ -316,7 +316,7 @@
 
       // --- Recent Users ---
       async function loadRecentUsers() {
-        const res = await fetch("http://localhost:3600/admin/dashboard", {
+        const res = await fetch("https://blogs-api-q51w.onrender.com/admin/dashboard", {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         });
         if (!res.ok) return;

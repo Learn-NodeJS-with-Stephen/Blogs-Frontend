@@ -239,7 +239,7 @@
     <!-- JavaScript -->
     <script>
       // Blog Section Dynamic Rendering
-      fetch("http://localhost:3600/blogs/")
+      fetch("https://blogs-api-q51w.onrender.com/blogs/")
         .then((res) => res.json())
         .then((data) => {
           if (data.success && data.data) {
@@ -295,7 +295,7 @@
           const formData = new FormData(e.target);
           const body = Object.fromEntries(formData);
 
-          const res = await fetch("http://localhost:3600/users/login", {
+          const res = await fetch("https://blogs-api-q51w.onrender.com//users/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
@@ -323,7 +323,7 @@
           const body = Object.fromEntries(formData);
           body.user_type = "user";
 
-          const res = await fetch("http://localhost:3600/users/", {
+          const res = await fetch("https://blogs-api-q51w.onrender.com/users/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
