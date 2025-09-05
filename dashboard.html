@@ -179,6 +179,12 @@
             const div = document.createElement("div");
             div.className = "bg-white rounded-lg shadow-md px-8 py-6";
 
+            // Determine if the post has been liked by the user
+            const hasLiked = post.has_liked;
+            const likeBtnClass = hasLiked
+              ? "text-red-600" // Liked state
+              : "text-gray-500 hover:text-red-600"; // Not liked state
+
             const isLong = post.content.length > 200;
             const contentToShow = isLong
               ? post.content.substring(0, 200) + "..."
@@ -209,9 +215,9 @@
               </div>
               <div class="flex items-center justify-between mt-4">
                 <div class="flex items-center gap-4">
-                  <button class="like-btn flex items-center gap-1 text-gray-500 hover:text-red-600" data-id="${
-                    post.id
-                  }">
+                  <button class="like-btn flex items-center gap-1 ${likeBtnClass}" data-id="${
+              post.id
+            }" data-liked="${hasLiked}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" /></svg>
                     <span class="like-count">${
                       post.likes_count || 0
@@ -235,7 +241,6 @@
                   }">Delete</button>
                 </div>
               </div>
-              <!-- Inline Comment Section (hidden by default) -->
               <div class="inline-comment-section mt-4 hidden" id="inline-comment-${
                 post.id
               }">
@@ -255,7 +260,7 @@
             "<p class='text-gray-500'>No blog posts found for your account.</p>";
         }
         updatePaginationControls();
-        attachActionListeners(); // This will now attach all listeners
+        attachActionListeners();
       }
 
       function updatePaginationControls() {
@@ -307,18 +312,23 @@
           // Handle Like Button Click
           if (likeBtn) {
             const postId = likeBtn.getAttribute("data-id");
-            const res = await fetch(
-              `http://localhost:3600/blogs/${postId}/like`,
-              {
-                method: "POST",
-                headers: { Authorization: `Bearer ${authToken}` },
-              }
-            );
+            const isLiked = likeBtn.getAttribute("data-liked") === "true";
+
+            // Determine the action: unlike or like
+            const method = isLiked ? "DELETE" : "POST";
+            const endpoint = isLiked
+              ? `http://localhost:3600/blogs/${postId}/unlike`
+              : `http://localhost:3600/blogs/${postId}/like`;
+
+            const res = await fetch(endpoint, {
+              method: method,
+              headers: { Authorization: `Bearer ${authToken}` },
+            });
             const result = await res.json();
             if (result.success) {
-              fetchUserPosts(); // Re-fetch to get the latest like count
+              fetchUserPosts(); // Re-fetch to get the latest state
             } else {
-              alert(result.message || "Failed to like post.");
+              alert(result.message || "An error occurred.");
             }
           }
 
